@@ -5,11 +5,11 @@ const sequencing = require('../config/sequencing');
 
 const userSchema = new mongoose.Schema({
 
-    Fname: {
+    fName: {
         type: String,
         required: true,
     },
-    Lname: {
+    lName: {
         type: String,
         required: true,
     },

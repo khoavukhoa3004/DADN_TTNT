@@ -3,16 +3,16 @@ const validator = require('validator');
 
 
 exports.validateUserSignUp = [
-    check('FName')
+    check('fName')
         .trim()
         .not()
         .isEmpty()
-        .withMessage('Name is required')
+        .withMessage('FName is required')
         .isString()
         .withMessage('First name must be a valid name')
         .isLength({min: 3, max: 20})
         .withMessage('Name must be within 3 to character!'),
-    check('LName')
+    check('lName')
         .trim()
         .not()
         .isEmpty()
@@ -23,6 +23,7 @@ exports.validateUserSignUp = [
         .withMessage('Name must be within 3 to character!'),
     check('email')
         .normalizeEmail()
+        .not()
         .isEmpty()
         .withMessage('Email is empty!')
         .isEmail()
@@ -47,20 +48,19 @@ exports.validateUserSignUp = [
         }),
     check('dateOfBirth')
         .trim()
+        .not()
         .isEmpty()
-        .withMessage('Date must be required!')
+        .withMessage('Birth day must be required!')
         .custom((value)=>{
             if(!validator.isISO8601(value, { strict: true})){
-                throw new Error('Invalid BirthDate format, must be YYYY-MM-DD');
+                throw new Error('Invalid Birth day format, must be YYYY-MM-DD');
             }
-            const date = new Date(value);
-            if (date.getHours() !== 0 || date.getMinutes() !== 0 || date.getSeconds() !== 0 || date.getMilliseconds() !== 0) {
-                throw new Error('Birthdate must not contain a time component');
-            }
+            // const date = new Date(value);
             return true;
         }),
     check('phoneNumber')
         .trim()
+        .not()
         .isEmpty()
         .withMessage('Phone must not be empty!')
         .isLength({min: 3, max: 20})
