@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
-const sequencing = require('../config/sequencing');
+const bcrypt = require('bcrypt');
 
 
 const userSchema = new mongoose.Schema({
@@ -34,6 +34,27 @@ const userSchema = new mongoose.Schema({
 
 });
 
+// execute before sending data
+userSchema.pre('save', function(next){
+    if(this.isModified('password')){
+        bcrypt.hash(this.password, 8, (err, hash) => {
+            if(err) return next(err);
+            this.password = hash;
+            next();
+        });
+    }
+});
+
+userSchema.methods.comparePassword = async function(password) {
+    if(!password) throw new Error('Password is missed, cannot compare!');
+
+    try {
+        const result = await bcrypt.compare(password, this.password);
+        return result;
+    } catch (error) {
+        console.log('Error while comparing password!', error.message);
+    }
+}
 
 userSchema.statics.isThisEmailInUse = async function(email){
     // if(email ==='') {
