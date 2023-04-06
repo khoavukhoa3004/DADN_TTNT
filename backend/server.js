@@ -1,9 +1,29 @@
-const express = require('express')
-const bodyParser =  require('body-parser')
-const app = express()
 const PORT = 3000
+const express = require('express');
+require('dotenv').config();
+require('./models/db');
 
-app.use(bodyParser.json())
+const userRouter = require('./routes/user')
+
+const app = express();
+
+// app.use((req, res, next) => {
+//     req.on('data', (chunk) => {
+//         const data = JSON.parse(chunk);
+//         req.body = data;
+//         next();
+//     });
+    
+// });
+
+app.use(express.json());
+
+app.use(userRouter);
+
+app.get('/test', (req, res) => {
+    res.send('Hello world!');
+});
+
 
 
 app.get('/', (req, res) => {
