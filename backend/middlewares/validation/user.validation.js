@@ -83,3 +83,19 @@ exports.userValidation = (req, res, next) => {
     const error = result[0].msg;
     res.json({success: false, message: error});
 };
+
+
+exports.validateUserSignIn = [
+    check('email')
+        .trim()
+        .not()
+        .isEmpty()
+        .withMessage('Email acount is missing!')
+        .isEmail()
+        .withMessage('Invalid email, try again!'),
+    check('password')
+        .trim()
+        .not()
+        .isEmpty()
+        .withMessage('Password is missing!'),
+]

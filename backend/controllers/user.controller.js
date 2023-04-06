@@ -26,4 +26,28 @@ exports.createUser = async (req, res) => {
     })
     await user.save()
     res.json(user);
-}
+};
+
+exports.userSignIn = async (req, res) => {
+    const {email, password} = req.body;
+    const user = await User.findOne({ email: email});
+
+    if(!user) {
+        res.json({ success: false, message: 'User not found with the given email!' });
+    }
+    const isMatch = await user.comparePassword(password);
+    if(!isMatch) {
+        return res.json({ success: false, message: 'The password is not match' });
+    }
+    res.json({ success: true, user});
+};
+
+// {
+//     "fName": "Vu Dang",
+//     "lName": "Khoa",
+//     "email": "khoapro313@gmail.com",
+//     "password": "hello12376",
+//     "confirmPassword": "hello12376",
+//     "dateOfBirth": "2002-08-08",
+//     "phoneNumber": "0123456789"
+// }
