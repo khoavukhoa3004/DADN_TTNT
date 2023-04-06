@@ -6,7 +6,7 @@ export default function LoginScreen({navigation}: {navigation: any}) {
         <View style={styles.container}>
             <Text> Login Screen </Text>
             <Button 
-                title="This is Login Screen"
+                title="Hello! This is Login Screen"
                 onPress={() => navigation.navigate("HomeScreen")}
             />
         </View>
