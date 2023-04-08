@@ -1,7 +1,7 @@
 
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const bcrypt = require('bcrypt');
-
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
 
