@@ -53,9 +53,7 @@ export default function LoginScreen({navigation}: {navigation: any}) {
                 </View>
 
                 <View style={styles.formAction}>
-                    <TouchableOpacity onPress={() => {
-                        Alert.alert('Successfully logged in!')
-                    }}>
+                    <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
                         <View style={styles.btn}>
                             <Text style={styles.btnText}>Sign in</Text>
                         </View>
@@ -64,9 +62,7 @@ export default function LoginScreen({navigation}: {navigation: any}) {
 
                 <TouchableOpacity
                     style={{marginTop: 'auto'}}
-                    onPress={() => {
-
-                    }}
+                    onPress={() => navigation.navigate("RegisterScreen")}
                 >
                     <Text style={styles.formFooter}>
                         Don't have an account?{' '}

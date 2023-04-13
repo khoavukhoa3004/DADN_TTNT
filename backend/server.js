@@ -38,6 +38,20 @@ app.get('/test', (req, res) => {
 app.get('/', (req, res) => {
     res.send('<h1>Hello World</h1>');
 })
+
+app.post('/', async (req, res) => {
+    const user = await User({
+    "fName": "Vu Dang",
+    "lName": "Khoa",
+    "email": "khoapro31@gmail.com",
+    "password": "hello1237",
+    "confirmPassword": "hello1237",
+    "dateOfBirth": "2002-08-08",
+    "phoneNumber": "0123456789"
+    })
+    await user.save()
+    res.json(user)
+})
 // app.post('/', (req, res) => {
 //     console.log(req.body)
 //     res.send('hello')

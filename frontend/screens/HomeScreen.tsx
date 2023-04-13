@@ -3,11 +3,71 @@ import { View, Text, StyleSheet,Button, Image, ScrollView, Switch } from 'react-
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/Ionicons';
 import Icon3 from 'react-native-vector-icons/FontAwesome';
-import Icon2 from 'react-native-vector-icons/Feather';
+import Icon2 from 'react-native-vector-icons/Feather'; 
 import BottomBar from '../components/BottomBar';
 import { sendToAdafruitIO, getLatestButton1 } from '../API/api';
 
 let State = false
+
+let changeState = false
+let lastButton1='ON'
+
+const DeviceComponent = ({isFan} : {isFan: boolean}) =>{ 
+    const [isEnabled, setIsEnabled] = React.useState(false);
+
+    
+    const toggleSwitch = async () => {
+        try {
+            State=!State
+          setIsEnabled((previousState: boolean) => !previousState);
+          if (State) {
+            const response = await sendToAdafruitIO('ON', isFan);
+          }
+          else{
+            State =false
+            const response = await sendToAdafruitIO('OFF', isFan);
+          }
+
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      useEffect(() => {
+        const interval = setInterval(async () => {
+          try {
+            const latestButton1 = await getLatestButton1(isFan);
+            if(latestButton1==='ON'){
+                setIsEnabled(true)
+            }
+            else{
+                setIsEnabled(false)
+            }
+            
+          } catch (error) {
+            console.error(error);
+          }
+        }, 1000); // Fetch the latest temperature every second
+    
+        return () => clearInterval(interval);
+      }, []);
+    return (
+        <View style={styles.box}>
+            <Icon style={styles.iconBox} name={(isFan)? "fan" : "lightbulb-on-outline"}  size={50} color="white"/>
+            <Text style={styles.titleBox}>{(isFan ? "Quạt" : "Đèn")}</Text>
+            <View style={styles.stateBox}>
+                <Text style={styles.stateTextBox}>Bật</Text>
+                <Switch         
+                    trackColor={{false: '#767577', true: '#FF8A00'}}
+                    thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={toggleSwitch}
+                    value={isEnabled}
+                    style={styles.toggleInBox}
+                />
+            </View>
+        </View>
+    );
+}
 
 const HomeScreen = ({navigation}: {navigation: any}) =>{
     const [isEnabled, setIsEnabled] = React.useState(false);
@@ -34,13 +94,12 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
           try {
             const latestButton1 = await getLatestButton1();
             if(latestButton1==='ON'){
-                State = !State
+                setIsEnabled(true)
             }
             else{
-                State=false
+                setIsEnabled(false)
             }
-            setIsEnabled(latestButton1);
-
+            
           } catch (error) {
             console.error(error);
           }
@@ -99,7 +158,7 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                     </View>
                     <ScrollView style={styles.listDetail}>
                         <View style={styles.listDetailRow}>
-                            <View style={styles.box}>
+                            {/* <View style={styles.box}>
                                 <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
                                 <Text style={styles.titleBox}>Đèn</Text>
                                 <View style={styles.stateBox}>
@@ -114,8 +173,8 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                                     />
                                 </View>
                             </View>
-                            <View style={styles.box}>
-                                <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
+                             <View style={styles.box}>
+                                <Icon style={styles.iconBox} name="fan" size={50} color="white"/>
                                 <Text style={styles.titleBox}> Đèn</Text>
                                 <View style={styles.stateBox}>
                                     <Text style={styles.stateTextBox}> Bật</Text>
@@ -128,72 +187,12 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                                         style={styles.toggleInBox}
                                     />
                                 </View>
-                            </View>
+                            </View> */}
+                            <DeviceComponent isFan={true}/>
+                            <DeviceComponent isFan={false}/>
+
                         </View>
-                        <View style={styles.listDetailRow}>
-                            <View style={styles.box}>
-                                <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
-                                <Text style={styles.titleBox}> Đèn</Text>
-                                <View style={styles.stateBox}>
-                                    <Text style={styles.stateTextBox}> Bật</Text>
-                                    <Switch         
-                                        trackColor={{false: '#767577', true: '#FF8A00'}}
-                                        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                                        ios_backgroundColor="#3e3e3e"
-                                        onValueChange={toggleSwitch}
-                                        value={isEnabled}
-                                        style={styles.toggleInBox}
-                                    />
-                                </View>
-                            </View>
-                            <View style={styles.box}>
-                                <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
-                                <Text style={styles.titleBox}> Đèn</Text>
-                                <View style={styles.stateBox}>
-                                    <Text style={styles.stateTextBox}> Bật</Text>
-                                    <Switch         
-                                        trackColor={{false: '#767577', true: '#FF8A00'}}
-                                        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                                        ios_backgroundColor="#3e3e3e"
-                                        onValueChange={toggleSwitch}
-                                        value={isEnabled}
-                                        style={styles.toggleInBox}
-                                    />
-                                </View>
-                            </View>
-                        </View>
-                        <View style={styles.listDetailRow}>
-                            <View style={styles.box}>
-                                <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
-                                <Text style={styles.titleBox}> Đèn</Text>
-                                <View style={styles.stateBox}>
-                                    <Text style={styles.stateTextBox}> Bật</Text>
-                                    <Switch         
-                                        trackColor={{false: '#767577', true: '#FF8A00'}}
-                                        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                                        ios_backgroundColor="#3e3e3e"
-                                        onValueChange={toggleSwitch}
-                                        value={isEnabled}
-                                        style={styles.toggleInBox}
-                                    />
-                                </View>
-                            </View>
-                            <View style={styles.box}>
-                                <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
-                                <Text style={styles.titleBox}> Đèn</Text>
-                                <View style={styles.stateBox}>
-                                    <Text style={styles.stateTextBox}> Bật</Text>
-                                    <Switch         
-                                        trackColor={{false: '#767577', true: '#FF8A00'}}
-                                        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                                        ios_backgroundColor="#3e3e3e"
-                                        onValueChange={toggleSwitch}
-                                        value={isEnabled}
-                                        style={styles.toggleInBox}
-                                    />
-                                </View>
-                            </View>
-                        </View>
+                        
                     </ScrollView>
                 </View>
                 <View>
