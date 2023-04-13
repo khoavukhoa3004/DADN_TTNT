@@ -21,9 +21,10 @@
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-native": "0.71.4",
+    "react-native": "0.71.6",
     "react-native-navigation": "^7.32.1",
     "react-native-onboarding-swiper": "^1.2.0",
+    "react-native-select-dropdown": "^3.3.2",
     "react-native-svg": "13.4.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.10"

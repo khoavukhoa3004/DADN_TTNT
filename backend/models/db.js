@@ -1,7 +1,7 @@
+// This file is used to connect to Server.
 const mongoose = require('mongoose');
 
-mongoose
-    .connect(process.env.MONGO_URI, {
+module.exports = mongoose.connect(process.env.MONGODB_TEST, {
         useNewUrlParser: true, 
         useUnifiedTopology: true,
         // useCreateIndex: true,

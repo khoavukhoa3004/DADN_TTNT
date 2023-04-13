@@ -16,6 +16,10 @@ import HomeScreen from './screens/HomeScreen';
 import DetailsScreen from './screens/DetailsScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import DetailScreen from './screens/DetailsScreen';
+import FanScreen from './screens/FanScreen';
+import FanSettingScreen from './screens/FanSettingScreen';
+import LedScreen from './screens/LedScreen';
+import LedSettingScreen from './screens/LedSettingScreen';
 
 // import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -75,6 +79,10 @@ export default function App() {
           <Stack.Screen name="HomeScreen" component={HomeScreen}/>
           <Stack.Screen name="DetailsScreen" component={DetailsScreen}/>
           <Stack.Screen name="SettingsScreen" component={SettingsScreen}/>
+          <Stack.Screen name="LedScreen" component={LedScreen} />
+          <Stack.Screen name="FanScreen" component={FanScreen} />
+          <Stack.Screen name="LedSettingScreen" component={LedSettingScreen} />
+          <Stack.Screen name="FanSettingScreen" component={FanSettingScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
@@ -91,7 +99,10 @@ export default function App() {
           <Stack.Screen name="HomeScreen" component={HomeScreen}/>
           <Stack.Screen name="DetailsScreen" component={DetailsScreen}/>
           <Stack.Screen name="SettingsScreen" component={SettingsScreen}/>
-          
+          <Stack.Screen name="LedScreen" component={LedScreen} />
+          <Stack.Screen name="FanScreen" component={FanScreen} />
+          <Stack.Screen name="LedSettingScreen" component={LedSettingScreen} />
+          <Stack.Screen name="FanSettingScreen" component={FanSettingScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
