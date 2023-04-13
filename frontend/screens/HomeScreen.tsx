@@ -1,14 +1,54 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet,Button, Image, ScrollView, Switch } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/Ionicons';
 import Icon3 from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/Feather';
 import BottomBar from '../components/BottomBar';
+import { sendToAdafruitIO, getLatestButton1 } from '../API/api';
+
+let State = false
 
 const HomeScreen = ({navigation}: {navigation: any}) =>{
     const [isEnabled, setIsEnabled] = React.useState(false);
-    const toggleSwitch = () => setIsEnabled((previousState: Boolean) => !previousState);
+
+    
+    const toggleSwitch = async () => {
+        try {
+            State=!State
+          setIsEnabled((previousState: boolean) => !previousState);
+          if (State) {
+            const response = await sendToAdafruitIO('ON');
+          }
+          else{
+            State =false
+            const response = await sendToAdafruitIO('OFF');
+          }
+
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      useEffect(() => {
+        const interval = setInterval(async () => {
+          try {
+            const latestButton1 = await getLatestButton1();
+            if(latestButton1==='ON'){
+                State = !State
+            }
+            else{
+                State=false
+            }
+            setIsEnabled(latestButton1);
+
+          } catch (error) {
+            console.error(error);
+          }
+        }, 1000); // Fetch the latest temperature every second
+    
+        return () => clearInterval(interval);
+      }, []);
+
     return (
         <View style={styles.container}>
             <View style={styles.subContainer}>
