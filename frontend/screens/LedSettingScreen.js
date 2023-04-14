@@ -21,23 +21,30 @@ import BottomBar from "../components/BottomBar";
 import { StatusBar } from "expo-status-bar";
 import { Line, LinearGradient } from "react-native-svg";
 import SelectDropdown from "react-native-select-dropdown";
+import { P } from "@expo/html-elements";
 
 const ScreenWidth = Dimensions.get("window").width;
 const ScreenHeight = Dimensions.get("window").height;
 
 const LedSettingScreen = ({ navigation }) => {
+  const backOnPress = () => {
+    navigation.navigate('LedScreen');
+  }
+
   return (
     <View style={styles.Container}>
       <View style={styles.headContainer}>
         <StatusBar barStyle="light-content" />
         <View style={styles.leftHeadContainer}>
-          <Icon
-            ios="ios-add"
-            android="android-add"
-            name="chevron-back-circle-outline"
-            size={32}
-            style={styles.chevronLeft}
-          ></Icon>
+          <TouchableOpacity onPress={backOnPress}>
+            <Icon
+              ios="ios-add"
+              android="android-add"
+              name="chevron-back-circle-outline"
+              size={32}
+              style={styles.chevronLeft}
+            ></Icon>
+          </TouchableOpacity>
         </View>
         <View style={styles.middleHeadContainer}>
           <Text style={styles.topTitle}>ĐÈN</Text>

@@ -1,14 +1,25 @@
 import * as React from 'react';
-import { View, Text, StyleSheet,Button, Image, ScrollView, Switch } from 'react-native';
+import { View, Text, StyleSheet,Button, Image, ScrollView, Switch, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/Ionicons';
 import Icon3 from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/Feather';
 import BottomBar from '../components/BottomBar';
+import { StatusBar } from "expo-status-bar";
+const ScreenWidth = Dimensions.get("window").width;
+const ScreenHeight = Dimensions.get("window").height;
+
 
 const HomeScreen = ({navigation}: {navigation: any}) =>{
-    const [isEnabled, setIsEnabled] = React.useState(false);
-    const toggleSwitch = () => setIsEnabled((previousState: Boolean) => !previousState);
+    const [isEnabled, setIsEnabled] = React.useState(false);   
+
+
+    const bulbToggleSwitch = () => setIsEnabled((previousState: Boolean) => !previousState);
+    const fanToggleSwitch = () => setIsEnabled((previousState: Boolean) => !previousState);
+    const doorToggleSwitch = () => setIsEnabled((previousState: Boolean) => !previousState);
+    const tempToggleSwitch = () => setIsEnabled((previousState: Boolean) => !previousState);
+    const lightToggleSwitch = () => setIsEnabled((previousState: Boolean) => !previousState);
+    
     return (
         <View style={styles.container}>
             <View style={styles.subContainer}>
@@ -17,7 +28,7 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                 <View style={styles.headerWrapper}>
                     <View style={styles.headerTitle}>
                         <Text style={{fontSize: 30, fontFamily: 'Inter-Bold', }}>Xin chào Natasha!</Text>
-                        <Text style={{position: 'absolute', fontSize: 60, fontFamily: 'Inter-Bold', opacity: 0.1}}>HOME</Text>
+                        <Text style={{position: 'absolute', fontSize: 60, fontFamily: 'Inter-Bold', opacity: 0.1}}></Text>
                     </View>
                     <View style={styles.headerNotification}>
                         <Icon1 name="notifications-outline" size={50} color="blue"/>
@@ -46,6 +57,7 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                         </View>
                     </View>
                 </View>
+
                 <View style={styles.elementDetail}>
                     <View style={styles.roomDetail}>
                         <ScrollView horizontal={true}>
@@ -68,22 +80,54 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                                         trackColor={{false: '#767577', true: '#FF8A00'}}
                                         thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
                                         ios_backgroundColor="#3e3e3e"
-                                        onValueChange={toggleSwitch}
+                                        onValueChange={bulbToggleSwitch}
                                         value={isEnabled}
                                         style={styles.toggleInBox}
                                     />
                                 </View>
                             </View>
                             <View style={styles.box}>
-                                <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
-                                <Text style={styles.titleBox}> Đèn</Text>
+                                <Icon style={styles.iconBox} name="fan" size={50} color="white"/>
+                                <Text style={styles.titleBox}>Quạt</Text>
                                 <View style={styles.stateBox}>
-                                    <Text style={styles.stateTextBox}> Bật</Text>
+                                    <Text style={styles.stateTextBox}>Bật</Text>
                                     <Switch         
                                         trackColor={{false: '#767577', true: '#FF8A00'}}
                                         thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
                                         ios_backgroundColor="#3e3e3e"
-                                        onValueChange={toggleSwitch}
+                                        onValueChange={fanToggleSwitch}
+                                        value={isEnabled}
+                                        style={styles.toggleInBox}
+                                    />
+                                </View>
+                            </View>
+                        </View>
+                        <View style={styles.listDetailRow}>
+                            <View style={styles.box}>
+                                <Icon style={styles.iconBox} name="door-closed-lock" size={50} color="white"/>
+                                <Text style={styles.titleBox}>Cửa</Text>
+                                <View style={styles.stateBox}>
+                                    <Text style={styles.stateTextBox}>Bật</Text>
+                                    <Switch         
+                                        trackColor={{false: '#767577', true: '#FF8A00'}}
+                                        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                                        ios_backgroundColor="#3e3e3e"
+                                        onValueChange={doorToggleSwitch}
+                                        value={isEnabled}
+                                        style={styles.toggleInBox}
+                                    />
+                                </View>
+                            </View>
+                            <View style={styles.box}>
+                                <Icon style={styles.iconBox} name="thermometer" size={50} color="white"/>
+                                <Text style={styles.titleBox}>Cảm biến nhiệt độ</Text>
+                                <View style={styles.stateBox}>
+                                    <Text style={styles.stateTextBox}>Bật</Text>
+                                    <Switch         
+                                        trackColor={{false: '#767577', true: '#FF8A00'}}
+                                        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                                        ios_backgroundColor="#3e3e3e"
+                                        onValueChange={tempToggleSwitch}
                                         value={isEnabled}
                                         style={styles.toggleInBox}
                                     />
@@ -93,21 +137,21 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                         <View style={styles.listDetailRow}>
                             <View style={styles.box}>
                                 <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
-                                <Text style={styles.titleBox}> Đèn</Text>
+                                <Text style={styles.titleBox}>Cảm biến {"\n"}ánh sáng</Text>
                                 <View style={styles.stateBox}>
-                                    <Text style={styles.stateTextBox}> Bật</Text>
+                                    <Text style={styles.stateTextBox}>Bật</Text>
                                     <Switch         
                                         trackColor={{false: '#767577', true: '#FF8A00'}}
                                         thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
                                         ios_backgroundColor="#3e3e3e"
-                                        onValueChange={toggleSwitch}
+                                        onValueChange={lightToggleSwitch}
                                         value={isEnabled}
                                         style={styles.toggleInBox}
                                     />
                                 </View>
                             </View>
-                            <View style={styles.box}>
-                                <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
+                            <View style={styles.finalBox}>
+                                {/* <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
                                 <Text style={styles.titleBox}> Đèn</Text>
                                 <View style={styles.stateBox}>
                                     <Text style={styles.stateTextBox}> Bật</Text>
@@ -119,39 +163,7 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                                         value={isEnabled}
                                         style={styles.toggleInBox}
                                     />
-                                </View>
-                            </View>
-                        </View>
-                        <View style={styles.listDetailRow}>
-                            <View style={styles.box}>
-                                <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
-                                <Text style={styles.titleBox}> Đèn</Text>
-                                <View style={styles.stateBox}>
-                                    <Text style={styles.stateTextBox}> Bật</Text>
-                                    <Switch         
-                                        trackColor={{false: '#767577', true: '#FF8A00'}}
-                                        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                                        ios_backgroundColor="#3e3e3e"
-                                        onValueChange={toggleSwitch}
-                                        value={isEnabled}
-                                        style={styles.toggleInBox}
-                                    />
-                                </View>
-                            </View>
-                            <View style={styles.box}>
-                                <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
-                                <Text style={styles.titleBox}> Đèn</Text>
-                                <View style={styles.stateBox}>
-                                    <Text style={styles.stateTextBox}> Bật</Text>
-                                    <Switch         
-                                        trackColor={{false: '#767577', true: '#FF8A00'}}
-                                        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                                        ios_backgroundColor="#3e3e3e"
-                                        onValueChange={toggleSwitch}
-                                        value={isEnabled}
-                                        style={styles.toggleInBox}
-                                    />
-                                </View>
+                                </View> */}
                             </View>
                         </View>
                     </ScrollView>
@@ -160,7 +172,47 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                 </View>
             </View>
             {/* footer */}
-            <BottomBar navigation={navigation}/>
+            {/* <BottomBar navigation={navigation}/> */}
+            <View style={styles.bottomContainer}>
+        <View style={styles.leftBottomContainer}>
+          <Image
+            style={styles.leftBottomContainer_Footer}
+            source={require("../assets/images/Led_Fan/leftFooter.png")}
+          />
+          <Icon1
+            // ios="ios-add"
+            // android="android-add"
+            name="home-outline"
+            size={30}
+            color={"white"}
+            style={styles.HomeIcon}
+          ></Icon1>
+        </View>
+        <View style={styles.middleBottomContainer}>
+          <View style={styles.circleContainer}>
+            <Icon3
+              style={styles.microphoneIcon}
+              name="microphone"
+              size={30}
+              color="white"
+            />
+          </View>
+        </View>
+        <View style={styles.rightBottomContainer}>
+          <Image
+            style={styles.rightBottomContainer_Footer}
+            source={require("../assets/images/Led_Fan/rightFooter.png")}
+          ></Image>
+          <Icon1
+            // ios="ios-add"
+            // android="android-add"
+            name="person-outline"
+            size={30}
+            color={"white"}
+            style={styles.personIcon}
+          ></Icon1>
+        </View>
+      </View>
         </View>
     );
 }
@@ -291,6 +343,16 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         backgroundColor: '#33394D',
     },
+    finalBox: {
+        height: 170,
+        paddingTop: 15,
+        paddingRight: 10,
+        paddingLeft: 20,
+        margin: 5,
+        flex: 1,
+        flexDirection: 'column',
+        borderRadius: 15,
+    },
     iconBox: {
         flex: 1,
     },
@@ -319,5 +381,48 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
-
+    bottomContainer: {
+        flex: 1.2,
+        flexDirection: "row",
+        backgroundColor: "#EFF1F5",
+      },
+      leftBottomContainer: {
+        flex: 1,
+      },
+      middleBottomContainer: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      rightBottomContainer: {
+        flex: 1,
+      },
+      leftBottomContainer_Footer: {
+        justifyContent: "flex-start",
+        width: "100%",
+      },
+      HomeIcon: {
+        position: "absolute",
+        bottom: 0.03 * ScreenHeight,
+        left: 0.065 * ScreenWidth,
+      },
+      circleContainer: {
+        position: "absolute",
+        justifyContent: "center",
+        alignItems: "center",
+        width: 60,
+        height: 60,
+        borderRadius: 100 / 2,
+        backgroundColor: "green",
+      },
+      microphoneIcon: {},
+      rightBottomContainer_Footer: {
+        justifyContent: "flex-start",
+        width: "100%",
+      },
+      personIcon: {
+        position: "absolute",
+        bottom: 0.03 * ScreenHeight,
+        right: 0.065 * ScreenWidth,
+      },
 });
