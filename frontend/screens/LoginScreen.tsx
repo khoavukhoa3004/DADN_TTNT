@@ -55,6 +55,7 @@ export default function LoginScreen({navigation}: {navigation: any}) {
                 <View style={styles.formAction}>
                     <TouchableOpacity onPress={() => {
                         Alert.alert('Successfully logged in!')
+                        navigation.navigate("HomeScreen");
                     }}>
                         <View style={styles.btn}>
                             <Text style={styles.btnText}>Sign in</Text>
