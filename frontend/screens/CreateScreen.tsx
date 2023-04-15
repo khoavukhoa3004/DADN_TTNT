@@ -1,50 +1,20 @@
-import React, {useState} from 'react';
-import { SafeAreaView, View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert, Button, StatusBar } from 'react-native';
-import type {StatusBarStyle} from 'react-native';
-const style = 'light-content' as const
+import React, { useState } from 'react';
+import { SafeAreaView, View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native'
 
-//: {navigation: any}
 export default function LoginScreen({navigation}: {navigation: any}) {
     const [form, setForm] = useState({
+        firstName: '',
+        lastName:'',
+        phoneNumber:'',
         email: '',
         password: '',
+        confirmPassword: '',
     })
-
-    const [statusBarStyle] = useState<StatusBarStyle>(style);
-
+    
     return (
-        // <View style={styles.container}>
-        //     <Text> Login Screen </Text>
-        //     <Button 
-        //         title="This is Home Screen"
-        //         onPress={() => navigation.navigate("HomeScreen")}
-        //     />
-        //     <Text>LED Screen</Text>
-        //     <Button
-        //         title="This is Led Screen"
-        //         onPress={() => navigation.navigate("LedScreen")}
-        //     />
-        //     <Text>Fan Screen</Text>
-        //     <Button
-        //         title="This is Fan Screen"
-        //         onPress={() => navigation.navigate("FanScreen")}
-        //     />
-        //     <Text>Led Setting Screen</Text>
-        //     <Button
-        //         title="This is Led Setting Screen"
-        //         onPress={() => navigation.navigate("LedSettingScreen")}
-        //     />
-        //     <Text>Led Setting Screen</Text>
-        //     <Button
-        //         title="This is Fan Setting Screen"
-        //         onPress={() => navigation.navigate("FanSettingScreen")}
-        //     />
-        // </View>
-
-
         <SafeAreaView style={{ flex: 1, backgroundColor: '#e8ecf4'}}>
+        <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-            <StatusBar barStyle='light-content'/>
             <View style={styles.header}>
                 <Image
                     source={require('../assets/images/Logo/logo.png')}
@@ -52,7 +22,7 @@ export default function LoginScreen({navigation}: {navigation: any}) {
                     alt="Logo"
                 />
 
-                <Text style={styles.title}>Sign in to Smart Home</Text>
+                <Text style={styles.title}>Sign up to Smart Home</Text>
 
                 <Text style={styles.subtitle}>
                     Get access to your portfolio and more
@@ -60,6 +30,46 @@ export default function LoginScreen({navigation}: {navigation: any}) {
             </View>
 
             <View style={styles.form}>
+                <View style={styles.input}>
+                    <Text style={styles.inputLabel}>First Name</Text>
+
+                    <TextInput
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        style={styles.inputControl}
+                        placeholder='Nguyen'
+                        placeholderTextColor="#6b7280"
+                        value={form.firstName}
+                        onChangeText={firstName => setForm({...form, firstName})}
+                    />
+                </View>
+                <View style={styles.input}>
+                    <Text style={styles.inputLabel}>Last Name</Text>
+
+                    <TextInput
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        style={styles.inputControl}
+                        placeholder='Minh'
+                        placeholderTextColor="#6b7280"
+                        value={form.lastName}
+                        onChangeText={lastName => setForm({...form, lastName})}
+                    />
+                </View>
+                <View style={styles.input}>
+                    <Text style={styles.inputLabel}>Phone Number</Text>
+
+                    <TextInput
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        style={styles.inputControl}
+                        placeholder='091864XXXX'
+                        placeholderTextColor="#6b7280"
+                        value={form.phoneNumber}
+                        onChangeText={phoneNumber => setForm({...form, phoneNumber})}
+                    />
+                </View>
+
                 <View style={styles.input}>
                     <Text style={styles.inputLabel}>Email address</Text>
 
@@ -74,7 +84,7 @@ export default function LoginScreen({navigation}: {navigation: any}) {
                         onChangeText={email => setForm({...form, email})}
                     />
                 </View>
-
+                
                 <View style={styles.input}>
                     <Text style={styles.inputLabel}>Password</Text>
 
@@ -86,44 +96,56 @@ export default function LoginScreen({navigation}: {navigation: any}) {
                         onChangeText={password => setForm({...form, password})}
                     />
                 </View>
+                
+                <View style={styles.input}>
+                    <Text style={styles.inputLabel}>Confirm Password</Text>
 
+                    <TextInput
+                        secureTextEntry
+                        style={styles.inputControl}
+                        placeholder='********'
+                        value={form.confirmPassword}
+                        onChangeText={confirmPassword => setForm({...form, confirmPassword})}
+                    />
+                </View>
+                
                 <View style={styles.formAction}>
-                    <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
+                    <TouchableOpacity onPress={() => {
+                        Alert.alert('Successfully logged in!')
+                    }}>
                         <View style={styles.btn}>
-                            <Text style={styles.btnText}>Sign in</Text>
+                            <Text style={styles.btnText}>Sign up</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
 
                 <TouchableOpacity
                     style={{marginTop: 'auto'}}
-                    onPress={() => navigation.navigate("RegisterScreen")}
+                    onPress={() => {
+                        
+                    }}
                 >
                     <Text style={styles.formFooter}>
-                        Don't have an account?{' '}
+                        Have an account!{' '}
                         <Text
                             style={{textDecorationLine: 'underline'}}
                         >
-                            Sign up
+                            Sign in
                         </Text>
                     </Text>
                 </TouchableOpacity>
             </View>
         </View>
+        </ScrollView>
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
+        padding: 24,
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
     },
-    // container: {
-    //     padding: 24,
-    //     flex: 1,
-    // },
 
     header: {
         marginVertical: 36,
