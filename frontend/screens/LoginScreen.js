@@ -1,16 +1,13 @@
 import React, {useState} from 'react';
-import { SafeAreaView, View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert, Button, StatusBar } from 'react-native';
-import type {StatusBarStyle} from 'react-native';
-const style = 'light-content' as const
+import { SafeAreaView, View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert, Button} from 'react-native';
+import {StatusBar} from 'expo-status-bar';
 
 //: {navigation: any}
-export default function LoginScreen({navigation}: {navigation: any}) {
+export default function LoginScreen({navigation}) {
     const [form, setForm] = useState({
         email: '',
         password: '',
     })
-
-    const [statusBarStyle] = useState<StatusBarStyle>(style);
 
     return (
         // <View style={styles.container}>
@@ -40,8 +37,6 @@ export default function LoginScreen({navigation}: {navigation: any}) {
         //         onPress={() => navigation.navigate("FanSettingScreen")}
         //     />
         // </View>
-
-
         <SafeAreaView style={{ flex: 1, backgroundColor: '#e8ecf4'}}>
         <View style={styles.container}>
             <StatusBar barStyle='light-content'/>
@@ -115,15 +110,15 @@ export default function LoginScreen({navigation}: {navigation: any}) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
     // container: {
-    //     padding: 24,
     //     flex: 1,
+    //     alignItems: 'center',
+    //     justifyContent: 'center'
     // },
+    container: {
+        padding: 24,
+        flex: 1,
+    },
 
     header: {
         marginVertical: 36,
