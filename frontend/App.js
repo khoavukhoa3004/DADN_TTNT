@@ -121,7 +121,9 @@ export default function App() {
               close: closeConfig,
             },
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
+            }
+          } 
+          initialRouteName='HomeScreen'
         >
           {/* <Stack.Screen name="Onboarding" component={OnboardingScreen}/> */}
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
