@@ -9,14 +9,72 @@ import { StatusBar } from "expo-status-bar";
 const ScreenWidth = Dimensions.get("window").width;
 const ScreenHeight = Dimensions.get("window").height;
 
+const FirstDeviceComponent = ({isFan} : {isFan: boolean}) => {
+    const [isEnabled, setIsEnabled] = React.useState(false);
+
+    const toggleSwitch = async () => {
+        try {
+            
+        } catch (error) {
+            
+        }
+    }
+
+    return (
+        <View style={styles.box}>
+            <Icon style={styles.iconBox} name={(isFan)? "fan" : "lightbulb-on-outline"}  size={50} color="white"/>
+            <Text style={styles.titleBox}>{(isFan ? "Quạt" : "Đèn")}</Text>
+            <View style={styles.stateBox}>
+                <Text style={styles.stateTextBox}>Bật</Text>
+                <Switch         
+                    trackColor={{false: '#767577', true: '#FF8A00'}}
+                    thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={toggleSwitch}
+                    value={isEnabled}
+                    style={styles.toggleInBox}
+                />
+            </View>
+        </View>
+    );
+};
+
+const SecondDeviceComponent = ({isDoor} : {isDoor: boolean}) => {
+    const [isEnabled, setIsEnabled] = React.useState(false);
+
+    const toggleSwitch = async () => {
+        try {
+            
+        } catch (error) {
+            
+        }
+    }
+
+    return (
+        <View style={styles.box}>
+            <Icon style={styles.iconBox} name={(isDoor)? "door-closed-lock" : "thermometer"} size={50} color="white"/>
+            <Text style={styles.titleBox}>{(isDoor)? "Cửa" : "Cảm biến nhiệt độ"}</Text>
+            <View style={styles.stateBox}>
+                <Text style={styles.stateTextBox}>Bật</Text>
+                <Switch         
+                    trackColor={{false: '#767577', true: '#FF8A00'}}
+                    thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={toggleSwitch}
+                    value={isEnabled}
+                    style={styles.toggleInBox}
+                />
+                </View>
+        </View>
+    );
+}
+
 
 const HomeScreen = ({navigation}: {navigation: any}) =>{
     const [isEnabled, setIsEnabled] = React.useState(false);   
 
 
-    const bulbToggleSwitch = () => setIsEnabled((previousState: Boolean) => !previousState);
-    const fanToggleSwitch = () => setIsEnabled((previousState: Boolean) => !previousState);
-    const doorToggleSwitch = () => setIsEnabled((previousState: Boolean) => !previousState);
+
     const tempToggleSwitch = () => setIsEnabled((previousState: Boolean) => !previousState);
     const lightToggleSwitch = () => setIsEnabled((previousState: Boolean) => !previousState);
     
@@ -71,7 +129,7 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                     </View>
                     <ScrollView style={styles.listDetail}>
                         <View style={styles.listDetailRow}>
-                            <View style={styles.box}>
+                            {/* <View style={styles.box}>
                                 <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
                                 <Text style={styles.titleBox}>Đèn</Text>
                                 <View style={styles.stateBox}>
@@ -100,10 +158,12 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                                         style={styles.toggleInBox}
                                     />
                                 </View>
-                            </View>
+                            </View> */}
+                            <FirstDeviceComponent isFan={true}/>
+                            <FirstDeviceComponent isFan={false}/>
                         </View>
                         <View style={styles.listDetailRow}>
-                            <View style={styles.box}>
+                            {/* <View style={styles.box}>
                                 <Icon style={styles.iconBox} name="door-closed-lock" size={50} color="white"/>
                                 <Text style={styles.titleBox}>Cửa</Text>
                                 <View style={styles.stateBox}>
@@ -117,8 +177,8 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                                         style={styles.toggleInBox}
                                     />
                                 </View>
-                            </View>
-                            <View style={styles.box}>
+                            </View> */}
+                            {/* <View style={styles.box}>
                                 <Icon style={styles.iconBox} name="thermometer" size={50} color="white"/>
                                 <Text style={styles.titleBox}>Cảm biến nhiệt độ</Text>
                                 <View style={styles.stateBox}>
@@ -132,7 +192,9 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                                         style={styles.toggleInBox}
                                     />
                                 </View>
-                            </View>
+                            </View> */}
+                            <SecondDeviceComponent isDoor={true}/>
+                            <SecondDeviceComponent isDoor={false}/>
                         </View>
                         <View style={styles.listDetailRow}>
                             <View style={styles.box}>
