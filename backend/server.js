@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const mqttService = require('./services/mqttService');
+const request = require('request');
 
 require('dotenv').config();
 //Connect to MongoDB Server:

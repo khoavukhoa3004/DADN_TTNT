@@ -30,6 +30,7 @@
     "mongoose": "^7.0.3",
     "mongoose-sequence": "^5.3.1",
     "mqtt": "^4.3.7",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "request": "^2.88.2"
   }
 }
