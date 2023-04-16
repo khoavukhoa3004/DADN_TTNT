@@ -33,9 +33,9 @@ const bulbRoute = require('./routes/bulbRoute');
 // const lightSensorRoute = require('./routes/lightSensorRoute');
 const doorSensorRoute = require('./routes/doorSensorRoute');
 
-app.get('/', (req, res) => {
-    res.send('<h1>Hello World</h1>');
-})
+// app.get('/', (req, res) => {
+//     res.send('<h1>Hello World</h1>');
+// })
 
 app.use('/fan', fanRoute);
 app.use('/bulb', bulbRoute);
