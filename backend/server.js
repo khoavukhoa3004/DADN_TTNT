@@ -15,9 +15,9 @@ require('dotenv').config();
 require('./models/db');
 
 const app = express();
-const mqttClient = new mqttService();
-mqttClient.connect();
-module.exports = mqttClient;
+// const mqttClient = new mqttService();
+// mqttClient.connect();
+// module.exports = mqttClient;
 
 app.use(cors());
 
