@@ -1,20 +1,24 @@
 import * as React from 'react';
-import { View, Text, StyleSheet,Button, Image, ScrollView, Switch, Dimensions } from 'react-native';
+import { View, Text, StyleSheet,Button, Image, ScrollView, Switch, Dimensions, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/Ionicons';
 import Icon3 from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/Feather';
 import BottomBar from '../components/BottomBar';
 import { StatusBar } from "expo-status-bar";
+// import { TouchableOpacity } from 'react-native-gesture-handler';
 const ScreenWidth = Dimensions.get("window").width;
 const ScreenHeight = Dimensions.get("window").height;
+
+let State = false;
 
 const FirstDeviceComponent = ({isFan} : {isFan: boolean}) => {
     const [isEnabled, setIsEnabled] = React.useState(false);
 
     const toggleSwitch = async () => {
         try {
-            
+            State = !State;
+            setIsEnabled((previousState: boolean) => !previousState);
         } catch (error) {
             
         }
@@ -44,7 +48,8 @@ const SecondDeviceComponent = ({isDoor} : {isDoor: boolean}) => {
 
     const toggleSwitch = async () => {
         try {
-            
+            State = !State;
+            setIsEnabled((previousState: boolean) => !previousState);
         } catch (error) {
             
         }
@@ -67,8 +72,38 @@ const SecondDeviceComponent = ({isDoor} : {isDoor: boolean}) => {
                 </View>
         </View>
     );
-}
+};
 
+const ThirdDeviceComponent = () => {
+    const [isEnabled, setIsEnabled] = React.useState(false);
+
+    const toggleSwitch = async () => {
+        try {
+            State = !State;
+            setIsEnabled((previousState: boolean) => !previousState);
+        } catch (error) {
+            
+        }
+    }
+
+    return (
+        <View style={styles.box}>
+            <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
+            <Text style={styles.titleBox}>Cảm biến {"\n"}ánh sáng</Text>
+            <View style={styles.stateBox}>
+                <Text style={styles.stateTextBox}>Bật</Text>
+                <Switch         
+                    trackColor={{false: '#767577', true: '#FF8A00'}}
+                    thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={toggleSwitch}
+                    value={isEnabled}
+                    style={styles.toggleInBox}
+                />
+            </View>
+        </View>
+    );
+};
 
 const HomeScreen = ({navigation}: {navigation: any}) =>{
     const [isEnabled, setIsEnabled] = React.useState(false);   
@@ -197,7 +232,7 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                             <SecondDeviceComponent isDoor={false}/>
                         </View>
                         <View style={styles.listDetailRow}>
-                            <View style={styles.box}>
+                            {/* <View style={styles.box}>
                                 <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
                                 <Text style={styles.titleBox}>Cảm biến {"\n"}ánh sáng</Text>
                                 <View style={styles.stateBox}>
@@ -211,7 +246,8 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                                         style={styles.toggleInBox}
                                     />
                                 </View>
-                            </View>
+                            </View> */}
+                            <ThirdDeviceComponent/>
                             <View style={styles.finalBox}>
                                 {/* <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
                                 <Text style={styles.titleBox}> Đèn</Text>
@@ -237,18 +273,20 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
             {/* <BottomBar navigation={navigation}/> */}
             <View style={styles.bottomContainer}>
         <View style={styles.leftBottomContainer}>
-          <Image
-            style={styles.leftBottomContainer_Footer}
-            source={require("../assets/images/Led_Fan/leftFooter.png")}
-          />
-          <Icon1
-            // ios="ios-add"
-            // android="android-add"
-            name="home-outline"
-            size={30}
-            color={"white"}
-            style={styles.HomeIcon}
-          ></Icon1>
+          <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
+            <Image
+                style={styles.leftBottomContainer_Footer}
+                source={require("../assets/images/Led_Fan/leftFooter.png")}
+            />
+            <Icon1
+                // ios="ios-add"
+                // android="android-add"
+                name="reorder-three-outline"
+                size={30}
+                color={"white"}
+                style={styles.HomeIcon}
+            ></Icon1>
+          </TouchableOpacity>
         </View>
         <View style={styles.middleBottomContainer}>
           <View style={styles.circleContainer}>
@@ -261,21 +299,23 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
           </View>
         </View>
         <View style={styles.rightBottomContainer}>
-          <Image
-            style={styles.rightBottomContainer_Footer}
-            source={require("../assets/images/Led_Fan/rightFooter.png")}
-          ></Image>
-          <Icon1
-            // ios="ios-add"
-            // android="android-add"
-            name="person-outline"
-            size={30}
-            color={"white"}
-            style={styles.personIcon}
-          ></Icon1>
+            <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
+                <Image
+                    style={styles.rightBottomContainer_Footer}
+                    source={require("../assets/images/Led_Fan/rightFooter.png")}
+                ></Image>
+                <Icon1
+                // ios="ios-add"
+                // android="android-add"
+                name="person-outline"
+                size={30}
+                color={"white"}
+                style={styles.personIcon}
+                ></Icon1>
+            </TouchableOpacity>
         </View>
       </View>
-        </View>
+    </View>
     );
 }
 
@@ -465,7 +505,7 @@ const styles = StyleSheet.create({
       },
       HomeIcon: {
         position: "absolute",
-        bottom: 0.03 * ScreenHeight,
+        bottom: 0.05 * ScreenHeight,
         left: 0.065 * ScreenWidth,
       },
       circleContainer: {
@@ -484,7 +524,7 @@ const styles = StyleSheet.create({
       },
       personIcon: {
         position: "absolute",
-        bottom: 0.03 * ScreenHeight,
+        bottom: 0.05 * ScreenHeight,
         right: 0.065 * ScreenWidth,
       },
 });

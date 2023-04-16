@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Easing } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFonts } from 'expo-font';
 
 
-import { createStackNavigator } from "@react-navigation/stack";
+import { CardStyleInterpolators, TransitionSpecs, createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Color } from './GlobalStyles';
 import OnboardingScreen from './screens/OnboardingScreen';
@@ -22,9 +23,30 @@ import LedScreen from './screens/LedScreen';
 import LedSettingScreen from './screens/LedSettingScreen';
 
 // import Icon from 'react-native-vector-icons/Ionicons';
+const config = {
+  animation: 'spring',
+  config: {
+    stiffness: 1000,
+    damping: 500,
+    mass: 3,
+    overshootClamping: true,
+    restDisplacementThreshold: 0.01,
+    restSpeedThreshold: 0.01,
+  },
+};
 
+const closeConfig = {
+  animation: 'config',
+  config: {
+    duration: 200,
+    easing: Easing.linear,
+  }
+}
 
 const Stack = createStackNavigator();
+
+// const Stack = createNativeStackNavigator();
+
 
 const Tab = createBottomTabNavigator();
 
@@ -91,11 +113,18 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
-            headerShown: false
+            headerShown: false,
+            gestureEnabled: true,
+            gestureDirection: 'horizontal',
+            transitionSpec: {
+              open: config,
+              close: closeConfig,
+            },
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           }}
         >
-          <Stack.Screen name="Onboarding" component={OnboardingScreen}/>
-          <Stack.Screen name="LoginScreen" component={LoginScreen}/>
+          {/* <Stack.Screen name="Onboarding" component={OnboardingScreen}/> */}
+          <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
           <Stack.Screen name="HomeScreen" component={HomeScreen}/>
           <Stack.Screen name="DetailsScreen" component={DetailsScreen}/>
