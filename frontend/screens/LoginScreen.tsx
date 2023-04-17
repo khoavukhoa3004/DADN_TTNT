@@ -73,6 +73,7 @@ export default function LoginScreen({navigation}: {navigation: any}) {
                         Don't have an account?{' '}
                         <Text
                             style={{textDecorationLine: 'underline'}}
+                            onPress={() => navigation.navigate("RegisterScreen")}
                         >
                             Sign up
                         </Text>

@@ -1,15 +1,13 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
+import FormHeader from '../components/FormHeader';
+import FormInput from '../components/FormInput';
 
-export default function LogoutScreen({navigation}: {navigation: any}) {
+export default function RegisterScreen({navigation}: {navigation: any}) {
     return (
-        <View style={styles.container}>
-            <Text> Login Screen </Text>
-            <Button 
-                title="This is Login Screen"
-                onPress={() => navigation.navigate("HomeScreen")}
-            />
-        </View>
+        <>
+            <FormHeader title="Sign up" url='../assets/images/Logo/logo.png' subTitle="Sign up to get started" />
+        </>
     );
 }
 
@@ -20,3 +18,4 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
 });
+

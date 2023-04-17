@@ -86,7 +86,6 @@ export default function App() {
             headerShown: false
           }}
         >
-          <Stack.Screen name="Onboarding" component={OnboardingScreen}/>
           <Stack.Screen name="LoginScreen" component={LoginScreen}/>
           <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
           <Stack.Screen name="HomeScreen" component={HomeScreen}/>
