@@ -17,6 +17,10 @@ const bulb = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    isActive: {
+        type: Boolean,
+        required: true,
+    },
     createdAt: {type: Date},
     updatedAt: {type: Date}
 }, {timestamps: true});
@@ -29,6 +33,10 @@ const door = new mongoose.Schema({
     },
     doorStatus: {
         type: String,
+        required: true,
+    },
+    isActive: {
+        type: Boolean,
         required: true,
     },
     createdAt: {type: Date},
@@ -49,6 +57,10 @@ const fan = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    isActive: {
+        type: Boolean,
+        required: true,
+    },
     createdAt: {type: Date},
     updatedAt: {type: Date}
 }, {timestamps: true});
@@ -63,6 +75,10 @@ const light = new mongoose.Schema({
         type: Decimal128,
         required: true,
     },
+    isActive: {
+        type: Boolean,
+        required: true,
+    },
     createdAt: {type: Date},
     updatedAt: {type: Date}
 }, {timestamps: true});
@@ -75,6 +91,10 @@ const temp = new mongoose.Schema({
     },
     tempValue: {
         type: Decimal128,
+        required: true,
+    },
+    isActive: {
+        type: Boolean,
         required: true,
     },
     createdAt: {type: Date},
