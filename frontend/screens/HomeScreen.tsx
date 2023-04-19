@@ -106,17 +106,10 @@ const ThirdDeviceComponent = () => {
 };
 
 const HomeScreen = ({navigation}: {navigation: any}) =>{
-    const [isEnabled, setIsEnabled] = React.useState(false);   
-
-
-
-    const tempToggleSwitch = () => setIsEnabled((previousState: Boolean) => !previousState);
-    const lightToggleSwitch = () => setIsEnabled((previousState: Boolean) => !previousState);
-    
+    const [isEnabled, setIsEnabled] = React.useState(false);
     return (
         <View style={styles.container}>
             <View style={styles.subContainer}>
-
                 {/* Header */}
                 <View style={styles.headerWrapper}>
                     <View style={styles.headerTitle}>
@@ -164,89 +157,14 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                     </View>
                     <ScrollView style={styles.listDetail}>
                         <View style={styles.listDetailRow}>
-                            {/* <View style={styles.box}>
-                                <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
-                                <Text style={styles.titleBox}>Đèn</Text>
-                                <View style={styles.stateBox}>
-                                    <Text style={styles.stateTextBox}>Bật</Text>
-                                    <Switch         
-                                        trackColor={{false: '#767577', true: '#FF8A00'}}
-                                        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                                        ios_backgroundColor="#3e3e3e"
-                                        onValueChange={bulbToggleSwitch}
-                                        value={isEnabled}
-                                        style={styles.toggleInBox}
-                                    />
-                                </View>
-                            </View>
-                            <View style={styles.box}>
-                                <Icon style={styles.iconBox} name="fan" size={50} color="white"/>
-                                <Text style={styles.titleBox}>Quạt</Text>
-                                <View style={styles.stateBox}>
-                                    <Text style={styles.stateTextBox}>Bật</Text>
-                                    <Switch         
-                                        trackColor={{false: '#767577', true: '#FF8A00'}}
-                                        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                                        ios_backgroundColor="#3e3e3e"
-                                        onValueChange={fanToggleSwitch}
-                                        value={isEnabled}
-                                        style={styles.toggleInBox}
-                                    />
-                                </View>
-                            </View> */}
                             <FirstDeviceComponent isFan={true}/>
                             <FirstDeviceComponent isFan={false}/>
                         </View>
                         <View style={styles.listDetailRow}>
-                            {/* <View style={styles.box}>
-                                <Icon style={styles.iconBox} name="door-closed-lock" size={50} color="white"/>
-                                <Text style={styles.titleBox}>Cửa</Text>
-                                <View style={styles.stateBox}>
-                                    <Text style={styles.stateTextBox}>Bật</Text>
-                                    <Switch         
-                                        trackColor={{false: '#767577', true: '#FF8A00'}}
-                                        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                                        ios_backgroundColor="#3e3e3e"
-                                        onValueChange={doorToggleSwitch}
-                                        value={isEnabled}
-                                        style={styles.toggleInBox}
-                                    />
-                                </View>
-                            </View> */}
-                            {/* <View style={styles.box}>
-                                <Icon style={styles.iconBox} name="thermometer" size={50} color="white"/>
-                                <Text style={styles.titleBox}>Cảm biến nhiệt độ</Text>
-                                <View style={styles.stateBox}>
-                                    <Text style={styles.stateTextBox}>Bật</Text>
-                                    <Switch         
-                                        trackColor={{false: '#767577', true: '#FF8A00'}}
-                                        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                                        ios_backgroundColor="#3e3e3e"
-                                        onValueChange={tempToggleSwitch}
-                                        value={isEnabled}
-                                        style={styles.toggleInBox}
-                                    />
-                                </View>
-                            </View> */}
                             <SecondDeviceComponent isDoor={true}/>
                             <SecondDeviceComponent isDoor={false}/>
                         </View>
                         <View style={styles.listDetailRow}>
-                            {/* <View style={styles.box}>
-                                <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
-                                <Text style={styles.titleBox}>Cảm biến {"\n"}ánh sáng</Text>
-                                <View style={styles.stateBox}>
-                                    <Text style={styles.stateTextBox}>Bật</Text>
-                                    <Switch         
-                                        trackColor={{false: '#767577', true: '#FF8A00'}}
-                                        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                                        ios_backgroundColor="#3e3e3e"
-                                        onValueChange={lightToggleSwitch}
-                                        value={isEnabled}
-                                        style={styles.toggleInBox}
-                                    />
-                                </View>
-                            </View> */}
                             <ThirdDeviceComponent/>
                             <View style={styles.finalBox}>
                                 {/* <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
@@ -273,7 +191,7 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
             {/* <BottomBar navigation={navigation}/> */}
             <View style={styles.bottomContainer}>
         <View style={styles.leftBottomContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
+          <TouchableOpacity onPress={() => navigation.navigate('DeviceScreen')}>
             <Image
                 style={styles.leftBottomContainer_Footer}
                 source={require("../assets/images/Led_Fan/leftFooter.png")}

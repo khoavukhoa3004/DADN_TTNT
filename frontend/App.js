@@ -9,7 +9,10 @@ import { CardStyleInterpolators, TransitionSpecs, createStackNavigator } from "@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Color } from './GlobalStyles';
+import 'react-native-gesture-handler';
+
 import OnboardingScreen from './screens/OnboardingScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
@@ -21,6 +24,7 @@ import FanScreen from './screens/FanScreen';
 import FanSettingScreen from './screens/FanSettingScreen';
 import LedScreen from './screens/LedScreen';
 import LedSettingScreen from './screens/LedSettingScreen';
+import DeviceScreen from './screens/DeviceScreen.js';
 
 // import Icon from 'react-native-vector-icons/Ionicons';
 const config = {
@@ -44,6 +48,7 @@ const closeConfig = {
 }
 
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
 // const Stack = createNativeStackNavigator();
 
@@ -58,7 +63,6 @@ const checkFirstLaunch = async () => {
   }
   return false;
 };
-
 
 export default function App() {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(false);
@@ -122,13 +126,14 @@ export default function App() {
             },
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
             }
-          } 
-          initialRouteName='HomeScreen'
+          }
+          // initialRouteName='HomeScreen'
         >
           {/* <Stack.Screen name="Onboarding" component={OnboardingScreen}/> */}
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
           <Stack.Screen name="HomeScreen" component={HomeScreen}/>
+          <Stack.Screen name="DeviceScreen" component={DeviceScreen}/>
           <Stack.Screen name="DetailsScreen" component={DetailsScreen}/>
           <Stack.Screen name="SettingsScreen" component={SettingsScreen}/>
           <Stack.Screen name="LedScreen" component={LedScreen} />
@@ -138,7 +143,6 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     );
-}
-
+  }
 }
 
