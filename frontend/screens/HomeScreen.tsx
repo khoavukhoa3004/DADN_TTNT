@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#EFF1F5',
     },
     subContainer: {
-        flex: 10.85,
+        flex: 10.35,
         flexDirection: 'column',
         paddingTop: 20,
         paddingLeft: 20,
