@@ -58,7 +58,7 @@ const SecondDeviceComponent = ({isDoor} : {isDoor: boolean}) => {
     return (
         <View style={styles.box}>
             <Icon style={styles.iconBox} name={(isDoor)? "door-closed-lock" : "thermometer"} size={50} color="white"/>
-            <Text style={styles.titleBox}>{(isDoor)? "Cửa" : "Cảm biến nhiệt độ"}</Text>
+            <Text style={styles.titleBox}>{(isDoor)? "Cửa" : "Cảm biến" + "\n" + "nhiệt độ"}</Text>
             <View style={styles.stateBox}>
                 <Text style={styles.stateTextBox}>Bật</Text>
                 <Switch         
@@ -117,7 +117,11 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                         <Text style={{position: 'absolute', fontSize: 60, fontFamily: 'Inter-Bold', opacity: 0.1}}></Text>
                     </View>
                     <View style={styles.headerNotification}>
-                        <Icon1 name="notifications-outline" size={50} color="blue"/>
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate('NotificationScreen');
+                        }}>
+                            <Icon1 name="notifications-outline" size={50} color="blue"/>
+                        </TouchableOpacity>
                     </View>
                 </View>
 

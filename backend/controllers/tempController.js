@@ -2,6 +2,32 @@ const tempSensor = require('../models/deviceModel').tempModel;
 const bcrypt = require('bcrypt');
 
 const tempController = {
+    create: async(req, res) => {
+        try {
+            const newTempSensor = await new tempSensor({
+                
+            })
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+
+    get: async(req, res) => {
+
+    },
+
+    getInterval: async(req, res) => {
+
+    },
+
+    getHistory: async(req, res) => {
+
+    },
+
+    delete: async(req, res) => {
+
+    },
+
     // createTempSensor: async(req, res) => {
     //     try {
     //         const newTempSensor = await new tempSensor({

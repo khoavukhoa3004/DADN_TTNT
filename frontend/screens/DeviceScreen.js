@@ -57,7 +57,7 @@ const DeviceListScreen = ({navigation}) => {
           </View>
           <View style={styles.addContainer}>
             <TouchableOpacity onPress={() => {
-              navigation.navigate('FanSettingScreen');
+              navigation.navigate('AddSettingScreen');
             }}>
               <Icon 
                 name="add-circle-outline"
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   titleHeader: {
     display: 'flex',
     textAlign: 'center',
-    top: 0.055 * ScreenHeight,
+    top: 0.05 * ScreenHeight,
     fontWeight: 500,
     fontSize: 0.055 * ScreenWidth,
   },

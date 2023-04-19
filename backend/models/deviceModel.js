@@ -85,8 +85,13 @@ const light = new mongoose.Schema({
 
 const temp = new mongoose.Schema({
     tempID: {
-        type: String,
+        type: Number,
         unique: true,
+        required: true,
+        default: 0,
+    },
+    tempName: {
+        type: String,
         required: true,
     },
     tempValue: {

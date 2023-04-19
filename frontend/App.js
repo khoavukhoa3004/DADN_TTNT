@@ -25,6 +25,9 @@ import FanSettingScreen from './screens/FanSettingScreen';
 import LedScreen from './screens/LedScreen';
 import LedSettingScreen from './screens/LedSettingScreen';
 import DeviceScreen from './screens/DeviceScreen.js';
+import AddScreen from './screens/AddScreen';
+import AddSettingScreen from './screens/AddSettingScreen';
+import NotificationScreen from './screens/NotificationScreen';
 
 // import Icon from 'react-native-vector-icons/Ionicons';
 const config = {
@@ -133,6 +136,7 @@ export default function App() {
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
           <Stack.Screen name="HomeScreen" component={HomeScreen}/>
+          <Stack.Screen name="NotificationScreen" component={NotificationScreen}/>
           <Stack.Screen name="DeviceScreen" component={DeviceScreen}/>
           {/* <Stack.Screen name="DetailsScreen" component={DetailsScreen}/> */}
           <Stack.Screen name="SettingsScreen" component={SettingsScreen}/>
@@ -140,6 +144,8 @@ export default function App() {
           <Stack.Screen name="FanScreen" component={FanScreen} />
           <Stack.Screen name="LedSettingScreen" component={LedSettingScreen} />
           <Stack.Screen name="FanSettingScreen" component={FanSettingScreen} />
+          <Stack.Screen name="AddSettingScreen" component={AddSettingScreen}/>
+          <Stack.Screen name="AddScreen" component={AddScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
     );
