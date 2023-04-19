@@ -2,10 +2,15 @@ const tempController = require("../controllers/tempController");
 
 const tempRouter = require("express").Router();
 
-tempRouter.post("/createTempSensor", tempController.createTempSensor);
-tempRouter.get("/getAllTempSensor", tempController.getAllTempSensor);
-tempRouter.get("/getTempSensorById/:id", tempController.getTempSensorById);
-tempRouter.delete("/deleteAllTempSensor", tempController.deleteAllTempSensor);
-tempRouter.delete("/deleteTempSensorById/:id", tempController.deleteTempSensorByID);
+// Create Sensor, and push to MongoDB (but inactive):
+tempRouter.post('/create', tempController.create);
+// Get Sensor Data from MongoDB (for DeviceListScreen = Device + Button):
+tempRouter.get('/get', tempController.get);
+// Get Sensor Data from Adafruit (Real-time) when active:
+tempRouter.get('/getInterval', tempController.getInterval);
+// Get Sensor Data from MongoDB (to do HistoryList) when active:
+tempRouter.get('/getHistory', tempController.getHistory);
+// Delete Sensor on MongoDB:
+tempRouter.delete('/delete', tempController.delete);
 
 module.exports = tempRouter;
