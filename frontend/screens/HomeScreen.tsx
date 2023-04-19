@@ -144,6 +144,7 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                     </View>
                 </View>
 
+                {/* Element Details */}
                 <View style={styles.elementDetail}>
                     <View style={styles.roomDetail}>
                         <ScrollView horizontal={true}>
@@ -153,8 +154,9 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                             <View style={styles.roomCell}><Text>Nhà vệ sinh</Text></View>
                             <View style={styles.roomCell}><Text>Garage</Text></View>
                         </ScrollView>
-
                     </View>
+
+                {/* List Details */}
                     <ScrollView style={styles.listDetail}>
                         <View style={styles.listDetailRow}>
                             <FirstDeviceComponent isFan={true}/>
@@ -184,56 +186,55 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                         </View>
                     </ScrollView>
                 </View>
-                <View>
-                </View>
             </View>
+
             {/* footer */}
             {/* <BottomBar navigation={navigation}/> */}
             <View style={styles.bottomContainer}>
-        <View style={styles.leftBottomContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('DeviceScreen')}>
-            <Image
-                style={styles.leftBottomContainer_Footer}
-                source={require("../assets/images/Led_Fan/leftFooter.png")}
-            />
-            <Icon1
-                // ios="ios-add"
-                // android="android-add"
-                name="reorder-three-outline"
-                size={30}
-                color={"white"}
-                style={styles.HomeIcon}
-            ></Icon1>
-          </TouchableOpacity>
+                <View style={styles.leftBottomContainer}>
+                <TouchableOpacity onPress={() => navigation.navigate('DeviceScreen')}>
+                    <Image
+                        style={styles.leftBottomContainer_Footer}
+                        source={require("../assets/images/Led_Fan/leftFooter.png")}
+                    />
+                    <Icon1
+                        // ios="ios-add"
+                        // android="android-add"
+                        name="reorder-three-outline"
+                        size={30}
+                        color={"white"}
+                        style={styles.HomeIcon}
+                    ></Icon1>
+                </TouchableOpacity>
+                </View>
+                <View style={styles.middleBottomContainer}>
+                <View style={styles.circleContainer}>
+                    <Icon3
+                    style={styles.microphoneIcon}
+                    name="microphone"
+                    size={30}
+                    color="white"
+                    />
+                </View>
+                </View>
+                <View style={styles.rightBottomContainer}>
+                    <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
+                        <Image
+                            style={styles.rightBottomContainer_Footer}
+                            source={require("../assets/images/Led_Fan/rightFooter.png")}
+                        ></Image>
+                        <Icon1
+                        // ios="ios-add"
+                        // android="android-add"
+                        name="person-outline"
+                        size={30}
+                        color={"white"}
+                        style={styles.personIcon}
+                        ></Icon1>
+                    </TouchableOpacity>
+                </View>
+            </View>
         </View>
-        <View style={styles.middleBottomContainer}>
-          <View style={styles.circleContainer}>
-            <Icon3
-              style={styles.microphoneIcon}
-              name="microphone"
-              size={30}
-              color="white"
-            />
-          </View>
-        </View>
-        <View style={styles.rightBottomContainer}>
-            <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
-                <Image
-                    style={styles.rightBottomContainer_Footer}
-                    source={require("../assets/images/Led_Fan/rightFooter.png")}
-                ></Image>
-                <Icon1
-                // ios="ios-add"
-                // android="android-add"
-                name="person-outline"
-                size={30}
-                color={"white"}
-                style={styles.personIcon}
-                ></Icon1>
-            </TouchableOpacity>
-        </View>
-      </View>
-    </View>
     );
 }
 
@@ -245,7 +246,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#EFF1F5',
     },
     subContainer: {
-        flex: 9,
+        flex: 10.85,
         flexDirection: 'column',
         paddingTop: 20,
         paddingLeft: 20,
@@ -423,7 +424,7 @@ const styles = StyleSheet.create({
       },
       HomeIcon: {
         position: "absolute",
-        bottom: 0.05 * ScreenHeight,
+        bottom: 0.06 * ScreenHeight,
         left: 0.065 * ScreenWidth,
       },
       circleContainer: {
@@ -442,7 +443,7 @@ const styles = StyleSheet.create({
       },
       personIcon: {
         position: "absolute",
-        bottom: 0.05 * ScreenHeight,
+        bottom: 0.06 * ScreenHeight,
         right: 0.065 * ScreenWidth,
       },
 });

@@ -134,7 +134,7 @@ export default function App() {
           <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
           <Stack.Screen name="HomeScreen" component={HomeScreen}/>
           <Stack.Screen name="DeviceScreen" component={DeviceScreen}/>
-          <Stack.Screen name="DetailsScreen" component={DetailsScreen}/>
+          {/* <Stack.Screen name="DetailsScreen" component={DetailsScreen}/> */}
           <Stack.Screen name="SettingsScreen" component={SettingsScreen}/>
           <Stack.Screen name="LedScreen" component={LedScreen} />
           <Stack.Screen name="FanScreen" component={FanScreen} />

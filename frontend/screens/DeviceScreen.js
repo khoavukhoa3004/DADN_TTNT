@@ -25,26 +25,47 @@ import SelectDropdown from "react-native-select-dropdown";
 const ScreenWidth = Dimensions.get("window").width;
 const ScreenHeight = Dimensions.get("window").height;
 
-const DeviceListScreen = () => {
+const DeviceListScreen = ({navigation}) => {
     return(
       <View style={styles.container}>
         <View style={styles.headContainer}>
           <View style={styles.backContainer}>
-            <Icon
-              name="chevron-back-circle-outline"
-              size={32}
-              style={styles.chevronLeft}
-            ></Icon>
+            <TouchableOpacity onPress={() => {
+              navigation.navigate('HomeScreen');
+              // navigation.pop(1);
+            }}>
+              <Icon
+                name="chevron-back-circle-outline"
+                size={32}
+                style={styles.chevronLeft}
+              ></Icon>
+            </TouchableOpacity>
           </View>
           <View style={styles.titleContainer}>
             <Text style={styles.titleHeader}>Quản lý thiết bị</Text>
           </View>
           <View style={styles.settingContainer}>
-            <Icon
-              name="settings-outline"
-              size={30}
-              style={styles.settingIcon}
-            ></Icon>
+            <TouchableOpacity onPress={() => {
+              // navigation.navigate('SettingsScreen');
+            }}>
+              <Icon
+                name="reload-circle-outline"
+                size={30}
+                style={styles.settingIcon}
+              ></Icon>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.addContainer}>
+            <TouchableOpacity onPress={() => {
+              navigation.navigate('FanSettingScreen');
+            }}>
+              <Icon 
+                name="add-circle-outline"
+                size={30}
+                style={styles.addIcon}
+              >
+              </Icon>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.bodyContainer}></View>
@@ -71,8 +92,12 @@ const styles = StyleSheet.create({
     // backgroundColor: 'orange',
   },
   settingContainer: {
-    flex: 1,
+    flex: 0.5,
     // backgroundColor: 'yellow',
+  },
+  addContainer: {
+    flex: 0.5,
+    // backgroundColor: 'blue',
   },
   titleHeader: {
     display: 'flex',
@@ -83,19 +108,24 @@ const styles = StyleSheet.create({
   },
   chevronLeft: {
     position: "absolute",
-    top: 0.04 * ScreenHeight,
+    top: 0.045 * ScreenHeight,
     left: 0.025 * ScreenWidth,
   },
   settingIcon: {
     position: "absolute",
-    top: 0.04 * ScreenHeight,
-    right: 0.025 * ScreenWidth,
+    top: 0.045 * ScreenHeight,
+    right: 0.01 * ScreenWidth,
+  },
+  addIcon: {
+    position: "absolute",
+    top: 0.045 * ScreenHeight,
+    right: 0.01 * ScreenWidth,
   },
   
 
   bodyContainer: {
     flex: 9,
-    backgroundColor: 'green',
+    // backgroundColor: 'green',
   },
 
 });
