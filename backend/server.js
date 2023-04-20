@@ -29,8 +29,8 @@ app.use(bodyParser.json());
 // API Configurations through ROUTES:
 const fanRoute = require('./routes/fanRoute');
 const bulbRoute = require('./routes/bulbRoute');
-// const tempSensorRoute = require('./routes/tempSensorRoute');
-// const lightSensorRoute = require('./routes/lightSensorRoute');
+const tempSensorRoute = require('./routes/tempSensorRoute');
+const lightSensorRoute = require('./routes/lightSensorRoute');
 const doorSensorRoute = require('./routes/doorSensorRoute');
 
 // app.get('/', (req, res) => {
@@ -39,8 +39,8 @@ const doorSensorRoute = require('./routes/doorSensorRoute');
 
 app.use('/fan', fanRoute);
 app.use('/bulb', bulbRoute);
-// app.use('/temp', tempSensorRoute);
-// app.use('/light', lightSensorRoute);
+app.use('/temp', tempSensorRoute);
+app.use('/light', lightSensorRoute);
 app.use('/door', doorSensorRoute);
 
 

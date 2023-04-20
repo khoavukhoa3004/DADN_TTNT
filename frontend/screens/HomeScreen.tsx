@@ -33,7 +33,7 @@ const FirstDeviceComponent = ({isFan} : {isFan: boolean}) => {
                 <Switch         
                     trackColor={{false: '#767577', true: '#FF8A00'}}
                     thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                    ios_backgroundColor="#3e3e3e"
+                    // ios_backgroundColor="#3e3e3e"
                     onValueChange={toggleSwitch}
                     value={isEnabled}
                     style={styles.toggleInBox}
@@ -58,13 +58,13 @@ const SecondDeviceComponent = ({isDoor} : {isDoor: boolean}) => {
     return (
         <View style={styles.box}>
             <Icon style={styles.iconBox} name={(isDoor)? "door-closed-lock" : "thermometer"} size={50} color="white"/>
-            <Text style={styles.titleBox}>{(isDoor)? "Cửa" : "Cảm biến" + "\n" + "nhiệt độ"}</Text>
+            <Text style={styles.titleBox}>{(isDoor)? "Cửa" : "Cảm biến nhiệt độ"}</Text>
             <View style={styles.stateBox}>
                 <Text style={styles.stateTextBox}>Bật</Text>
                 <Switch         
                     trackColor={{false: '#767577', true: '#FF8A00'}}
                     thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                    ios_backgroundColor="#3e3e3e"
+                    // ios_backgroundColor="#3e3e3e"
                     onValueChange={toggleSwitch}
                     value={isEnabled}
                     style={styles.toggleInBox}
@@ -89,13 +89,13 @@ const ThirdDeviceComponent = () => {
     return (
         <View style={styles.box}>
             <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
-            <Text style={styles.titleBox}>Cảm biến {"\n"}ánh sáng</Text>
+            <Text style={styles.titleBox}>Cảm biến ánh sáng</Text>
             <View style={styles.stateBox}>
                 <Text style={styles.stateTextBox}>Bật</Text>
                 <Switch         
                     trackColor={{false: '#767577', true: '#FF8A00'}}
                     thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                    ios_backgroundColor="#3e3e3e"
+                    // ios_backgroundColor="#3e3e3e"
                     onValueChange={toggleSwitch}
                     value={isEnabled}
                     style={styles.toggleInBox}
@@ -172,8 +172,8 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                         </View>
                         <View style={styles.listDetailRow}>
                             <ThirdDeviceComponent/>
-                            <View style={styles.finalBox}>
-                                {/* <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
+                            {/* <View style={styles.finalBox}>
+                                <Icon style={styles.iconBox} name="lightbulb-on-outline" size={50} color="white"/>
                                 <Text style={styles.titleBox}> Đèn</Text>
                                 <View style={styles.stateBox}>
                                     <Text style={styles.stateTextBox}> Bật</Text>
@@ -185,8 +185,8 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                                         value={isEnabled}
                                         style={styles.toggleInBox}
                                     />
-                                </View> */}
-                            </View>
+                                </View>
+                            </View> */}
                         </View>
                     </ScrollView>
                 </View>
@@ -196,7 +196,7 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
             {/* <BottomBar navigation={navigation}/> */}
             <View style={styles.bottomContainer}>
                 <View style={styles.leftBottomContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate('DeviceScreen')}>
+                <TouchableOpacity onPress={() => navigation.navigate('DeviceSettingScreen')}>
                     <Image
                         style={styles.leftBottomContainer_Footer}
                         source={require("../assets/images/Led_Fan/leftFooter.png")}
@@ -204,7 +204,7 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                     <Icon1
                         // ios="ios-add"
                         // android="android-add"
-                        name="reorder-three-outline"
+                        name="add-circle-outline"
                         size={30}
                         color={"white"}
                         style={styles.HomeIcon}
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
       
     },
     listDetailRow: {
-        flexDirection: 'row',
+        flexDirection: 'column',
     },
     box: {
         height: 170,
@@ -393,12 +393,11 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'flex-end',
         flexDirection: 'row',
-        
     },
     stateTextBox: {
         color: 'white',
         fontFamily: 'Inter-Bold',
-        flex: 1,
+        flex: 4,
         paddingBottom: 15,
         fontSize: 17,
     },

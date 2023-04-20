@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  SectionList,
   View,
   Text,
   Button,
@@ -68,7 +69,23 @@ const DeviceListScreen = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.bodyContainer}></View>
+        <View style={styles.bodyContainer}>
+          <SectionList 
+            sections={[
+              {title: 'Phòng khách', data: ['Quạt 1', 'Quạt 2']},
+              {title: 'Phòng ngủ', data: ['Quạt 1', 'Quạt 2']},
+              {title: 'Nhà bếp', data: ['Quạt 1', 'Quạt 2']},
+              {title: 'Nhà vệ sinh', data: ['Quạt 1', 'Quạt 2']},
+              {title: 'Garage', data: ['Quạt 1', 'Quạt 2']},
+            ]}
+            renderItem={({item}) => (
+              <Text style={styles.sectionItem}>{item}</Text>
+            )}
+            renderSectionHeader={({section}) => (
+              <Text style={styles.sectionHeader}>{section.title}</Text>
+            )}
+            keyExtractor={item => `basicListEntry-${item}`}/>
+        </View>
       </View>
     );
   }
@@ -126,6 +143,20 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 9,
     // backgroundColor: 'green',
+  },
+  sectionItem: {
+    padding: 10,
+    fontSize: 18,
+    height: 44,
+  },
+  sectionHeader: {
+    paddingTop: 2,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 2,
+    fontSize: 24,
+    fontWeight: 'bold',
+    backgroundColor: 'rgba(247,247,247,1.0)',
   },
 
 });

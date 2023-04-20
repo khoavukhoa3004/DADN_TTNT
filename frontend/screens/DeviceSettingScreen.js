@@ -28,9 +28,16 @@ const ScreenHeight = Dimensions.get("window").height;
 
 const LedSettingScreen = ({ navigation }) => {
   const backOnPress = () => {
-    navigation.navigate('DeviceScreen');
+    navigation.navigate('HomeScreen');
   }
 
+  const addScreenPress = () => {
+    navigation.navigate('AddScreen');
+  }
+
+  const deleteScreenPress = () => {
+    navigation.navigate('DeleteScreen');
+  }
   return (
     <View style={styles.Container}>
       <View style={styles.headContainer}>
@@ -62,43 +69,49 @@ const LedSettingScreen = ({ navigation }) => {
       <View style={styles.middleContainer}>
         <View style={styles.leftMiddleContainer}></View>
         <View style={styles.centerMiddleContainer}>
-          <View style={styles.addDevicesContainer}>
-            <Text style={styles.middleTextContainer}>Thêm thiết bị</Text>
-            <Icon
-              style={styles.chevronForwardIcon}
-              ios="ios-add"
-              android="android-add"
-              name="chevron-forward"
-              size={30}
-            />
-          </View>
-          <View style={styles.deleteDevicesContainer}>
-            <Text style={styles.middleTextContainer}>Xóa thiết bị</Text>
-            <Icon
-              style={styles.chevronForwardIcon}
-              ios="ios-add"
-              android="android-add"
-              name="chevron-forward"
-              size={30}
-            />
-          </View>
+          <TouchableOpacity onPress={addScreenPress}>
+            <View style={styles.addDevicesContainer}>
+              <Text style={styles.middleTextContainer}>Thêm thiết bị</Text>
+              <Icon
+                style={styles.chevronForwardIcon}
+                ios="ios-add"
+                android="android-add"
+                name="chevron-forward"
+                size={30}
+              />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={deleteScreenPress}>
+            <View style={styles.deleteDevicesContainer}>
+              <Text style={styles.middleTextContainer}>Xóa thiết bị</Text>
+              <Icon
+                style={styles.chevronForwardIcon}
+                ios="ios-add"
+                android="android-add"
+                name="chevron-forward"
+                size={30}
+              />
+            </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.rightMiddleContainer}></View>
       </View>
-      <View style={styles.bottomContainer}>
+      {/* <View style={styles.bottomContainer}>
         <View style={styles.leftBottomContainer}>
-          <Image
-            style={styles.leftBottomContainer_Footer}
-            source={require("../assets/images/Led_Fan/leftFooter.png")}
-          />
-          <Icon
-            ios="ios-add"
-            android="android-add"
-            name="home-outline"
-            size={30}
-            color={"white"}
-            style={styles.HomeIcon}
-          ></Icon>
+          <TouchableOpacity onPress={backOnPress}>
+            <Image
+              style={styles.leftBottomContainer_Footer}
+              source={require("../assets/images/Led_Fan/leftFooter.png")}
+            />
+            <Icon
+              ios="ios-add"
+              android="android-add"
+              name="home-outline"
+              size={30}
+              color={"white"}
+              style={styles.HomeIcon}
+            ></Icon>
+          </TouchableOpacity>
         </View>
         <View style={styles.middleBottomContainer}>
           <View style={styles.circleContainer}>
@@ -124,7 +137,7 @@ const LedSettingScreen = ({ navigation }) => {
             style={styles.personIcon}
           ></Icon>
         </View>
-      </View>
+      </View> */}
     </View>
   );
 };

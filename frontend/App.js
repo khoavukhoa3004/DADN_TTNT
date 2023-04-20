@@ -26,8 +26,9 @@ import LedScreen from './screens/LedScreen';
 import LedSettingScreen from './screens/LedSettingScreen';
 import DeviceScreen from './screens/DeviceScreen.js';
 import AddScreen from './screens/AddScreen';
-import AddSettingScreen from './screens/AddSettingScreen';
+import DeviceSettingScreen from './screens/DeviceSettingScreen';
 import NotificationScreen from './screens/NotificationScreen';
+import DeleteScreen from './screens/DeleteScreen';
 
 // import Icon from 'react-native-vector-icons/Ionicons';
 const config = {
@@ -144,8 +145,9 @@ export default function App() {
           <Stack.Screen name="FanScreen" component={FanScreen} />
           <Stack.Screen name="LedSettingScreen" component={LedSettingScreen} />
           <Stack.Screen name="FanSettingScreen" component={FanSettingScreen} />
-          <Stack.Screen name="AddSettingScreen" component={AddSettingScreen}/>
+          <Stack.Screen name="DeviceSettingScreen" component={DeviceSettingScreen}/>
           <Stack.Screen name="AddScreen" component={AddScreen}/>
+          <Stack.Screen name="DeleteScreen" component={DeleteScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
     );

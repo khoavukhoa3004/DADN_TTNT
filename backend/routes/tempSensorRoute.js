@@ -11,6 +11,6 @@ tempRouter.get('/getInterval', tempController.getInterval);
 // Get Sensor Data from MongoDB (to do HistoryList) when active:
 tempRouter.get('/getHistory', tempController.getHistory);
 // Delete Sensor on MongoDB:
-tempRouter.delete('/delete', tempController.delete);
+tempRouter.delete('/delete/:id', tempController.delete);
 
 module.exports = tempRouter;

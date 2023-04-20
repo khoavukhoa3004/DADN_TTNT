@@ -24,8 +24,17 @@ const tempController = {
 
     },
 
+    // Delete Sensor on MongoDB:
+        // When inactive: only delete on MongoDB + UI.
+        // When active: delete on MongoDB + Adafruit + UI.
     delete: async(req, res) => {
-
+        try {
+            const deleteTempSensor = await tempSensor.findOneAndDelete({
+                tempID: req.params.id,
+            });
+        } catch (error) {
+            
+        }
     },
 
     // createTempSensor: async(req, res) => {

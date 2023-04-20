@@ -25,7 +25,7 @@ import SelectDropdown from "react-native-select-dropdown";
 const ScreenWidth = Dimensions.get("window").width;
 const ScreenHeight = Dimensions.get("window").height;
 
-const AddScreen = ({navigation}) => {
+const DeleteScreen = ({navigation}) => {
     return(
         <View style={styles.container}>
             <View style={styles.headContainer}>
@@ -42,7 +42,7 @@ const AddScreen = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.titleContainer}>
-                    <Text style={styles.titleHeader}>Thêm Thiết Bị</Text>
+                    <Text style={styles.titleHeader}>Xóa Thiết Bị</Text>
                 </View>
                 <View style={styles.rightContainer}></View>
             </View>
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     bodyContainer: {
         flex: 9,
         // backgroundColor: 'green',
-    },
+    }, 
 });
 
-export default AddScreen;
+export default DeleteScreen;
