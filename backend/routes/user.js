@@ -62,7 +62,6 @@ router.post('/upload-profile', isAuthenticated, uploads.single('profile'), async
         });
         console.log('Error while uploading profile image', error.message);
     }
-
 });
 module.exports = router;
 

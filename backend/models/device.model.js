@@ -26,7 +26,7 @@ const deviceSchema = new mongoose.Schema({
     brightness: {
       type: Number,
       required: true
-    },
+    },  
     // other bulb properties
   });
   

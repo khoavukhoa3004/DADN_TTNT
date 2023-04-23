@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert } from 'react-native'
+import { SafeAreaView, View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native'
 
-export default function LoginScreen({navigation}: {navigation: any}) {
+export default function RegisterScreen(navigation) {
     const [form, setForm] = useState({
+        firstName: '',
+        lastName:'',
+        phoneNumber:'',
         email: '',
         password: '',
+        confirmPassword: '',
     })
     
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#e8ecf4'}}>
+        <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
             <View style={styles.header}>
                 <Image
@@ -17,7 +22,7 @@ export default function LoginScreen({navigation}: {navigation: any}) {
                     alt="Logo"
                 />
 
-                <Text style={styles.title}>Sign in to Smart Home</Text>
+                <Text style={styles.title}>Sign up to Smart Home</Text>
 
                 <Text style={styles.subtitle}>
                     Get access to your portfolio and more
@@ -25,6 +30,46 @@ export default function LoginScreen({navigation}: {navigation: any}) {
             </View>
 
             <View style={styles.form}>
+                <View style={styles.input}>
+                    <Text style={styles.inputLabel}>First Name</Text>
+
+                    <TextInput
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        style={styles.inputControl}
+                        placeholder='Nguyen'
+                        placeholderTextColor="#6b7280"
+                        value={form.firstName}
+                        onChangeText={firstName => setForm({...form, firstName})}
+                    />
+                </View>
+                <View style={styles.input}>
+                    <Text style={styles.inputLabel}>Last Name</Text>
+
+                    <TextInput
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        style={styles.inputControl}
+                        placeholder='Minh'
+                        placeholderTextColor="#6b7280"
+                        value={form.lastName}
+                        onChangeText={lastName => setForm({...form, lastName})}
+                    />
+                </View>
+                <View style={styles.input}>
+                    <Text style={styles.inputLabel}>Phone Number</Text>
+
+                    <TextInput
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        style={styles.inputControl}
+                        placeholder='091864XXXX'
+                        placeholderTextColor="#6b7280"
+                        value={form.phoneNumber}
+                        onChangeText={phoneNumber => setForm({...form, phoneNumber})}
+                    />
+                </View>
+
                 <View style={styles.input}>
                     <Text style={styles.inputLabel}>Email address</Text>
 
@@ -39,7 +84,7 @@ export default function LoginScreen({navigation}: {navigation: any}) {
                         onChangeText={email => setForm({...form, email})}
                     />
                 </View>
-
+                
                 <View style={styles.input}>
                     <Text style={styles.inputLabel}>Password</Text>
 
@@ -51,36 +96,43 @@ export default function LoginScreen({navigation}: {navigation: any}) {
                         onChangeText={password => setForm({...form, password})}
                     />
                 </View>
+                
+                <View style={styles.input}>
+                    <Text style={styles.inputLabel}>Confirm Password</Text>
 
+                    <TextInput
+                        secureTextEntry
+                        style={styles.inputControl}
+                        placeholder='********'
+                        value={form.confirmPassword}
+                        onChangeText={confirmPassword => setForm({...form, confirmPassword})}
+                    />
+                </View>
+                
                 <View style={styles.formAction}>
-                    <TouchableOpacity onPress={() => {
-                        Alert.alert('Successfully logged in!')
-                        navigation.navigate("HomeScreen");
-                    }}>
+                    <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
                         <View style={styles.btn}>
-                            <Text style={styles.btnText}>Sign in</Text>
+                            <Text style={styles.btnText}>Sign up</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
 
                 <TouchableOpacity
                     style={{marginTop: 'auto'}}
-                    onPress={() => {
-
-                    }}
+                    onPress={() => navigation.navigate("LoginScreen")}
                 >
                     <Text style={styles.formFooter}>
-                        Don't have an account?{' '}
+                        Have an account!{' '}
                         <Text
                             style={{textDecorationLine: 'underline'}}
-                            onPress={() => navigation.navigate("RegisterScreen")}
                         >
-                            Sign up
+                            Sign in
                         </Text>
                     </Text>
                 </TouchableOpacity>
             </View>
         </View>
+        </ScrollView>
         </SafeAreaView>
     );
 }

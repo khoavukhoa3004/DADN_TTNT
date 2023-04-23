@@ -7,7 +7,6 @@ import { useFonts } from 'expo-font';
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Color } from './GlobalStyles';
 import OnboardingScreen from './screens/OnboardingScreen';
 import LoginScreen from './screens/LoginScreen';
@@ -16,13 +15,14 @@ import HomeScreen from './screens/HomeScreen';
 import DetailsScreen from './screens/DetailsScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import DetailScreen from './screens/DetailsScreen';
+import TestScreen from './screens/TestScreen';
+import ResetPasswordScreen from './screens/ResetPasswordScreen';
 
 // import Icon from 'react-native-vector-icons/Ionicons';
 
 
 const Stack = createStackNavigator();
 
-const Tab = createBottomTabNavigator();
 
 const checkFirstLaunch = async () => {
   const isFirstLaunch = await AsyncStorage.getItem('alreadyLaunched');
@@ -69,12 +69,13 @@ export default function App() {
             headerShown: false
           }}
         >
-          <Stack.Screen name="Onboarding" component={OnboardingScreen}/>
+          <Stack.Screen name="TestScreen" component={TestScreen}/>
+          {/* <Stack.Screen name="Onboarding" component={OnboardingScreen}/>
           <Stack.Screen name="LoginScreen" component={LoginScreen}/>
           <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
           <Stack.Screen name="HomeScreen" component={HomeScreen}/>
           <Stack.Screen name="DetailsScreen" component={DetailsScreen}/>
-          <Stack.Screen name="SettingsScreen" component={SettingsScreen}/>
+          <Stack.Screen name="SettingsScreen" component={SettingsScreen}/> */}
         </Stack.Navigator>
       </NavigationContainer>
     );
@@ -88,6 +89,7 @@ export default function App() {
         >
           <Stack.Screen name="LoginScreen" component={LoginScreen}/>
           <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
+          <Stack.Screen name='ResetPasswordScreen' component={ResetPasswordScreen}/>
           <Stack.Screen name="HomeScreen" component={HomeScreen}/>
           <Stack.Screen name="DetailsScreen" component={DetailsScreen}/>
           <Stack.Screen name="SettingsScreen" component={SettingsScreen}/>

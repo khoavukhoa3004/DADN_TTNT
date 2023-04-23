@@ -5,12 +5,10 @@ import Icon1 from 'react-native-vector-icons/Ionicons';
 import Icon3 from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/Feather'; 
 import BottomBar from '../components/BottomBar';
-import { sendToAdafruitIO, getLatestButton1 } from '../API/api';
+import { sendToAdafruitIO, getLatestButton1 } from '../../backend/API/api';
 
 let State = false
 
-let changeState = false
-let lastButton1='ON'
 
 const DeviceComponent = ({isFan} : {isFan: boolean}) =>{ 
     const [isEnabled, setIsEnabled] = React.useState(false);

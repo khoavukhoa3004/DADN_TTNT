@@ -7,19 +7,13 @@ const userRouter = require('./routes/user')
 
 const User = require('./models/user.model');
 
+const adafruitRouter = require('./routes/adafruit.js')
+
 const app = express();
 
-// app.use((req, res, next) => {
-//     req.on('data', (chunk) => {
-//         const data = JSON.parse(chunk);
-//         req.body = data;
-//         next();
-//     });
-    
-// });
-
 app.use(express.json());
-app.use(userRouter);
+app.use('/user',userRouter);
+app.use('/sensor',adafruitRouter);
 
 // const test = async (email, password) => {
 //     const user = await User.findOne({ email: email});
