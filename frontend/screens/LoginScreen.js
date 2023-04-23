@@ -147,3 +147,10 @@ const styles = StyleSheet.create({
 
 });
 
+
+    btnText: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#fff',
+    }
+});

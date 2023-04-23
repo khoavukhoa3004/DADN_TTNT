@@ -1,6 +1,17 @@
+// Before these code, type these commands: npm install mqtt async-mqtt --save
+
 const PORT = 3000
 const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const mqttService = require('./services/mqttService');
+const request = require('request');
+
 require('dotenv').config();
+//Connect to MongoDB Server:
 require('./models/db');
 
 const userRouter = require('./routes/user')
@@ -15,28 +26,21 @@ app.use(express.json());
 app.use('/user',userRouter);
 app.use('/sensor',adafruitRouter);
 
-// const test = async (email, password) => {
-//     const user = await User.findOne({ email: email});
-//     const result = await user.comparePassword(password);
-//     console.log(result);
-// }
+// // test("khoapro313@gmail.com", "hello212376")
 
-// test("khoapro313@gmail.com", "hello212376")
-
-app.get('/test', (req, res) => {
-    res.send('Hello world!');
-});
+// app.get('/test', (req, res) => {
+//     res.send('Hello world!');
+// });
 
 
 
-app.get('/', (req, res) => {
-    res.send('<h1>Hello World</h1>');
-})
-// app.post('/', (req, res) => {
-//     console.log(req.body)
-//     res.send('hello')
+
+// // app.post('/', (req, res) => {
+// //     console.log(req.body)
+// //     res.send('hello')
+// // })
+
+// app.listen(PORT,()=>{
+//     console.log('server running in '+ PORT)
 // })
 
-app.listen(PORT,()=>{
-    console.log('server running in '+ PORT)
-})

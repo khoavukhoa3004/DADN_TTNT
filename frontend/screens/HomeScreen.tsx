@@ -109,15 +109,18 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
     return (
         <View style={styles.container}>
             <View style={styles.subContainer}>
-
                 {/* Header */}
                 <View style={styles.headerWrapper}>
                     <View style={styles.headerTitle}>
                         <Text style={{fontSize: 30, fontFamily: 'Inter-Bold', }}>Xin chào Natasha!</Text>
-                        <Text style={{position: 'absolute', fontSize: 60, fontFamily: 'Inter-Bold', opacity: 0.1}}>HOME</Text>
+                        <Text style={{position: 'absolute', fontSize: 60, fontFamily: 'Inter-Bold', opacity: 0.1}}></Text>
                     </View>
                     <View style={styles.headerNotification}>
-                        <Icon1 name="notifications-outline" size={50} color="blue"/>
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate('NotificationScreen');
+                        }}>
+                            <Icon1 name="notifications-outline" size={50} color="blue"/>
+                        </TouchableOpacity>
                     </View>
                 </View>
 
@@ -143,6 +146,8 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                         </View>
                     </View>
                 </View>
+
+                {/* Element Details */}
                 <View style={styles.elementDetail}>
                     <View style={styles.roomDetail}>
                         <ScrollView horizontal={true}>
@@ -152,8 +157,9 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                             <View style={styles.roomCell}><Text>Nhà vệ sinh</Text></View>
                             <View style={styles.roomCell}><Text>Garage</Text></View>
                         </ScrollView>
-
                     </View>
+
+                {/* List Details */}
                     <ScrollView style={styles.listDetail}>
                         <View style={styles.listDetailRow}>
                             {/* <View style={styles.box}>
@@ -196,8 +202,6 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                 <View>
                 </View>
             </View>
-            {/* footer */}
-            <BottomBar navigation={navigation}/>
         </View>
     );
 }
@@ -210,7 +214,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#EFF1F5',
     },
     subContainer: {
-        flex: 9,
+        flex: 10.35,
         flexDirection: 'column',
         paddingTop: 20,
         paddingLeft: 20,
@@ -315,7 +319,7 @@ const styles = StyleSheet.create({
       
     },
     listDetailRow: {
-        flexDirection: 'row',
+        flexDirection: 'column',
     },
     box: {
         height: 170,
@@ -327,6 +331,16 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         borderRadius: 15,
         backgroundColor: '#33394D',
+    },
+    finalBox: {
+        height: 170,
+        paddingTop: 15,
+        paddingRight: 10,
+        paddingLeft: 20,
+        margin: 5,
+        flex: 1,
+        flexDirection: 'column',
+        borderRadius: 15,
     },
     iconBox: {
         flex: 1,
@@ -343,12 +357,11 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'flex-end',
         flexDirection: 'row',
-        
     },
     stateTextBox: {
         color: 'white',
         fontFamily: 'Inter-Bold',
-        flex: 1,
+        flex: 4,
         paddingBottom: 15,
         fontSize: 17,
     },
@@ -356,5 +369,48 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
-
+    bottomContainer: {
+        flex: 1.2,
+        flexDirection: "row",
+        backgroundColor: "#EFF1F5",
+      },
+      leftBottomContainer: {
+        flex: 1,
+      },
+      middleBottomContainer: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      rightBottomContainer: {
+        flex: 1,
+      },
+      leftBottomContainer_Footer: {
+        justifyContent: "flex-start",
+        width: "100%",
+      },
+      HomeIcon: {
+        position: "absolute",
+        bottom: 0.06 * ScreenHeight,
+        left: 0.065 * ScreenWidth,
+      },
+      circleContainer: {
+        position: "absolute",
+        justifyContent: "center",
+        alignItems: "center",
+        width: 60,
+        height: 60,
+        borderRadius: 100 / 2,
+        backgroundColor: "green",
+      },
+      microphoneIcon: {},
+      rightBottomContainer_Footer: {
+        justifyContent: "flex-start",
+        width: "100%",
+      },
+      personIcon: {
+        position: "absolute",
+        bottom: 0.06 * ScreenHeight,
+        right: 0.065 * ScreenWidth,
+      },
 });
