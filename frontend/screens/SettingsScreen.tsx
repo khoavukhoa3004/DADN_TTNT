@@ -1,44 +1,53 @@
 import * as React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon1 from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const PROFILE_PCTURE='https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg'
+const PROFILE_PICTURE ='https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg'
 
 const SECTIONS = [
     {
         header: 'Preferences',
-        items: [
-            {id: '0', 
-            icon: 'gear', 
+        items: [ 
+            {
+                id: '0',
+                icon: 'home',
+                label: 'Trở về trang chủ',
+                type: 'link',
+                color: '#000'
+            },
+
+            {id: '1', 
+            icon: 'settings-outline', 
             label: 'Cài đặt thông báo', 
             type: 'link', 
             color: '#000'
             },
 
-            {id: '1', 
-            icon: 'globe', 
+            {id: '2', 
+            icon: 'language-outline', 
             label: 'Ngôn Ngữ/Language', 
             type: 'link', 
             color: '#000'
             },
 
-            {id: '2', 
-            icon: 'circle-info', 
+            {id: '3', 
+            icon: 'help-circle-outline', 
             label: 'Thông tin hỗ trợ', 
             type: 'link', 
             color: '#000'
             },
 
-            {id: '3', 
-            icon: 'globe', 
+            {id: '4', 
+            icon: 'globe-outline', 
             label: 'Giới thiệu', 
             type: 'link', 
             color: '#000'
             },
 
-            {id: '4', 
-            icon: 'globe', 
+            {id: '5', 
+            icon: 'earth-outline', 
             label: 'Đăng xuất', 
             type: 'link', 
             color: '#000'
@@ -48,7 +57,15 @@ const SECTIONS = [
 ];
 
 
-const SettingScreen = ({navigation}: {navigation: any}) =>{
+
+const SettingScreen = ({navigation}: {navigation: any}) => {
+
+    const [showBox, setShowBox] = React.useState(false);
+
+    const handlePress = () => {
+        setShowBox(true);
+    }
+
     return (
     <SafeAreaView>
         <ScrollView contentContainerStyle={styles.container}>
@@ -62,7 +79,7 @@ const SettingScreen = ({navigation}: {navigation: any}) =>{
                     <View style={styles.profileAvatarWrapper}>
                         <Image 
                             alt='Profile picture'
-                            source={{uri: PROFILE_PCTURE}} 
+                            source={{uri: PROFILE_PICTURE}} 
                             style={styles.profileAvatar}
                         />
 
@@ -82,13 +99,16 @@ const SettingScreen = ({navigation}: {navigation: any}) =>{
                         <TouchableOpacity
                             key={icon}
                             onPress={() => {
-                                
+                                if (icon == 'home') navigation.navigate('HomeScreen');
+                                if (icon == 'earth-outline') {
+                                    navigation.popToTop();
+                                }
                             }}>
                             <View style={styles.row}>
                                 <View style={[styles.rowIcon, {
                                     backgroundColor: color
                                     }]}>
-                                    <Icon name={icon} color='#fff' size={18}/>
+                                    <Icon1 name={icon} color='#fff' size={18}/>
                                 </View>
 
                                 <Text style={styles.rowLabel}>{label}</Text>
@@ -203,4 +223,5 @@ const styles = StyleSheet.create({
     }
 
 })
+
 export default SettingScreen;

@@ -1,43 +1,32 @@
+// Before these code, type these commands: npm install mqtt async-mqtt --save
+
 const PORT = 3000
 const express = require('express');
+
+const mqttService = require('./services/mqttService');
+// const request = require('request');
+
 require('dotenv').config();
+//Connect to MongoDB Server:
 require('./models/db');
 
 const userRouter = require('./routes/user')
-
-const User = require('./models/user.model');
+const adafruitRouter = require('./routes/adafruit.js')
 
 const app = express();
 
-// app.use((req, res, next) => {
-//     req.on('data', (chunk) => {
-//         const data = JSON.parse(chunk);
-//         req.body = data;
-//         next();
-//     });
-    
-// });
-
 app.use(express.json());
-app.use(userRouter);
-
-// const test = async (email, password) => {
-//     const user = await User.findOne({ email: email});
-//     const result = await user.comparePassword(password);
-//     console.log(result);
-// }
-
-// test("khoapro313@gmail.com", "hello212376")
-
-app.get('/test', (req, res) => {
-    res.send('Hello world!');
-});
-
+app.use('/user',userRouter);
+app.use('/sensor',adafruitRouter);
 
 
 app.get('/', (req, res) => {
-    res.send('<h1>Hello World</h1>');
+    res.json({success: true, message: 'Welcome to backend zone!'})
 })
+
+
+
+
 // app.post('/', (req, res) => {
 //     console.log(req.body)
 //     res.send('hello')
@@ -46,3 +35,4 @@ app.get('/', (req, res) => {
 app.listen(PORT,()=>{
     console.log('server running in '+ PORT)
 })
+

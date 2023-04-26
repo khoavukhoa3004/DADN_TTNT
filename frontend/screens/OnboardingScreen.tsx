@@ -5,11 +5,21 @@ import { SvgUri } from 'react-native-svg';
 import Onboarding from 'react-native-onboarding-swiper';
 
 const OnboardingScreen = ({navigation}: {navigation: any}) => {
+
     return (
         <Onboarding
             // SkipButtonComponent={Skip}
-            onSkip={() => navigation.navigate("LoginScreen")}
-            onDone={() => navigation.navigate("LoginScreen")}
+            onSkip={() =>navigation.reset({
+                index: 0, 
+                routes: [{name: 'LoginScreen'}]
+            })
+        }
+            onDone={
+                () => navigation.reset({
+                    index: 0, 
+                    routes: [{name: 'LoginScreen'}]
+                })
+            }
             pages={[
                 {
                     backgroundColor: '#fff',
