@@ -33,7 +33,7 @@ const DeviceComponent = ({
       
         if (response.data.success === true) {
           setIsClicked(false);
-          console.log('Điều khiển thiết bị thành công', (isEnabled === false) ? 'ON': 'OFF');
+          console.log('Điều khiển thiết bị thành công', (isEnabled === true) ? 'ON': 'OFF');
         } else {
           alert('Có lỗi xảy ra khi điều khiển thiết bị');
           setIsEnabled(!isEnabled); // Reset lại trạng thái isEnabled
@@ -50,27 +50,27 @@ const DeviceComponent = ({
 
       // checkLoginStatus(navigation);
       const interval = setInterval(async () => {
-        if(!isClicked){
-          try {
-            const response = await withAuth((token) => client.get(`/sensor/get-current/${deviceNameSystem}`,{
-              headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              }
-            }));
-            
-            if(response?.value ==='ON' && !isClicked){
-                setIsEnabled(true)
+        // console.log('yep');
+        try {
+          const response = await withAuth((token) => client.get(`/sensor/get-current/${deviceNameSystem}`,{
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
             }
-            else if(response?.value ==='OFF' && !isClicked){
-                console.log('yep');
-                setIsEnabled(false)
-            }
-            
-          } catch (error) {
-            console.error(error);
-          }            
-        }
+          }));
+          
+          if(response.data.value ==='ON' && !isClicked){
+              setIsEnabled(true)
+          }
+          else if(response.data.value ==='OFF' && !isClicked){
+              console.log('yep');
+              setIsEnabled(false)
+          }
+          
+        } catch (error) {
+          console.error(error);
+        }            
+        
 
       }, 1000); // Fetch the latest temperature every second
       return () => clearInterval(interval);
