@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     elementDetail: {
         flex:4 ,
         flexDirection: 'column',
-        paddingTop: 15,
+        // paddingTop: 5,
         
     },
     roomDetail: {

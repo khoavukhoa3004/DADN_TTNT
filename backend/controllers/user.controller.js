@@ -6,6 +6,7 @@ exports.createUser = async (req, res) => {
         fName, 
         lName, 
         email, 
+        username,
         password, 
         dateOfBirth, 
         phoneNumber
@@ -21,6 +22,7 @@ exports.createUser = async (req, res) => {
         fName, 
         lName, 
         email, 
+        username,
         password, 
         dateOfBirth, 
         phoneNumber,
