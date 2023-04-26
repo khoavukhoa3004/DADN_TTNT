@@ -84,7 +84,7 @@ const DeviceComponent = ({
           paddingRight: 10,
           paddingLeft: 20,
           margin: 5,
-          flex: 1,
+          // flex: 1,
           flexDirection: 'column',
           borderRadius: 15,
           backgroundColor: (color === 'light') ? '#E4E3E3' : '#33394D',

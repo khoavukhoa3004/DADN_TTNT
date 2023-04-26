@@ -16,7 +16,7 @@ const WeatherWidgetComponent = ({
                     'Content-Type': 'application/json',
                 }
             }));  
-            setTemperature(response?.value);
+            setTemperature(response.data.value);
             // if(response?.value ==='ON' && !isClicked){
             //     setIsEnabled(true)
             // }
@@ -38,7 +38,7 @@ const WeatherWidgetComponent = ({
     }, []);
     return (
         <View style={styles.weatherWidget} onPress={updateTemp()}>
-            <Image source={require('../../assets/images/home/weather_widget.png')}/>
+            <Image source={require('../../assets/images/home/weather_widget.png')} style={{ width: '100%', height: '100%', resizeMode: 'contain' }} />
             <View style={styles.weatherInfor}>
                 <View style={styles.locationInfor}>
                     <Text style={styles.locationTitle}>Vị trí nhà bạn</Text>
@@ -67,7 +67,8 @@ const styles = StyleSheet.create({
     weatherWidget: {
         flex: 1,
         // backgroundColor: '#5ED9E1',
-        marginTop: 20,
+        marginTop: 10,
+        // backgroundColor: 'blue'
     },
     weatherInfor: {
         position: 'absolute',
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
     weatherTemp: {
         // position: 'absolute',
         flex: 4,
-        
+        paddingTop:5,
         // backgroundColor: 'blue',
         paddingRight: 15,
     },

@@ -18,6 +18,11 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    username: {
+        type: String, 
+        required: true,
+        unique: true,
+    },
     password: {
         type: String,
         required: true,
@@ -56,7 +61,7 @@ userSchema.methods.comparePassword = async function(password) {
     }
 }
 
-userSchema.statics.isThisEmailInUse = async function(email){
+userSchema.statics.isThisEmailInUse = async function(email) {
     // if(email ==='') {
     //     console.log("Failed");
     //     throw new Error('Invalid email');
@@ -66,10 +71,20 @@ userSchema.statics.isThisEmailInUse = async function(email){
         if(isEmail) return false;
         return true;
     } catch (error) {
-        console.log('error inside isThisEmailInUse method ', error.message);
+        console.log('Error inside isThisEmailInUse method ', error.message);
         return false;
     }
 
+}
+userSchema.statics.isThisUserNameInUse = async function(username) {
+    try {
+        const isUser = await this.findOne({username});
+        if(isUser) return false;
+        return true;
+    } catch (error) {
+        console.log('Error inside isThisEmailUse method ', error.message);
+        return false;
+    }
 }
 // userSchema.methods.isThisEmailInUse
 
