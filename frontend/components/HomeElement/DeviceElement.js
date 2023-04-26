@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet,Button, Image, ScrollView, Switch, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet,Button, Image, ScrollView, Switch, TouchableOpacity, ActivityIndicator  } from 'react-native';
 import { AntDesign, Entypo, MaterialCommunityIcons, FontAwesome5   } from '@expo/vector-icons';
 import client from '../../API/client';
 import {checkLoginStatus, withAuth } from '../../utils/auth';
@@ -9,73 +9,72 @@ const DeviceComponent = ({
     color,
     navigation,
 }) =>{
-    const [isEnabled, setIsEnabled] = useState(false);
-    const [isClicked, setIsClicked] = useState(false);
+    const [buttonState, setButtonState] = useState('OFF');
+    const [tempButtonState, setTempButtonState] = useState('OFF');
+    const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
     const deviceName = translateDevice(deviceNameSystem);
-    const toggleSwitch = async () => {
+    const postData = async (newData) => {
+      console.log(newData);
       try {
-        setIsClicked(true);
-        setIsEnabled(!isEnabled);
-        const response = await Promise.race([
-          withAuth((token) => client.post('/sensor/post-current', {
+        const response = await withAuth((token) => client.post('/sensor/post-current', {
             feedName: deviceNameSystem,
-            value: (isEnabled === false) ? 'ON': 'OFF',
+            value: newData,
           }, {
             headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',
             }
-          })),
-          new Promise((resolve, reject) => {
-            setTimeout(() => reject(new Error('Timeout while waiting for response')), 3000); // Timeout sau 3 giây
-          })
-        ]);
-      
-        if (response.data.success === true) {
-          setIsClicked(false);
-          console.log('Điều khiển thiết bị thành công', (isEnabled === false) ? 'ON': 'OFF');
-        } else {
-          alert('Có lỗi xảy ra khi điều khiển thiết bị');
-          setIsEnabled(!isEnabled); // Reset lại trạng thái isEnabled
-          setIsClicked(false);
+          }));
+        if (response.data.success === false) {
+          throw new Error('Failed to post data to Adafruit');
         }
       } catch (error) {
         alert(`Có lỗi xảy ra: ${error.message}`);
-        setIsEnabled(!isEnabled); // Reset lại trạng thái isEnabled
-        setIsClicked(false);
-      };
+        throw new Error('Error: ', error);
+
+      } 
+    }
+    const toggleSwitch = async () => {
+      const newData = buttonState === 'ON' ? 'OFF' : 'ON';
+      setTempButtonState(newData);
+      setIsWaitingForResponse(true);
+      try{
+        await postData(newData);
+
+        setButtonState(newData);
+        setIsWaitingForResponse(false);
+      } catch (error) {
+        console.error(error);
+        setTimeout(() => {
+          if(isWaitingForResponse) {
+            setButtonState(tempButtonState);
+            setIsWaitingForResponse(false);
+          }
+        }, 5000);
+      }
     }
 
     useEffect(() => {
+      getData();
+    })
 
-      // checkLoginStatus(navigation);
-      const interval = setInterval(async () => {
-        if(!isClicked){
-          try {
-            const response = await withAuth((token) => client.get(`/sensor/get-current/${deviceNameSystem}`,{
-              headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              }
-            }));
-            
-            if(response?.value ==='ON' && !isClicked){
-                setIsEnabled(true)
-            }
-            else if(response?.value ==='OFF' && !isClicked){
-                console.log('yep');
-                setIsEnabled(false)
-            }
-            
-          } catch (error) {
-            console.error(error);
-          }            
-        }
+    const getData = async () => {
+      try {
+        const response = await withAuth((token) => client.get(`/sensor/get-current/${deviceNameSystem}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
+        }));
+        const data = await response.data.value;
+        setButtonState(data);
+        setTempButtonState(data);
+      } catch (error) {
+        console.error(error);
+      }           
+    };
 
-      }, 1000); // Fetch the latest temperature every second
-      return () => clearInterval(interval);
 
-    }, []);
     const styles = StyleSheet.create({
       box: {
           height: 150,
@@ -123,21 +122,29 @@ const DeviceComponent = ({
       stateTextBox: {
           color: (color === 'light') ? 'black' : 'white',
           fontFamily: 'Inter-Bold',
-          flex: 4,
+          flex: 3,
           paddingBottom: 15,
           fontSize: 17,
       },
       toggleInBox: {
           flex: 1,
       },
+      loadingToggleInBox: {
+        flex: 1,
+      }
   });
+  const renderActivityIndicator = () => {
+    return (
+      <ActivityIndicator size="small" color="#f5dd4b" />
+    );
+  }
     return (
         <View style={styles.box}>
             <View style={styles.iconBox}>
               {(deviceName == 'Fan') && <FontAwesome5 name="fan" size={30} color={(color === 'light') ? 'black' : 'white'} style={{}}/>}
               {(deviceName == 'Led') && <FontAwesome5 name="lightbulb" size={30} color={(color === 'light') ? 'black' : 'white'} />}
-              {(deviceName == 'Door') && (isEnabled) &&<FontAwesome5 name="door-open" size={30} color={(color === 'light') ? 'black' : 'white'} />}
-              {(deviceName == 'Door') && (!isEnabled) &&<FontAwesome5 name="door-closed" size={30} color={(color === 'light') ? 'black' : 'white'} />}
+              {(deviceName == 'Door') && (buttonState) &&<FontAwesome5 name="door-open" size={30} color={(color === 'light') ? 'black' : 'white'} />}
+              {(deviceName == 'Door') && (!buttonState) &&<FontAwesome5 name="door-closed" size={30} color={(color === 'light') ? 'black' : 'white'} />}
             </View>
             {/* <Icon style={styles.iconBox} name={(isFan)? "fan" : "lightbulb-on-outline"}  size={50} color="white"/> */}
 
@@ -146,12 +153,17 @@ const DeviceComponent = ({
                 <Text style={styles.stateTextBox}>Bật</Text>
                 <Switch         
                     trackColor={{false: '#767577', true: '#FF8A00'}}
-                    thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                    thumbColor={buttonState ? '#f5dd4b' : '#f4f3f4'}
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={toggleSwitch}
-                    value={isEnabled}
+                    value={buttonState === 'ON'}
+                    disabled={isWaitingForResponse}
                     style={styles.toggleInBox}
                 />
+                <View styles={styles.loadingToggleInBox}>
+                  {isWaitingForResponse && renderActivityIndicator()}
+                </View>
+            
             </View>
         </View>
     );

@@ -9,6 +9,7 @@ const WeatherWidgetComponent = ({
     const [temperature, setTemperature] = useState(0);
     // checkLoginStatus(navigation);
     const updateTemp = async () => {
+        console.log('ok')
         try {
             const response = await withAuth((token) => client.get(`/sensor/get-current/${deviceNameSystem}`,{
                 headers: {
