@@ -28,6 +28,12 @@ exports.validateUserSignUp = [
         .withMessage('Email is empty!')
         .isEmail()
         .withMessage('Invalid email'),
+    check('username')
+        .not()
+        .isEmpty()
+        .withMessage('User is empty!')
+        .isEmail()
+        .withMessage('Invalid username'),
     check('password')
         .trim()
         .not()

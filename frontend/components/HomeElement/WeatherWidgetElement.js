@@ -15,8 +15,9 @@ const WeatherWidgetComponent = ({
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 }
-            }));  
-            setTemperature(response?.value);
+            }));
+            // console.log(response.data.value);
+            setTemperature(response.data.value);
             // if(response?.value ==='ON' && !isClicked){
             //     setIsEnabled(true)
             // }
