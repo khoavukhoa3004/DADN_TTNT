@@ -3,7 +3,7 @@
 const PORT = 3000
 const express = require('express');
 
-const mqttService = require('./services/mqttService');
+// const mqttService = require('./services/mqttService');
 // const request = require('request');
 
 require('dotenv').config();

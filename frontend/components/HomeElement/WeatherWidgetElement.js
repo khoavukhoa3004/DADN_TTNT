@@ -1,33 +1,36 @@
 import { View, Text, StyleSheet,Button, Image, ScrollView, Switch, TouchableOpacity, Dimensions } from 'react-native';
+import Icon2 from 'react-native-vector-icons/Feather'; 
+import {withAuth } from '../../utils/auth';
+import client from '../../API/client';
 import React, { useState, useEffect } from 'react';
 const WeatherWidgetComponent = ({
     deviceNameSystem,
-    color
 }) => {
     const [temperature, setTemperature] = useState(0);
+    // checkLoginStatus(navigation);
+    const updateTemp = async () => {
+        try {
+            const response = await withAuth((token) => client.get(`/sensor/get-current/${deviceNameSystem}`,{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            }));  
+            setTemperature(response?.value);
+            // if(response?.value ==='ON' && !isClicked){
+            //     setIsEnabled(true)
+            // }
+            // else if(response?.value ==='OFF' && !isClicked){
+            //     console.log('yep');
+            //     setIsEnabled(false)
+            // }
+        } catch (error) {
+            console.error(error);
+        }      
+    }
     useEffect(() => {
 
-        // checkLoginStatus(navigation);
-        const updateTemp = async () => {
-            try {
-                const response = await withAuth((token) => client.get(`/sensor/get-current/${deviceNameSystem}`,{
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    }
-                }));  
-                setTemperature(response?.value);
-                // if(response?.value ==='ON' && !isClicked){
-                //     setIsEnabled(true)
-                // }
-                // else if(response?.value ==='OFF' && !isClicked){
-                //     console.log('yep');
-                //     setIsEnabled(false)
-                // }
-            } catch (error) {
-                console.error(error);
-            }      
-        }
+
         const interval = setInterval(async () => {
             updateTemp();
         }, 3600); // Fetch the latest temperature every second
@@ -35,7 +38,7 @@ const WeatherWidgetComponent = ({
     }, []);
     return (
         <View style={styles.weatherWidget} onPress={updateTemp()}>
-            <Image source={require('../assets/images/home/weather_widget.png')}/>
+            <Image source={require('../../assets/images/home/weather_widget.png')}/>
             <View style={styles.weatherInfor}>
                 <View style={styles.locationInfor}>
                     <Text style={styles.locationTitle}>Vị trí nhà bạn</Text>
