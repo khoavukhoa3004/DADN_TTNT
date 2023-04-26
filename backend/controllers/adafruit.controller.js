@@ -7,6 +7,7 @@ exports.postData = async (req,res) => {
      *  "value": "ON"
      * } - indicates the body of data to be sent
      */
+
     const { user } = req;
     if(!user) {
         return res.status(401).json({
@@ -22,7 +23,7 @@ exports.postData = async (req,res) => {
             message: 'A feedName and a value must be provided!',
         });
     }
-
+    console.log(`https://io.adafruit.com/api/v2/${process.env.AIO_USERNAME}/feeds/${feedName}/data`);
     try {
         const response = await axios({
             method: 'POST',
@@ -49,7 +50,7 @@ exports.postData = async (req,res) => {
         console.error('Error while sending data to Adafruit IO:', error);
         res.status(500).json({
             success: false, 
-            message: 'Server error, try again later'
+            message: error
         });
     }
 }

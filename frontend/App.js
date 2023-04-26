@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Easing } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFonts } from 'expo-font';
 
-
+import axios from 'axios';
 import { CardStyleInterpolators, TransitionSpecs, createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -78,15 +78,23 @@ export default function App() {
     'Inter-Regular': require("./assets/fonts/Inter-Regular.ttf"),
     'Inter-SemiBold': require("./assets/fonts/Inter-SemiBold.ttf")
   });
-  // React.useEffect(() => {
-  //   setTimeout(() => {
-  //     setHideSplashScreen(true);
-  //   }, 1000);
-  // }, []);
 
   React.useEffect(() => {
     checkFirstLaunch().then(result => setIsFirstLaunch(result));
   }, []);
+
+  const fetchApi = async () => {
+    try {
+      const res = await axios.get('http://192.168.43.113:3000');
+      console.log(res.data);
+    } catch (error) {
+      console.log(error.message)
+    }
+
+  }
+  React.useEffect(() => {
+    fetchApi();
+  },[])
 
   if (!fontsLoaded && !error) {
     return null;
@@ -102,8 +110,8 @@ export default function App() {
             headerShown: false
           }}
         >
-          <Stack.Screen name="TestScreen" component={TestScreen}/>
-          {/* <Stack.Screen name="Onboarding" component={OnboardingScreen}/>
+
+          <Stack.Screen name="Onboarding" component={OnboardingScreen}/>
           <Stack.Screen name="LoginScreen" component={LoginScreen}/>
           <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
           <Stack.Screen name="HomeScreen" component={HomeScreen}/>
@@ -136,11 +144,11 @@ export default function App() {
           {/* <Stack.Screen name="Onboarding" component={OnboardingScreen}/> */}
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
-          <Stack.Screen name='ResetPasswordScreen' component={ResetPasswordScreen}/>
+          {/* <Stack.Screen name='ResetPasswordScreen' component={ResetPasswordScreen}/> */}
           <Stack.Screen name="HomeScreen" component={HomeScreen}/>
           <Stack.Screen name="NotificationScreen" component={NotificationScreen}/>
           <Stack.Screen name="DeviceScreen" component={DeviceScreen}/>
-          {/* <Stack.Screen name="DetailsScreen" component={DetailsScreen}/> */}
+          <Stack.Screen name="DetailsScreen" component={DetailsScreen}/> 
           <Stack.Screen name="SettingsScreen" component={SettingsScreen}/>
           <Stack.Screen name="LedScreen" component={LedScreen} />
           <Stack.Screen name="FanScreen" component={FanScreen} />

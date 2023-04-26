@@ -5,6 +5,8 @@ import { AntDesign, Entypo, MaterialCommunityIcons, FontAwesome5   } from '@expo
 
 const Input = ({
     label,
+    value,
+    setValue,
     iconName,
     error,
     password,
@@ -51,6 +53,8 @@ const Input = ({
                     )}    
                 </View>
                 <TextInput
+                    value={value}
+                    onChangeText={setValue}
                     autoCorrect={false}
                     onFocus={() => {
                         onFocus();
@@ -74,7 +78,7 @@ const Input = ({
 
             </View>
             <View style={styles.errorContainer}>
-                {error && (
+                {error!='' && error && (
                     <Text style={styles.errorText}>
                         {error}
                     </Text>

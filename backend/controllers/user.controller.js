@@ -34,21 +34,24 @@ exports.userSignIn = async (req, res) => {
     const user = await User.findOne({ email: email});
 
     if(!user) {
-        res.json({ success: false, message: 'User not found with the given email!' });
+        res.json({ success: false, message: "not found email" });
     }
-    const isMatch = await user.comparePassword(password);
-    if(!isMatch) {
-        return res.json({ 
-            success: false, 
-            message: 'The password is not match' 
-        });
+    else{
+        const isMatch = await user.comparePassword(password);
+        if(!isMatch) {
+            return res.json({ 
+                success: false, 
+                message: "wrong password"
+            });
+        }
+        const token = jwt.sign(
+            {userID: user._id}, 
+            process.env.JWT_SECRET, 
+            {expiresIn: '5d'}
+        )
+        res.json({ success: true, user, token});
     }
-    const token = jwt.sign(
-        {userID: user._id}, 
-        process.env.JWT_SECRET, 
-        {expiresIn: '5d'}
-    )
-    res.json({ success: true, user, token});
+
 };
 
 // {

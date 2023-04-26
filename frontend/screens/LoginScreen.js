@@ -1,25 +1,97 @@
-import React from 'react';
+import React, { useState, useEffect} from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import Input from '../components/FormElement/Input';
 
-import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Input from '../components/FormElement/Input';
+import  { checkLoginStatus } from '../utils/auth' 
+import jwtDecode from 'jwt-decode';
+
+
+// Google Signin api
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+
+import client from '../API/client';
 
 export default function LoginScreen({navigation}){
-
-    const handleLogin = (credentials) => {
-        const url = 'http://localhost:3000/sign-in';
-
-        axios
-            .post(url, credentials)
-            .then((response) => {
-                const result = response.data;
-                // const {message, status, }
-            })
-            .catch(error => {
-            console.log(error.JSON);
-        })
+    const fetchApi = async () => {
+        try {
+            const res = await client.get('/');
+            console.log(res.data);
+        } catch (error) {
+            console.log(error.message);
+        }
     }
+    const isTokenExpired = (token) => {
+        const expirationTime = jwtDecode(token).exp;
+        const currentTime = Date.now() / 1000;
+        return expirationTime < currentTime;
+    };
+
+    useEffect(() => {
+        fetchApi();
+        const checkToken = async () => {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                if (token && !isTokenExpired(token)) {
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'HomeScreen' }],
+                    });
+                }
+            } catch (error) {
+                alert(error);
+                console.log(error);
+            }
+        };
+        checkToken();
+    }, []);
+
+    const [email, setEmail] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordError, setPasswordError] = useState('');
     
+
+    const submitForm = async () => {
+        console.log(email);
+        console.log(password);
+        try {
+            
+            const res = await client.post('/user/sign-in', { 
+                "email": email, 
+                "password": password 
+            });
+            if(res.data.success){
+                
+                const { token, user } = res.data;
+                await AsyncStorage.setItem('token', token);
+                await AsyncStorage.setItem('user', JSON.stringify(user));
+                navigation.reset({
+                    index: 0, 
+                    routes: [{name: 'HomeScreen'}]
+                })
+            }
+            else {
+                // console.log({success: res.data.success, message: res.data.message});
+                console.log(res.data.success);
+                console.log(res.data.message);
+                if(res.data.message === "not found email"){
+                    setEmailError(res.data.message);
+                };
+                if(res.data.message === "wrong password"){
+                    setPasswordError(res.data.message);
+                };
+                alert(res.data.message);
+            }
+            
+        } catch (error) {
+            console.log(error.message)
+            alert(error.message);
+        }
+    };
+
+
     return (
     <View style={styles.container}>
             <View style={styles.header}>
@@ -40,27 +112,33 @@ export default function LoginScreen({navigation}){
                 <Text></Text>
             </View>
             <Input  label="Email" 
+                    value={email}
+                    setValue={setEmail}
+                    error={emailError}
                     iconName={"email"} 
-                    placeholder="example@gmail.com" />
+                    placeholder="example@gmail.com" 
+                    />
             <Input  label="Password" 
                     iconName={"password"} 
                     password={true} 
+                    value={password}
+                    setValue={setPassword}
                     placeholder="********" 
                     moreInfo={"Forgot password?"}
                     handleLinking={() => { () => navigation.navigate('ResetPasswordScreen')}}
-                    error={"Invalid password"}
+                    error={passwordError}
             /> 
 
             <TouchableOpacity 
                 style={styles.signInButton}
-                onPress={() => navigation.navigate('HomeScreen')}
+                onPress={submitForm}
             >
                 <Text style={styles.buttonTitle}>Login</Text>
             </TouchableOpacity>
 
             <View style={styles.haveAccountContainer}>
                 <Text style={styles.haveAccount}>Don't have an account?{' '}</Text>
-                <TouchableOpacity onPress={() => {() => navigation.navigate('RegisterScreen')}}>
+                <TouchableOpacity onPress={submitForm}>
                     <Text style={styles.newAccount}>Create new account</Text>
                 </TouchableOpacity>
             </View>
@@ -147,10 +225,3 @@ const styles = StyleSheet.create({
 
 });
 
-
-    btnText: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: '#fff',
-    }
-});

@@ -22,8 +22,8 @@ class MQTTService {
             host: "io.adafruit.com",
             port: 1883,
             protocol: ('mqtt'),
-            username: "dangnguyen",
-            password: "aio_Tpns72HEyXkIXko7394emsFLSZPL",
+            username: process.env.AIO_USERNAME,
+            password: process.env.AIO_KEY,
             connectTimeout: 60 * 1000,
             keepalive: 3600
         });
