@@ -38,7 +38,7 @@ exports.validateData = [
         .custom((value, { req }) => {
             const feedName = req.body.feedName;
             // console.log(feedName);
-            const {userName, room, deviceName, index} =parseFeedName(feedName);
+            const {userName, room, deviceName, index} = parseFeedName(feedName);
             // console.log(deviceName);
             if (deviceName === 'fanvalue' || deviceName === 'ledvalue' || deviceName === 'lightsensor' || deviceName === 'tempsensor' || deviceName === 'soundai') {
                 return validator.isFloat(value) || validator.isInt(value);
