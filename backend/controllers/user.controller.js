@@ -5,7 +5,7 @@ exports.createUser = async (req, res) => {
     const {
         fName, 
         lName, 
-        email,
+        email, 
         username,
         password, 
         dateOfBirth, 
