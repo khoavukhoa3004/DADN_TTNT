@@ -113,7 +113,7 @@ export default function App() {
 
           <Stack.Screen name="Onboarding" component={OnboardingScreen}/>
           <Stack.Screen name="LoginScreen" component={LoginScreen}/>
-          <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
+          {/* <Stack.Screen name="RegisterScreen" component={RegisterScreen}/> */}
           <Stack.Screen name="HomeScreen" component={HomeScreen}/>
           <Stack.Screen name="DetailsScreen" component={DetailsScreen}/>
           <Stack.Screen name="SettingsScreen" component={SettingsScreen}/>
@@ -141,9 +141,8 @@ export default function App() {
           }
           // initialRouteName='HomeScreen'
         >
-          {/* <Stack.Screen name="Onboarding" component={OnboardingScreen}/> */}
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
-          <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
+          {/* <Stack.Screen name="RegisterScreen" component={RegisterScreen}/> */}
           {/* <Stack.Screen name='ResetPasswordScreen' component={ResetPasswordScreen}/> */}
           <Stack.Screen name="HomeScreen" component={HomeScreen}/>
           <Stack.Screen name="NotificationScreen" component={NotificationScreen}/>

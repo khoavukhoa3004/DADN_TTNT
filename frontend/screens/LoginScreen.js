@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Input from '../components/FormElement/Input';
@@ -107,7 +107,7 @@ export default function LoginScreen({navigation}){
                     Get access to your portfolio and more
                 </Text>
             </View>
-        <View style={styles.signInContainer}>
+        <SafeAreaView style={styles.signInContainer}>
             <View>
                 <Text></Text>
             </View>
@@ -143,7 +143,7 @@ export default function LoginScreen({navigation}){
                 </TouchableOpacity>
             </View>
 
-        </View>
+        </SafeAreaView>
 
     </View>
   );
