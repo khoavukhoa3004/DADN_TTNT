@@ -61,7 +61,17 @@ exports.validateUserSignUp = [
             if(!validator.isISO8601(value, { strict: true})){
                 throw new Error('Invalid Birth day format, must be YYYY-MM-DD');
             }
-            // const date = new Date(value);
+            const today = new Date(value);
+            const age = today.getFullYear() - value.getFullYear();
+            if(today.getMonth() < value.getMonth() || (today.getMonth() === value.getMonth() && today.getDate() < value.getDate())){
+                age -= 1;
+            }
+            if(age < 0){
+                throw new Error('Invalid birth day, age must be positive');
+            }
+            if(age < 6){
+                throw new Error('The minimun age must be greater than 6');
+            }
             return true;
         }),
     check('phoneNumber')

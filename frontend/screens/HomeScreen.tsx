@@ -11,6 +11,7 @@ const ScreenWidth = Dimensions.get("window").width;
 const ScreenHeight = Dimensions.get("window").height;
 
 
+
 const HomeScreen = ({navigation}: {navigation: any}) =>{
     const [isEnabled, setIsEnabled] = React.useState(false);
 
@@ -23,6 +24,7 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                         <Text style={{fontSize: 30, fontFamily: 'Inter-Bold', }}>Xin chào Natasha!</Text>
                         <Text style={{position: 'absolute', fontSize: 60, fontFamily: 'Inter-Bold', opacity: 0.1}}></Text>
                     </View>
+
                     <View style={styles.headerNotification}>
                         <TouchableOpacity onPress={() => {
                             navigation.navigate('NotificationScreen');
@@ -33,27 +35,6 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                 </View>
 
                 {/* Weather widget */}
-                {/* <View style={styles.weatherWidget}>
-                    <Image source={require('../assets/images/home/weather_widget.png')}/>
-                    <View style={styles.weatherInfor}>
-                        <View style={styles.locationInfor}>
-                            <Text style={styles.locationTitle}>Vị trí nhà bạn</Text>
-                            <Text style={styles.location}>Thủ Đức, Tp.Hồ Chí Minh</Text>
-                            <View style={styles.weatherStateContainer}>
-                                <Icon2  name="cloud" size={30} color="white"/>
-                                <Text style={styles.weatherState}>Partly Cloudy</Text>
-                            </View>
-                        </View>
-                        <View style={styles.weatherTemp}>
-                            <View style= {styles.tempContainer}>
-                                <Text style={styles.tempInfor}>32</Text>
-                                <Text style={{color: 'white', fontSize: 24, fontFamily: 'Inter-Light',}}>o</Text>
-                                <Text style={styles.tempInfor}>C</Text>
-                            </View>
-                            <Text style={styles.humidity}>Độ ẩm: 69%</Text>
-                        </View>
-                    </View>
-                </View> */}
                 <WeatherWidgetComponent deviceNameSystem="nmdk-1-tempsensor-1"/>
 
 
@@ -69,7 +50,7 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                         </ScrollView>
                     </View>
 
-                {/* List Details */}
+                    {/* List Details */}
                     <ScrollView style={styles.listDetail}>
                         <View style={styles.listDetailRow}>
                                 <DeviceComponent deviceNameSystem="nmdk-1-doorstatus-1" navigation={navigation} color="dark"/>
@@ -80,9 +61,9 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                         </View>
                     </ScrollView>
                 </View>
-                <View>
-                </View>
+                  
             </View>
+            <BottomBar navigation={navigation}/>
         </View>
     );
 }
@@ -109,6 +90,7 @@ const styles = StyleSheet.create({
         paddingTop: 15,
         justifyContent: 'center',
         alignItems:'center',
+        // backgroundColor: 'blue',
 
     },
     headerTitle: {

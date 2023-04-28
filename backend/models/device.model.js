@@ -19,6 +19,10 @@ const deviceSchema = mongoose.Schema({
     value: {
         type: Number,
     },
+    room: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Room',
+    },
     haveDeviceType: {
         type: String,
         required: true,

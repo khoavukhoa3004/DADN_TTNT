@@ -15,7 +15,8 @@ exports.createUser = async (req, res) => {
     if(!isNewUser){
         return res.json({
             success: false, 
-            message: 'This email is already in use, try sign-in'
+            message: 'This email is already in use, try sign-in',
+            type: 'email',
         });
     }
     const user = await User({
@@ -36,14 +37,15 @@ exports.userSignIn = async (req, res) => {
     const user = await User.findOne({ email: email});
 
     if(!user) {
-        res.json({ success: false, message: "not found email" });
+        res.json({ success: false, message: "not found email",type: 'email' });
     }
     else{
         const isMatch = await user.comparePassword(password);
         if(!isMatch) {
             return res.json({ 
                 success: false, 
-                message: "wrong password"
+                message: "wrong password",
+                type: 'password'
             });
         }
         const token = jwt.sign(
