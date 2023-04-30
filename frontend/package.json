@@ -27,6 +27,7 @@
     "expo-font": "~11.1.1",
     "expo-status-bar": "~1.4.4",
     "expo-web-browser": "~12.1.1",
+    "formik": "^2.2.9",
     "jwt-decode": "^3.1.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -41,7 +42,8 @@
     "react-native-select-dropdown": "^3.3.2",
     "react-native-svg": "13.4.0",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-web": "~0.18.10"
+    "react-native-web": "~0.18.10",
+    "yup": "^1.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

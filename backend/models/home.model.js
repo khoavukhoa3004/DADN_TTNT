@@ -15,11 +15,6 @@ const home = new mongoose.Schema({
             required: true,
         }
     },
-    haveUsers: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-    }],
     haveRooms: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Room',
@@ -31,6 +26,19 @@ const home = new mongoose.Schema({
         required: true,
     }
 });
+
+const userHomeSchema = new mongoose.Schema({
+    userID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+    homeID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Home',
+        required: true,
+    }
+})
 
 const room = new mongoose.Schema({
     name: {
