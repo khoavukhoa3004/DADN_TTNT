@@ -54,8 +54,10 @@ const room = new mongoose.Schema({
 
 const homeSchema = mongoose.model('Home', home);
 const roomSchema = mongoose.model('Room', room);
+const userHome = mongoose.model('UserHome', userHomeSchema);
 
 module.exports = {
     homeModel: homeSchema,
     roomModel: roomSchema,
+    userHomeModel: userHome,
 };
