@@ -12,11 +12,14 @@ const Input = ({
     password,
     moreInfo,
     handleLinking,
-    onFocus = () => {},
+    onBlur,
     ...props
  }) => {
     const [hidePassword, setHidePassword] = React.useState(password);
-    const [isFocused, setIsFocused] = React.useState(false);
+    // React.useEffect(() => {
+    //     setValue(value);
+    // }, [value, setValue]);
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -31,6 +34,17 @@ const Input = ({
             {/* <Text style={styles.moreInfo}>{moreInfo}</Text> */}
             <View style={styles.inputContainer}>
                 <View style= {styles.leftIcon}>
+                    {iconName ==='calendar' &&(
+                            <Entypo 
+                                name='calendar'
+                            />
+                        )
+                    }
+                    {iconName === 'pushpin' && (
+                        <AntDesign
+                            name={iconName}
+                        />
+                    )}
                     {(iconName ==='email') && (
                         <MaterialCommunityIcons 
                             name= {iconName}
@@ -55,12 +69,8 @@ const Input = ({
                 <TextInput
                     value={value}
                     onChangeText={setValue}
+                    onBlur={onBlur}
                     autoCorrect={false}
-                    onFocus={() => {
-                        onFocus();
-                        setIsFocused(true);
-                    }}
-                    onBlur={() =>setIsFocused(false)}
                     secureTextEntry={hidePassword}
                     style={styles.Input}
                     {...props}
@@ -78,11 +88,9 @@ const Input = ({
 
             </View>
             <View style={styles.errorContainer}>
-                {error!='' && error && (
-                    <Text style={styles.errorText}>
-                        {error}
-                    </Text>
-                )}
+                <Text style={styles.errorText}>
+                    {error}
+                </Text>
             </View>
         </View>
     );
@@ -99,6 +107,7 @@ const styles = StyleSheet.create({
         marginRight: 40,
         marginTop: 10,
         marginBottom: 10,
+        // backgroundColor: 'blue'
 
     },
     header:{
@@ -129,7 +138,7 @@ const styles = StyleSheet.create({
     inputContainer: {
         // flex: 2,
         height: 50,
-        width: 220,
+        width: 230,
         flexDirection: 'row',
         paddingHorizontal: 15,
         borderWidth: 0.5,

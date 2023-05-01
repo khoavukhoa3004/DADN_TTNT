@@ -138,7 +138,7 @@ export default function LoginScreen({navigation}){
 
             <View style={styles.haveAccountContainer}>
                 <Text style={styles.haveAccount}>Don't have an account?{' '}</Text>
-                <TouchableOpacity onPress={submitForm}>
+                <TouchableOpacity onPress={()=> navigation.navigate('RegisterScreen')}>
                     <Text style={styles.newAccount}>Create new account</Text>
                 </TouchableOpacity>
             </View>
