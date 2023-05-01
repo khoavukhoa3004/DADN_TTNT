@@ -31,9 +31,7 @@ exports.validateUserSignUp = [
     check('username')
         .not()
         .isEmpty()
-        .withMessage('User is empty!')
-        .isEmail()
-        .withMessage('Invalid username'),
+        .withMessage('User is empty!'),
     check('password')
         .trim()
         .not()
@@ -61,9 +59,10 @@ exports.validateUserSignUp = [
             if(!validator.isISO8601(value, { strict: true})){
                 throw new Error('Invalid Birth day format, must be YYYY-MM-DD');
             }
-            const today = new Date(value);
-            const age = today.getFullYear() - value.getFullYear();
-            if(today.getMonth() < value.getMonth() || (today.getMonth() === value.getMonth() && today.getDate() < value.getDate())){
+            const today = new Date();
+            birthday = new Date(value)
+            const age = today.getFullYear() - birthday.getFullYear();
+            if(today.getMonth() < birthday.getMonth() || (today.getMonth() === birthday.getMonth() && today.getDate() < birthday.getDate())){
                 age -= 1;
             }
             if(age < 0){

@@ -138,7 +138,10 @@ export default function LoginScreen({navigation}){
 
             <View style={styles.haveAccountContainer}>
                 <Text style={styles.haveAccount}>Don't have an account?{' '}</Text>
-                <TouchableOpacity onPress={()=> navigation.navigate('RegisterScreen')}>
+                <TouchableOpacity onPress={()=> navigation.reset({
+                    index: 0, 
+                    routes: [{name: 'RegisterScreen'}]
+                })}>
                     <Text style={styles.newAccount}>Create new account</Text>
                 </TouchableOpacity>
             </View>

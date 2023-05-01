@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert, ScrollView, Button } from 'react-native'
 import { Formik } from 'formik';
 import { Entypo } from '@expo/vector-icons';
@@ -30,13 +30,13 @@ export default function RegisterScreen({navigation}) {
             .trim()
             .min(2, 'Invalid first name!')
             .notOneOf(['admin', 'root'], 'Invalid first name!')
-            .matches(/^[a-zA-Z ]*$/, 'First name must not have number or special characters')
+            .matches(/^[\p{L} ]+$/u, 'First name must contain only letters and spaces')
             .required('First name is required!'),
         lName: Yup.string()
             .trim()
             .min(2, 'Invalid last name!')
             .notOneOf(['admin', 'root'], 'Invalid first name!')
-            .matches(/^[a-zA-Z ]*$/, 'Last name must not have number or special characters')
+            .matches(/^[\p{L} ]+$/u, 'Last name must contain only letters and spaces')
             .required('Last name is required!'),
         email: Yup.string()
             .email('Invalid email')
@@ -55,10 +55,10 @@ export default function RegisterScreen({navigation}) {
             .min(4, 'Password must be longer than 4 characters!')
             .oneOf([Yup.ref('password'), null], 'Passwords does not match!')
             .required('Confirm password is required!'),
-        // dateOfBirth: Yup.date()
-        //     .max(new Date(), 'Date of birth cannot be in the future!')
-        //     .min(new Date('1900-01-01'), 'Date of birth cannot be before 1900')
-        //     .required('Date of birth is required!'),
+        dateOfBirth: Yup.date()
+            .max(new Date(), 'Date of birth cannot be in the future!')
+            .min(new Date('1900-01-01'), 'Date of birth cannot be before 1900')
+            .required('Date of birth is required!'),
         phoneNumber: Yup.string()
             .min(8, 'Invalid phone number!')
             .max(15, 'maximum phone digits is 15!')
@@ -69,8 +69,7 @@ export default function RegisterScreen({navigation}) {
             const res = await client.post('/user/create-user', {
                 ...values,
             });
-    
-            if (res.data.success) {
+            if (res.data._id != '') {
                 alert('Đăng ký thành công')
                 navigation.reset({
                     index: 0, 
@@ -111,6 +110,7 @@ export default function RegisterScreen({navigation}) {
                         lName: '',
                         email: '',
                         username: '',
+                        activate: false,
                         password: '',
                         confirmPassword: '',
                         dateOfBirth: new Date(),
@@ -119,6 +119,7 @@ export default function RegisterScreen({navigation}) {
                     }}
                     validationSchema={validationSchema}
                     onSubmit={handleSignUp}
+                    validator={() => ({})}
                 >
                     {
                         ({
@@ -130,7 +131,16 @@ export default function RegisterScreen({navigation}) {
                             handleBlur,
                             handleSubmit,
                             setFieldValue,
-                        }) => (
+                        }) => {
+                            useEffect(() => {
+                                if (values.dateOfBirth) {
+                                    // console.log(values.dateOfBirth.getMonth());
+                                    setDay(values.dateOfBirth.getDate());
+                                    setMonth(values.dateOfBirth.getMonth()+1);
+                                    setYear(values.dateOfBirth.getFullYear());
+                                }
+                            }, [values.dateOfBirth]);
+                            return (
                                     <View style={styles.container}>
                                     
 
@@ -155,6 +165,16 @@ export default function RegisterScreen({navigation}) {
                                             placeholder='Backham'
                                         />
                                         <Input
+                                            value={values.username}
+                                            iconName={"pushpin"}
+                                            error={(touched.username && errors.username)? errors.username : ''}
+                                            setValue={handleChange('username')}
+                                            // onBlur={handleBlur('lName')}
+                                            // autoCapitalize='sentences'
+                                            label={'User Name'}
+                                            placeholder='Backham'
+                                        />
+                                        <Input
                                             value={values.email}
                                             iconName="email"
                                             error={(touched.email && errors.email) ? (errors.email) : ''}
@@ -162,7 +182,7 @@ export default function RegisterScreen({navigation}) {
                                             // onBlur={handleBlur('email')}
                                             label={'Email'}
                                             // keyboardType="email-address"
-                                            // autoCapitalize='none'
+                                            autoCapitalize='none'
                                             placeholder='example@gmail.com'
                                         />
                                         <Input
@@ -171,7 +191,7 @@ export default function RegisterScreen({navigation}) {
                                             error={(touched.password && errors.password) ? errors.password: ''}
                                             setValue={handleChange('password')}
                                             // onBlur={handleBlur('password')}
-                                            // autoCapitalize='none'
+                                            autoCapitalize='none'
                                             label={'Password'}
                                             password={true}
                                             placeholder='*****'
@@ -182,7 +202,7 @@ export default function RegisterScreen({navigation}) {
                                             error={(touched.confirmPassword && errors.confirmPassword) ? errors.confirmPassword:''}
                                             setValue={handleChange('confirmPassword')}
                                             // onBlur={handleBlur('confirmPassword')}
-                                            // autoCapitalize='none'
+                                            autoCapitalize='none'
                                             label='Confirm Password'
                                             password={true}
                                             placeholder="******"
@@ -214,9 +234,9 @@ export default function RegisterScreen({navigation}) {
                                             onChange={(event, selectedDate) => {
                                                 handlePickerVisibility();
                                                 setFieldValue('dateOfBirth', selectedDate || values.dateOfBirth);
-                                                setDay(values.dateOfBirth.getDate());
-                                                setMonth(values.dateOfBirth.getMonth());
-                                                setYear(values.dateOfBirth.getFullYear());
+                                                // setDay(values.dateOfBirth.getDate());
+                                                // setMonth(values.dateOfBirth.getMonth());
+                                                // setYear(values.dateOfBirth.getFullYear());
                                             }}
                                             onBlur={handleBlur('dateOfBirth')}
                                         />)}
@@ -229,17 +249,26 @@ export default function RegisterScreen({navigation}) {
                                             setValue={handleChange('phoneNumber')}
                                             // onBlur={handleBlur('phoneNumber')}
                                             label={'Your phone'}
+                                            keyboardType='numeric'
                                             // autoCapitalize='none'
                                             placeholder='0123456789'
                                         />
+                                        <TextInput style={{ display: 'none' }} editable={false} defaultValue={values.activate ? 'true' : 'false'} />
+                                        <TouchableOpacity onPress={() =>{
+                                            
+                                            if(Object.keys(errors).length != 0){
+                                                // console.log('heloo',errors);
+                                                alert(Object.values(errors).join('\n'));
+                                            }
+                                            else{
+                                                handleSubmit();
+                                            } 
+                                        }} disabled={isSubmitting} style={styles.formAction}>
+                                            <View style={styles.btn}>
+                                                <Text style={styles.btnText}>Sign up</Text>
+                                            </View>
+                                        </TouchableOpacity>
 
-                                        <View style={styles.formAction}>
-                                            <TouchableOpacity onPress={handleSubmit} disabled={isSubmitting}>
-                                                <View style={styles.btn}>
-                                                    <Text style={styles.btnText}>Sign up</Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                        </View>
                                         <TouchableOpacity
                                             style={{marginTop: 'auto'}}
                                             onPress={()=> navigation.navigate('LoginScreen')}
@@ -253,9 +282,10 @@ export default function RegisterScreen({navigation}) {
                                                 </Text>
                                             </Text>
                                         </TouchableOpacity>
+                                        {console.log(errors)}
                                     </View>
                                 
-                        )
+                        )}
                     }
                 </Formik>
             </ScrollView>
@@ -362,6 +392,13 @@ const styles = StyleSheet.create({
         marginRight: 45,
         marginTop: 10,
         // marginBottom: 5,
+    },
+    errorText: {
+        marginTop: 2,
+        color: 'red',
+        fontSize: 12,
+        fontFamily: 'Inter-Regular',
+        textAlign: 'right',
     },
     dateSubContainer:{
         flexDirection: 'row',
