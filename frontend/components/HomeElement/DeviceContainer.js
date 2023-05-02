@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet,Button, Image, ScrollView, Switch, TouchableOpacity, ActivityIndicator  } from 'react-native';
 
-const DeviceContainer = () => {
+const DeviceContainer = (home_id) => {
     return (
         <View style={styles.elementDetail}>
             <View style={styles.roomDetail}>

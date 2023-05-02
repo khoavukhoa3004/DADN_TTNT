@@ -20,9 +20,9 @@ const device = mongoose.Schema({
     value: {
         type: Number,
     },
-    inRoom: {
+    haveRoom: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Room',
+        ref: 'Room',        
     },
     type: {
         type: String,

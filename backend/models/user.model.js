@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    haveHome: [{
+    haveHomes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Home',
     }],
@@ -56,11 +56,14 @@ userSchema.pre('save', function(next){
             next();
         });
     }
+    console.log('dr')
+    next();
 });
 userSchema.pre('save', async function(next) {
-    if(this.haveHome.length > 0){
+    if(this.haveHomes.length > 0){
         this.activate = true;
     }
+    console.log('dfa')
     next();
 });
 

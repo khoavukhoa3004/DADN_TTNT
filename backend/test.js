@@ -15,8 +15,8 @@ mongoose
         console.log('Connected to MongoDB Atlas');
 
         const username = 'nmdk';
-        const user = await User.findOne({ username: username}); 
-
+        let user = await User.findOne({ username: username}); 
+        console.log(user)
         //Create New Home:
         const newHome = new homeModel({
             "address": {
@@ -33,9 +33,20 @@ mongoose
             return;
         }
         
+        try {
+            console.log('okeeefsfasdf')
+            user.haveHomes.push(newHome._id);
+            console.log('dfafsd')
+            await user.save();
+            console.log('user added successfully')
+        } catch(error){
+            console.error('Can push user', error.message);
+            return;
+        }      
         const newRoom = new roomModel({
             "name": "Phòng khách",
             "id" : "0",
+            haveHome: newHome._id,
         });
         try {
             await newRoom.save();
@@ -47,17 +58,19 @@ mongoose
 
         
         try{
-            newHome.residents.push(user._id);
+            newHome.haveResidents.push(user._id);
             console.log('ok')
             newHome.haveOwner = user._id;
             console.log('okela')
             newHome.haveRooms.push(newRoom._id);
             console.log('okelaalala')
             await newHome.save();
+            
             console.log('User added to residents successfully');
         }
         catch(error){
             console.error(error.message);
+            console.error('Loi cho nay')
         }
 
         const fan_device = new deviceModel({
@@ -75,7 +88,7 @@ mongoose
             return;
         }
         
-        fan_device.inRoom = newRoom._id;
+        fan_device.haveRoom = newRoom._id;
         fan_device.save();
         
         const door_device = new deviceModel({
@@ -84,7 +97,7 @@ mongoose
             state: 'OFF',
             value: 0,
             type: 'door',
-            inRoom: newRoom._id,
+            haveRoom: newRoom._id,
         })
 
         try {
@@ -101,7 +114,7 @@ mongoose
             state: 'OFF',
             value: 63,
             type: 'bulb',
-            inRoom: newRoom._id,
+            haveRoom: newRoom._id,
         })
 
         try{
@@ -118,7 +131,7 @@ mongoose
             state: 'ON',
             value: 40,
             type: 'light',
-            inRoom: newRoom._id,
+            haveRoom: newRoom._id,
         });
         try {
             await light_sensor.save();
@@ -133,7 +146,7 @@ mongoose
             state: 'ON',
             value: 28,
             type: 'temp',
-            inRoom: newRoom._id,
+            haveRoom: newRoom._id,
         });
 
         try {
@@ -142,6 +155,20 @@ mongoose
             console.error(error.message);
             return;
         }
+        newRoom.haveDevices.push(fan_device._id);
+        newRoom.haveDevices.push(led_device._id);
+        newRoom.haveDevices.push(light_sensor._id);
+        newRoom.haveDevices.push(temp_sensor._id);
+        newRoom.haveDevices.push(door_device._id);
+        try {
+            await newRoom.save();
+            console.log('adding devices successfully to newRoom');
+        }
+        catch(error){
+            console.error(error.message);
+            return;
+        }
+
     })
     .catch((err) => {
         console.error(err.message);
