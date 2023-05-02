@@ -52,6 +52,13 @@ const roomSchema = new mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model('Home', homeSchema);
-module.exports = mongoose.model('Room', roomSchema);
-module.exports = mongoose.model('UserHome', userHomeSchema);
+
+
+home = mongoose.model('Home', homeSchema);
+room = mongoose.model('Room', roomSchema);
+userHome = mongoose.model('UserHome', userHomeSchema);
+module.exports = {
+    home,
+    room,
+    userHome,
+}
