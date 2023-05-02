@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'rea
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon1 from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { removeData } from '../utils/auth';
 
 const PROFILE_PICTURE ='https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg'
 
@@ -97,11 +98,20 @@ const SettingScreen = ({navigation}: {navigation: any}) => {
 
                     {items.map(({id, label, type, icon, color})=>(
                         <TouchableOpacity
-                            key={icon}
+                            key={id}
                             onPress={() => {
-                                if (icon == 'home') navigation.navigate('HomeScreen');
-                                if (icon == 'earth-outline') {
-                                    navigation.popToTop();
+                                if (id == '0'){
+                                    navigation.reset({
+                                        index: 0,
+                                        routes: [{ name: 'HomeScreen' }],
+                                    });
+                                }
+                                if (id == '5') {
+                                    removeData();
+                                    navigation.reset({
+                                        index: 0,
+                                        routes: [{ name: 'LoginScreen' }],
+                                    });
                                 }
                             }}>
                             <View style={styles.row}>

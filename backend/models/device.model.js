@@ -29,10 +29,6 @@ const device = mongoose.Schema({
         required: true,
         enum: ['fan', 'bulb', 'door', 'light', 'temp'],
     },
-    haveLog: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: ''
-    }],
 },{timestamps: true});
 
 device.pre('save', async function (next) {
