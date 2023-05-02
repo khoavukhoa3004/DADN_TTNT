@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const home = new mongoose.Schema({
+const homeSchema = new mongoose.Schema({
     address: {
         number: {
             type: String,
@@ -18,29 +18,33 @@ const home = new mongoose.Schema({
     haveRooms: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Room',
-        required: true,
+        // required: true,
     }],
     haveOwner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true,
-    }
-});
-
-const userHomeSchema = new mongoose.Schema({
-    userID: {
+        // required: true,
+    },
+    residents: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true,
-    },
-    homeID: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Home',
-        required: true,
-    }
-})
+    }]
+});
 
-const room = new mongoose.Schema({
+// const userHomeSchema = new mongoose.Schema({
+//     userID: {
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: 'User',
+//         required: true,
+//     },
+//     homeID: {
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: 'Home',
+//         required: true,
+//     }
+// })
+
+const roomSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -52,12 +56,12 @@ const room = new mongoose.Schema({
     },
 });
 
-const homeSchema = mongoose.model('Home', home);
-const roomSchema = mongoose.model('Room', room);
-const userHome = mongoose.model('UserHome', userHomeSchema);
+const homeModel = mongoose.model('Home', homeSchema);
+const roomModel = mongoose.model('Room', roomSchema);
+// const userHome = mongoose.model('UserHome', userHomeSchema);
 
 module.exports = {
-    homeModel: homeSchema,
-    roomModel: roomSchema,
-    userHomeModel: userHome,
+    homeModel,
+    roomModel
+    // userHomeModel: userHome,
 };

@@ -39,6 +39,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    haveHome: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Home',
+    }],
     avatar: Buffer,
 
 });
@@ -52,6 +56,12 @@ userSchema.pre('save', function(next){
             next();
         });
     }
+});
+userSchema.pre('save', async function(next) {
+    if(this.haveHome.length > 0){
+        this.activate = true;
+    }
+    next();
 });
 
 userSchema.methods.comparePassword = async function(password) {
@@ -92,7 +102,7 @@ userSchema.statics.isThisUserNameInUse = async function(username) {
 }
 // userSchema.methods.isThisEmailInUse
 
-module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model('User', userSchema);
 
 
 

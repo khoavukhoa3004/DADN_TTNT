@@ -61,7 +61,7 @@ exports.validateUserSignUp = [
             }
             const today = new Date();
             birthday = new Date(value)
-            const age = today.getFullYear() - birthday.getFullYear();
+            let age = today.getFullYear() - birthday.getFullYear();
             if(today.getMonth() < birthday.getMonth() || (today.getMonth() === birthday.getMonth() && today.getDate() < birthday.getDate())){
                 age -= 1;
             }
