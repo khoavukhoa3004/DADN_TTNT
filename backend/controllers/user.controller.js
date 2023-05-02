@@ -10,7 +10,7 @@ exports.createUser = async (req, res) => {
         activate,
         password, 
         dateOfBirth, 
-        phoneNumber
+        phoneNumber,
     } = req.body;
     const isNewUser = await User.isThisEmailInUse(email);
     if(!isNewUser){
@@ -57,7 +57,6 @@ exports.userSignIn = async (req, res) => {
         )
         res.json({ success: true, user, token});
     }
-
 };
 
 // {

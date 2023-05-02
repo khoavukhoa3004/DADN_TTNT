@@ -17,7 +17,7 @@ const fileFilter = (req, file, callback) => {
         callback(null, true);
     }
     else {
-        callback('invalide image file', false);
+        callback('invalid image file', false);
     }
 }
 

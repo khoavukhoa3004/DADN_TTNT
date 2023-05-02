@@ -3,8 +3,8 @@ const axios = require('axios');
 // const bodyParser = require('body-parser');
 
 const { isAuthenticated } = require('../middlewares/authentication');
-const { dataValidation, validateData} = require('../middlewares/validation/adafruit.validation');
-const { postData, getCurrentData, getAllData } =require('../controllers/adafruit.controller');
+const { dataValidation, validateData } = require('../middlewares/validation/adafruit.validation');
+const { postData, getCurrentData, getAllData } = require('../controllers/adafruit.controller');
 
 const router = express.Router();
 

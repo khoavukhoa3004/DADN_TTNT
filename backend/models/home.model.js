@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const homeSchema = new mongoose.Schema({
+const home = new mongoose.Schema({
     address: {
         number: {
             type: String,
@@ -40,7 +40,7 @@ const userHomeSchema = new mongoose.Schema({
     }
 })
 
-const roomSchema = new mongoose.Schema({
+const room = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -52,13 +52,12 @@ const roomSchema = new mongoose.Schema({
     },
 });
 
+const homeSchema = mongoose.model('Home', home);
+const roomSchema = mongoose.model('Room', room);
+const userHome = mongoose.model('UserHome', userHomeSchema);
 
-
-home = mongoose.model('Home', homeSchema);
-room = mongoose.model('Room', roomSchema);
-userHome = mongoose.model('UserHome', userHomeSchema);
 module.exports = {
-    home,
-    room,
-    userHome,
-}
+    homeModel: homeSchema,
+    roomModel: roomSchema,
+    userHomeModel: userHome,
+};
