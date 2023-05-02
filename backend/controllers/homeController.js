@@ -2,15 +2,22 @@ const HomeConstructor = require('../models/home.model').homeModel;
 const RoomConstructor = require('../models/home.model').roomModel;
 
 exports.HomeController = {
-    // create: async(req, res) => {
-    //     try {
-    //         const newHome = await new HomeConstructor({
-
-    //         })
-    //     } catch (error) {
-            
-    //     }
-    // },
+    create: async(req, res) => {
+        try {
+            const newHome = await new HomeConstructor({
+                address: {
+                    number: req.body.number,
+                    street: req.body.street,
+                    city: req.body.city,
+                }
+            })
+            const saveHome = await newHome.save();
+            res.status(200).json(saveHome);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json(error);
+        }
+    },
     
     get: async(req, res) => {
         try {
