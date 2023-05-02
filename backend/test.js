@@ -17,6 +17,7 @@ mongoose
         const username = 'nmdk';
         const user = await User.findOne({ username: username}); 
 
+        //Create New Home:
         const newHome = new homeModel({
             "address": {
                 "number": "1",
