@@ -6,6 +6,7 @@ import {checkLoginStatus, withAuth } from '../../utils/auth';
 import {translateDevice, getVietNameseDevice} from '../../utils/translateDevice'
 const DeviceComponent = ({
     deviceNameSystem,
+    id,
     color,
     type,
     navigation,
@@ -139,7 +140,10 @@ const DeviceComponent = ({
     );
   }
     return (
-        <TouchableOpacity onPress={() => {console.log(deviceNameSystem)}}>
+        <TouchableOpacity onPress={() => {
+          console.log(deviceNameSystem)
+          console.log(id);
+          }}>
           <View style={styles.box} >
               <View style={styles.iconBox}>
                 {(deviceName == 'Fan') && <FontAwesome5 name="fan" size={30} color={(color === 'light') ? 'black' : 'white'} style={{}}/>}
