@@ -15,7 +15,7 @@ const ScreenHeight = Dimensions.get("window").height;
 
 
 
-const HomeScreen = (navigation) =>{
+const HomeScreen = ({navigation}) =>{
     
     const [isEnabled, setIsEnabled] = React.useState(false);
     const [userName, setUserName] = React.useState('');
