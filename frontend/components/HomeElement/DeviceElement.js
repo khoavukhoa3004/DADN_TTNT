@@ -7,6 +7,7 @@ import {translateDevice, getVietNameseDevice} from '../../utils/translateDevice'
 const DeviceComponent = ({
     deviceNameSystem,
     color,
+    type,
     navigation,
 }) =>{
     const [buttonState, setButtonState] = useState('OFF');
@@ -14,7 +15,6 @@ const DeviceComponent = ({
     const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
     const deviceName = translateDevice(deviceNameSystem);
     const postData = async (newData) => {
-      console.log(newData);
       try {
         const response = await withAuth((token) => client.post('/sensor/post-current', {
             feedName: deviceNameSystem,
@@ -139,33 +139,35 @@ const DeviceComponent = ({
     );
   }
     return (
-        <View style={styles.box}>
-            <View style={styles.iconBox}>
-              {(deviceName == 'Fan') && <FontAwesome5 name="fan" size={30} color={(color === 'light') ? 'black' : 'white'} style={{}}/>}
-              {(deviceName == 'Led') && <FontAwesome5 name="lightbulb" size={30} color={(color === 'light') ? 'black' : 'white'} />}
-              {(deviceName == 'Door') && (buttonState) &&<FontAwesome5 name="door-open" size={30} color={(color === 'light') ? 'black' : 'white'} />}
-              {(deviceName == 'Door') && (!buttonState) &&<FontAwesome5 name="door-closed" size={30} color={(color === 'light') ? 'black' : 'white'} />}
-            </View>
-            {/* <Icon style={styles.iconBox} name={(isFan)? "fan" : "lightbulb-on-outline"}  size={50} color="white"/> */}
+        <TouchableOpacity onPress={() => {console.log(deviceNameSystem)}}>
+          <View style={styles.box} >
+              <View style={styles.iconBox}>
+                {(deviceName == 'Fan') && <FontAwesome5 name="fan" size={30} color={(color === 'light') ? 'black' : 'white'} style={{}}/>}
+                {(deviceName == 'Led') && <FontAwesome5 name="lightbulb" size={30} color={(color === 'light') ? 'black' : 'white'} />}
+                {(deviceName == 'Door') && (buttonState) &&<FontAwesome5 name="door-open" size={30} color={(color === 'light') ? 'black' : 'white'} />}
+                {(deviceName == 'Door') && (!buttonState) &&<FontAwesome5 name="door-closed" size={30} color={(color === 'light') ? 'black' : 'white'} />}
+              </View>
+              {/* <Icon style={styles.iconBox} name={(isFan)? "fan" : "lightbulb-on-outline"}  size={50} color="white"/> */}
 
-            <Text style={styles.titleBox}>{getVietNameseDevice(deviceNameSystem)}</Text>
-            <View style={styles.stateBox}>
-                <Text style={styles.stateTextBox}>Bật</Text>
-                <Switch         
-                    trackColor={{false: '#767577', true: '#FF8A00'}}
-                    thumbColor={buttonState ? '#f5dd4b' : '#f4f3f4'}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={toggleSwitch}
-                    value={buttonState === 'ON'}
-                    disabled={isWaitingForResponse}
-                    style={styles.toggleInBox}
-                />
-                <View styles={styles.loadingToggleInBox}>
-                  {isWaitingForResponse && renderActivityIndicator()}
-                </View>
-            
-            </View>
-        </View>
+              <Text style={styles.titleBox}>{getVietNameseDevice(deviceNameSystem)}</Text>
+              <View style={styles.stateBox}>
+                  <Text style={styles.stateTextBox}>Bật</Text>
+                  <Switch         
+                      trackColor={{false: '#767577', true: '#FF8A00'}}
+                      thumbColor={buttonState ? '#f5dd4b' : '#f4f3f4'}
+                      ios_backgroundColor="#3e3e3e"
+                      onValueChange={toggleSwitch}
+                      value={buttonState === 'ON'}
+                      disabled={isWaitingForResponse}
+                      style={styles.toggleInBox}
+                  />
+                  <View styles={styles.loadingToggleInBox}>
+                    {isWaitingForResponse && renderActivityIndicator()}
+                  </View>
+              
+              </View>
+          </View>
+        </TouchableOpacity>
     );
 
 }
