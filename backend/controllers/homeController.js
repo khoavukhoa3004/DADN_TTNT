@@ -1,5 +1,6 @@
 const HomeConstructor = require('../models/home.model').homeModel;
 const RoomConstructor = require('../models/home.model').roomModel;
+const Device = require('../models/device.model')
 const User = require('../models/user.model')
 
 exports.HomeController = {
@@ -39,15 +40,84 @@ exports.HomeController = {
             });
         }
         try{
+            console.log('getHomeByUserName', req.params.username)
             const user = await User.findOne({username: req.params.username});
+            // console.log(user)
             if(!user) {
                 return res.status(404).json({success: false, message: 'User not found'});
             }
             const home = user.haveHomes.map(home => home._id.toString());
-            res.status(200).json({sucess: true, data: home});
+            res.status(200).json({success: true, data: home});
         } catch (error) {
             console.error(error);
             res.status(500).json({success: false, message: error.message});
+        }
+    },
+    getRooms: async (req, res) => {
+        const { user } = req;
+        if(!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized access!'
+            });
+        }
+        try {
+            console.log('getRooms');
+            const homeInfo = await HomeConstructor.findOne({_id: req.params.homeId})
+            // console.log(homeInfo)
+            
+            const roomIds = homeInfo.haveRooms.map(room => room._id.toString());
+            console.log(typeof roomIds);
+            res.status(200).json({success: true, data: roomIds});
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({success: false, message: err.message});
+        }
+    },
+    getRoomsIdAndName: async (req, res) => {
+        const { user } = req;
+        if(!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized access!'
+            });
+        }
+        try {
+            console.log('getRooms');
+            const homeInfo = await HomeConstructor.findOne({_id: req.params.homeId})
+                .populate({
+                    path: 'haveRooms',
+                    select: '_id id name'
+                })
+            // console.log(homeInfo)
+            
+            const roomPairs = homeInfo.haveRooms.map(room => ({_id: room._id, name: room.name, id: room.id}));
+            console.log(roomPairs);
+            res.status(200).json({success: true, data: roomPairs});
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({success: false, message: err.message});
+        }
+    },
+    getRoomIds: async (req, res) => {
+        const { user } = req;
+        if(!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized access!'
+            });
+        }
+        try {
+            console.log('getRoomIds');
+            const homeInfo = await HomeConstructor.findOne({_id: req.params.homeId}).populate({ path: 'haveRooms', select: 'id' })
+            // console.log(homeInfo)
+            console.log(homeInfo)
+            const roomIds = homeInfo.haveRooms.map(room => room.id);
+            console.log(typeof roomIds);
+            res.status(200).json({success: true, data: roomIds});
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({success: false, message: err.message});
         }
     },
     getAddress: async function (req, res) {
@@ -66,23 +136,7 @@ exports.HomeController = {
             res.status(500).json({success: false, message: error.message});
         }
     },
-    getRooms: async (req, res) => {
-        const { user } = req;
-        if(!user) {
-            return res.status(401).json({
-                success: false,
-                message: 'Unauthorized access!'
-            });
-        }
-        try {
-            const homeInfo = await HomeConstructor.findOne({_id: req.params.id})
-            const room_id = homeInfo.haveRooms.map(room => room._id.toString());
-            res.status(200).json({success: true, data: room_id});
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({success: false, message: err.message});
-        }
-    },
+    
 };
 
 exports.RoomController = {
@@ -117,7 +171,8 @@ exports.RoomController = {
             });
         }
         try {   
-            const roomInfor = RoomConstructor.findOne({_id: req.params.roomId});
+            console.log('getName of Room')
+            const roomInfor = await RoomConstructor.findOne({_id: req.params.roomId});
             if(!roomInfor) {
                 return res.status(404).json({success: false, message: 'Not found room._id'});
             }
@@ -137,7 +192,9 @@ exports.RoomController = {
             });
         }
         try {
-            const roomInfor = RoomConstructor.findOne({_id: req.params.roomId});
+            console.log('getDevices, roomID: ', req.params.roomId)
+            const roomInfor = await RoomConstructor.findOne({_id: req.params.roomId});
+            // console.log(roomInfor)
             if(!roomInfor) {
                 return res.status(404).json({success: false, message: 'Not found room._id'});
             }
@@ -147,5 +204,31 @@ exports.RoomController = {
             console.error(error);
             res.status(500).json({success: false, message: error.message});   
         }    
+    },
+    getDevicesIdAndType: async (req, res) => {
+        const { user } = req;
+        if(!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized access!'
+            });
+        }
+        try {
+            console.log('getDevicesId&Type: ', req.params.roomId);
+            const roomInfo = await RoomConstructor.findOne({_id: req.params.roomId})
+                .populate({
+                    path: 'haveDevices',
+                    select: '_id type device_name'
+                })
+            // console.log(homeInfo)
+            
+            const devicePairs = roomInfo.haveDevices.map(device => ({_id: device._id, type: device.type, name: device.device_name}));
+            console.log(devicePairs);
+            res.status(200).json({success: true, data: devicePairs});
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({success: false, message: err.message});
+        }
     }
+
 };

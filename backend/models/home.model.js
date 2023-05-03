@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const homeSchema = new mongoose.Schema({
+    id: {
+        type: String,
+        unique: true,
+    },
     address: {
         number: {
             type: String,

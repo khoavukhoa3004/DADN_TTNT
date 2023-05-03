@@ -7,6 +7,7 @@ const WeatherWidgetComponent = ({
     deviceNameSystem,
 }) => {
     const [temperature, setTemperature] = useState(0);
+    const [light, setLight] = useState(0);
     // checkLoginStatus(navigation);
     const updateTemp = async () => {
         try {
@@ -28,11 +29,32 @@ const WeatherWidgetComponent = ({
             console.error(error);
         }      
     }
+    const updateLight = async () => {
+        try {
+            const response = await withAuth((token) => client.get(`/sensor/get-current/nmdk-1-lightsensor-1`,{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            }));  
+            setLight(response.data.value);
+            // if(response?.value ==='ON' && !isClicked){
+            //     setIsEnabled(true)
+            // }
+            // else if(response?.value ==='OFF' && !isClicked){
+            //     console.log('yep');
+            //     setIsEnabled(false)
+            // }
+        } catch (error) {
+            console.error(error);
+        }      
+    }
     useEffect(() => {
 
 
         const interval = setInterval(async () => {
             updateTemp();
+            updateLight();
         }, 3600); // Fetch the latest temperature every second
         return () => clearInterval(interval);
     }, []);
@@ -54,7 +76,7 @@ const WeatherWidgetComponent = ({
                         <Text style={{color: 'white', fontSize: 24, fontFamily: 'Inter-Light',}}>o</Text>
                         <Text style={styles.tempInfor}>C</Text>
                     </View>
-                    <Text style={styles.humidity}>Độ ẩm: --%</Text>
+                    <Text style={styles.humidity}>Ánh sáng: {light} lux</Text>
                 </View>
             </View>
         </View>
@@ -119,6 +141,7 @@ const styles = StyleSheet.create({
     },
     humidity: {
         fontFamily: 'Inter-Bold',
+        fontSize: 12,
         color: 'white',
     },
 
