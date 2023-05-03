@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'r
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Input from '../components/FormElement/Input';
-import  { checkLoginStatus } from '../utils/auth' 
 import jwtDecode from 'jwt-decode';
 
 
@@ -39,6 +38,7 @@ export default function LoginScreen({navigation}){
                         routes: [{ name: 'HomeScreen' }],
                     });
                 }
+                
             } catch (error) {
                 alert(error);
                 console.log(error);
@@ -65,6 +65,7 @@ export default function LoginScreen({navigation}){
             if(res.data.success){
                 
                 const { token, user } = res.data;
+                
                 await AsyncStorage.setItem('token', token);
                 await AsyncStorage.setItem('user', JSON.stringify(user));
                 navigation.reset({

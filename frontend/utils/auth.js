@@ -11,29 +11,34 @@ const checkLoginStatus = async (navigation) => {
         const currentTime = Date.now() / 1000;
         if (decodedToken.exp > currentTime) {
             // Token còn hạn, chuyển đến trang home
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'HomeScreen' }],
-            });
         } else {
         // Token hết hạn, xóa token và hiển thị trang đăng nhập
         await AsyncStorage.removeItem('token');
         navigation.reset({
             index: 0,
-            routes: [{ name: 'HomeScreen' }],
+            routes: [{ name: 'LoginScreen' }],
         });
     }
     } else {
         // Không có token, hiển thị trang đăng nhập
         navigation.reset({
             index: 0,
-            routes: [{ name: 'HomeScreen' }],
+            routes: [{ name: 'LoginScreen' }],
         });
     }
 };
 
 export {checkLoginStatus};
 
+export const removeData = async () => {
+    try { 
+        await AsyncStorage.removeItem('token');
+        await AsyncStorage.removeItem('user');
+    } catch (error){
+        alert(error.message);
+        console.log(error);
+    }
+}
 
 export const saveToken = async (token) => {
     try {

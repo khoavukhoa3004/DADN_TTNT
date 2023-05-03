@@ -20,19 +20,15 @@ const device = new mongoose.Schema({
     value: {
         type: Number,
     },
-    inRoom: {
+    haveRoom: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Room',
+        ref: 'Room',        
     },
     type: {
         type: String,
         required: true,
         enum: ['fan', 'bulb', 'door', 'light', 'temp'],
     },
-    haveLog: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: ''
-    }],
 },{timestamps: true});
 
 device.pre('save', async function (next) {

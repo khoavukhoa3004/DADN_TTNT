@@ -25,7 +25,7 @@ const homeSchema = new mongoose.Schema({
         ref: 'User',
         // required: true,
     },
-    residents: [{
+    haveResidents: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     }]
@@ -54,8 +54,15 @@ const roomSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    haveHome: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Home',      
+    },
+    haveDevices: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Device',        
+    }],
 });
-
 const homeModel = mongoose.model('Home', homeSchema);
 const roomModel = mongoose.model('Room', roomSchema);
 // const userHome = mongoose.model('UserHome', userHomeSchema);

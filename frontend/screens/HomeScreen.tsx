@@ -4,16 +4,47 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/Ionicons';
 import Icon3 from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/Feather'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomBar from '../components/BottomBar';
 import DeviceComponent from '../components/HomeElement/DeviceElement';
 import WeatherWidgetComponent from '../components/HomeElement/WeatherWidgetElement';
+import { checkLoginStatus } from '../utils/auth';
 const ScreenWidth = Dimensions.get("window").width;
 const ScreenHeight = Dimensions.get("window").height;
 
 
 
 const HomeScreen = ({navigation}: {navigation: any}) =>{
+    
     const [isEnabled, setIsEnabled] = React.useState(false);
+    const [userName, setUserName] = React.useState('');
+    const [lastName, setLastName] = React.useState('');
+    async function getData() {
+        try {
+            const userStr = await AsyncStorage.getItem('user');
+            if (userStr !== null) {
+                // chuyển đổi chuỗi JSON thành đối tượng JavaScript
+                const user = JSON.parse(userStr);
+                console.log('hello', user)
+                setUserName(user.username);
+                setLastName(user.lName);
+                // sử dụng đối tượng user
+                return user;
+            } else {
+                // xử lý trường hợp userStr là null
+                console.log('Không tìm thấy dữ liệu user');
+                
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        return '';
+    }
+    useEffect(() => {
+        checkLoginStatus();
+        getData();
+    },[])
+    
 
     return (
         <View style={styles.container}>
@@ -21,7 +52,7 @@ const HomeScreen = ({navigation}: {navigation: any}) =>{
                 {/* Header */}
                 <View style={styles.headerWrapper}>
                     <View style={styles.headerTitle}>
-                        <Text style={{fontSize: 30, fontFamily: 'Inter-Bold', }}>Xin chào Natasha!</Text>
+                        <Text style={{fontSize: 30, fontFamily: 'Inter-Bold', }}>Xin chào {lastName}!</Text>
                         <Text style={{position: 'absolute', fontSize: 60, fontFamily: 'Inter-Bold', opacity: 0.1}}></Text>
                     </View>
 
