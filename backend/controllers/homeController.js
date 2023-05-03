@@ -11,7 +11,9 @@ exports.HomeController = {
                     city: req.body.city,
                 }
             })
-            const saveHome = await newHome.save();
+            const saveHome = await newHome.save().then((savedHome) => {
+                console.log('Home saved to database:', savedHome); 
+            });
             res.status(200).json(saveHome);
         } catch (error) {
             console.log(error);

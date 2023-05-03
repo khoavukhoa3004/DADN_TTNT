@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const bcrypt = require('bcrypt');
-const { Decimal128 } = require('mongodb');
-const DeviceLog= require('./deviceLog.model')
+// const { Decimal128 } = require('mongodb');
+const DeviceLog = require('./deviceLog.model')
 
-const device = mongoose.Schema({
+const device = new mongoose.Schema({
     device_name: {
         type: String,
         required: true,
@@ -187,7 +187,7 @@ device.pre('save', async function (next) {
 //         required: true,
 //     },
 // }, {timestamps: true});
-const deviceSchema = mongoose.model('Device', device);
+const deviceModel = mongoose.model('Device', device);
 
 // const fanSchema = mongoose.model('fan', fan);
 // const bulbSchema = mongoose.model('bulb', bulb);
@@ -197,7 +197,7 @@ const deviceSchema = mongoose.model('Device', device);
 
 
 module.exports = {
-    deviceModel: deviceSchema,
+    deviceModel
     // fanModel: fanSchema,
     // bulbModel: bulbSchema,
     // tempModel: tempSchema,
