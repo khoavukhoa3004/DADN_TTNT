@@ -11,7 +11,7 @@ router.get('/getHomes/:username', isAuthenticated, HomeController.getHomeByUserN
 router.get('/getRooms/:homeId', isAuthenticated, HomeController.getRooms);
 router.get('/getRoomsId&Name/:homeId', isAuthenticated, HomeController.getRoomsIdAndName);
 router.get('/getRoomIds/:homeId', isAuthenticated, HomeController.getRoomIds);
-router.post('/createHome', HomeController.create);
+router.post('/createHome', isAuthenticated, HomeController.create);
 
 
 

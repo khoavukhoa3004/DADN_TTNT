@@ -27,15 +27,74 @@ const device = new mongoose.Schema({
     type: {
         type: String,
         required: true,
-        enum: ['fan', 'bulb', 'door', 'light', 'temp'],
+        // enum: ['fan', 'bulb', 'door', 'light', 'temp'],
     },
-    haveLog: [{
-        type: mongoose.SchemaType.Types.ObjectId,
+    haveLogs: [{
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'DeviceLog'
     }]
 },{timestamps: true});
 
 device.pre('save', async function (next) {
+    try {
+        if(this.isNew){
+            const deviceLog = new DeviceLog({
+                time: new Date(),
+                state: this.state,
+                data: this.value,
+                device: this._id,
+                action: `${this.device_name} has been created`,
+            })
+            await deviceLog.save();
+        }
+        else {
+            let action = '';
+            let value = '';
+            let modified = false;
+            if(this.isModified('device_name')){
+                action = 'device name';
+                modified = true;
+                value = this.device_name;
+            }
+            if(this.isModified('value')){
+                action = 'value';
+                modified = true;
+                value = this.value;
+            }
+            else if(this.isModified('state')){
+                action = 'state';
+                modified = true;
+                value = this.state;
+            }
+            else if(this.isModified('activate')){
+                action = 'activate';
+                modified = true;
+                value = this.activate;
+            }
+            else if(this.isModified('room')){
+                action = 'room';
+                modified = true;
+                value = this.room.toString();
+            }
+            if(modified) {
+                const deviceLog = new DeviceLog({
+                    time: new Date(),
+                    state: this.state,
+                    data: this.value,
+                    device: this._id,
+                    action: `${this.device_name} changed ${action} to ${value}`,
+                });
+                await deviceLog.save();
+                this.haveLog.push(deviceLog._id);
+            }
+        }
+        next();
+    } catch(error) {
+        next(error);
+    }
+});
+
+device.pre('update', async function (next) {
     try {
         if(this.isNew){
             const deviceLog = new DeviceLog({

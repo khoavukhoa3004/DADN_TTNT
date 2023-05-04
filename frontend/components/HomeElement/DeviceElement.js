@@ -4,6 +4,10 @@ import { AntDesign, Entypo, MaterialCommunityIcons, FontAwesome5   } from '@expo
 import client from '../../API/client';
 import {checkLoginStatus, withAuth } from '../../utils/auth';
 import {translateDevice, getVietNameseDevice} from '../../utils/translateDevice'
+import axios from 'axios';
+const URL = `http://localhost:3000`
+
+
 const DeviceComponent = ({
     deviceNameSystem,
     id,
@@ -26,13 +30,17 @@ const DeviceComponent = ({
               'Content-Type': 'application/json',
             }
           }));
+        if (response.data.success === true){
+          console.log('before');
+          await client.patch(`/device/updateState/${id}/${newData}`);
+          console.log('await');
+        }
         if (response.data.success === false) {
           throw new Error('Failed to post data to Adafruit');
         }
       } catch (error) {
         alert(`Có lỗi xảy ra: ${error.message}`);
         throw new Error('Error: ', error);
-
       } 
     }
     const toggleSwitch = async () => {
