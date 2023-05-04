@@ -76,7 +76,7 @@ const WeatherWidgetComponent = ({
                         <Text style={{color: 'white', fontSize: 24, fontFamily: 'Inter-Light',}}>o</Text>
                         <Text style={styles.tempInfor}>C</Text>
                     </View>
-                    <Text style={styles.humidity}>Ánh sáng: {light} lux</Text>
+                    <Text style={styles.humidity}>light: {light} lux</Text>
                 </View>
             </View>
         </View>
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
         paddingBottom: 0,
     },
     tempInfor: {
-        fontSize: 48,
+        fontSize: 40,
         color: 'white',
         fontFamily: 'Inter-Light',
     },
@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter-Bold',
         fontSize: 12,
         color: 'white',
+        paddingLeft: 10,
     },
 
 });

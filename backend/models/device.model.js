@@ -27,7 +27,6 @@ const device = mongoose.Schema({
     type: {
         type: String,
         required: true,
-        enum: ['fan', 'bulb', 'door', 'light', 'temp'],
     },
     haveLogs: [{
         type: mongoose.Schema.Types.ObjectId,
