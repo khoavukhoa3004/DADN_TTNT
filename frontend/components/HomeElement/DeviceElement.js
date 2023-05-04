@@ -143,6 +143,9 @@ const DeviceComponent = ({
         <TouchableOpacity onPress={() => {
           console.log(deviceNameSystem)
           console.log(id);
+          if (deviceName == 'Fan') navigation.navigate('FanScreen');
+          if (deviceName == 'Led') navigation.navigate('LedScreen');
+          if (deviceName == 'Door') navigation.navigate('DoorScreen');
           }}>
           <View style={styles.box} >
               <View style={styles.iconBox}>
@@ -168,7 +171,6 @@ const DeviceComponent = ({
                   <View styles={styles.loadingToggleInBox}>
                     {isWaitingForResponse && renderActivityIndicator()}
                   </View>
-              
               </View>
           </View>
         </TouchableOpacity>

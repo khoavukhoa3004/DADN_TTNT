@@ -12,6 +12,7 @@ import {
   Modal,
   FlatList,
   PanResponder,
+  Switch,
 } from "react-native";
 import Icon1 from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -21,12 +22,15 @@ import BottomBar from "../components/BottomBar";
 import { StatusBar } from "expo-status-bar";
 import { Line, LinearGradient } from "react-native-svg";
 import SelectDropdown from "react-native-select-dropdown";
+import {checkLoginStatus, withAuth } from '../utils/auth';
+import client from '../API/client';
 
 const ScreenWidth = Dimensions.get("window").width;
 const ScreenHeight = Dimensions.get("window").height;
 
+const DoorScreen = ({ navigation, deviceNameSystem, id, color, type }) => {
 
-const LedScreen = ({ navigation }) => {
+    
   return (
     <View style={styles.Container}>
       <View style={styles.headContainer}>
@@ -43,7 +47,7 @@ const LedScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.middleHeadContainer}>
-          <Text style={styles.topTitle}>QUẠT</Text>
+          <Text style={styles.topTitle}>CÁNH CỬA</Text>
         </View>
         <View style={styles.rightHeadContainer}>
           {/* <Icon
@@ -57,22 +61,15 @@ const LedScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.mainContainer}>
-        {/* <View style={styles.leftMainLayout}>
-          <Text style={styles.leftTextMainContainer}>Tắt</Text>
+        <View style={styles.leftMainLayout}>
+          
         </View>
         <View style={styles.middleMainLayout}>
-          <Text style={styles.middleTextMainContainer}>Mạnh</Text>
-          <View style={styles.firstMainBox}>
-            <View style={styles.secondMainBox}>
-              <View style={styles.thirdMainBox}>
-                <View style={styles.fourthMainBox}></View>
-              </View>
-            </View>
-          </View>
+            
         </View>
         <View style={styles.rightMainLayout}>
-          <Text style={styles.rightTextMainContainer}>Rất{"\n"}Mạnh</Text>
-        </View> */}
+          
+        </View>
         {/* <View style={styles.firstLayout}>
           <View style={styles.secondLayout}>
             <View style={styles.thirdLayout}>
@@ -83,36 +80,6 @@ const LedScreen = ({ navigation }) => {
           </View>
         </View> */}
       </View>
-
-      {/* <View style={styles.modeContainer}>
-        <View style={styles.modeSubContainer}>
-          <View style={styles.circleModeContainer}>
-            <Image
-              style={styles.functionIcon}
-              source={require("../assets/images/Led_Fan/Mode_Icon.png")}
-            />
-          </View>
-          <Text style={styles.functionTextContainer}>CHẾ ĐỘ</Text>
-        </View>
-        <View style={styles.modeSubContainer}>
-          <View style={styles.circleModeContainer}>
-            <Image
-              style={styles.scheduleIcon}
-              source={require("../assets/images/Led_Fan/Schedule_Icon.png")}
-            />
-          </View>
-          <Text style={styles.scheduleTextContainer}>LỊCH TRÌNH</Text>
-        </View>
-        <View style={styles.modeSubContainer}>
-          <View style={styles.circleModeContainer}>
-            <Image
-              style={styles.historyIcon}
-              source={require("../assets/images/Led_Fan/History_Icon.png")}
-            />
-          </View>
-          <Text style={styles.historyTextContainer}>LỊCH SỬ</Text>
-        </View>
-      </View> */}
 
       <View style={styles.modeContainer}>
         <View style={styles.modeSubContainer}>
@@ -157,29 +124,6 @@ const LedScreen = ({ navigation }) => {
       <View style={styles.historyContainer}>
         <View style={styles.historyBorder}></View>
       </View>
-
-      {/* <View style={styles.infoContainer}>
-        <View style={styles.insideTemperatureStyle}>
-          <Text style={styles.insideTemperatureText}>
-            Nhiệt độ{"\n"}trong nhà
-          </Text>
-          <Text style={styles.insideTemperatureNumber}>
-            {receive_insideTemp}
-          </Text>
-        </View>
-        <View style={styles.outsideTemperatureStyle}>
-          <Text style={styles.outsideTemperatureText}>
-            Nhiệt độ{"\n"}ngoài trời
-          </Text>
-          <Text style={styles.outsideTemperatureNumber}>
-            {receive_outsideTemp}
-          </Text>
-        </View>
-        <View style={styles.MoistureStyle}>
-          <Text style={styles.MoistureText}>Độ ẩm{"\n"}</Text>
-          <Text style={styles.MoistureNumber}>{receive_Moisture}</Text>
-        </View>
-      </View> */}
 
       {/* <View style={styles.deviceContainer}>
         <SelectDropdown
@@ -228,14 +172,14 @@ const LedScreen = ({ navigation }) => {
         <View style={styles.middleBottomContainer}>
           <View style={styles.circleContainer}>
             <View style={styles.subCircleContainer}>
-              <TouchableOpacity>
-                <Icon3
-                  style={styles.microphoneIcon}
-                  name="microphone"
-                  size={30}
-                  color="black"
-                />
-              </TouchableOpacity>
+                <TouchableOpacity>
+                    <Icon3
+                        style={styles.microphoneIcon}
+                        name="microphone"
+                        size={30}
+                        color="black"
+                    />
+                </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -260,12 +204,14 @@ const LedScreen = ({ navigation }) => {
   );
 };
 
-export default LedScreen;
+export default DoorScreen;
 // HeadContainer: 1.2
 // MainContainer: 5
 // ModeContainer: 1.7
+
 // InfoContainer: 1.75
 // DeviceContainer: 1.2
+    // => HistoryContainer = 1.75 + 1.2 = 2.95
 // BottomContainer: 1.3
 const styles = StyleSheet.create({
   Container: {
@@ -314,14 +260,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   leftMainLayout: {
-    flex: 0.75,
+    flex: 1,
+    backgroundColor: 'blue',
   },
   middleMainLayout: {
     flex: 2.5,
     flexDirection: "column",
   },
   rightMainLayout: {
-    flex: 0.75,
+    flex: 1,
+    backgroundColor: 'red',
   },
   leftTextMainContainer: {
     fontWeight: 600,
@@ -448,6 +396,70 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 
+//   infoContainer: {
+//     flex: 1.75,
+//     flexDirection: "row",
+//     backgroundColor: "#EFF1F5",
+//     justifyContent: "space-around",
+//   },
+//   insideTemperatureStyle: {
+//     width: 0.25 * ScreenWidth,
+//     borderRadius: 12,
+//     backgroundColor: "rgba(168, 168, 168, 0.5)",
+//   },
+//   outsideTemperatureStyle: {
+//     width: 0.25 * ScreenWidth,
+//     borderRadius: 12,
+//     backgroundColor: "rgba(168, 168, 168, 0.5)",
+//   },
+//   MoistureStyle: {
+//     width: 0.25 * ScreenWidth,
+//     borderRadius: 12,
+//     backgroundColor: "rgba(168, 168, 168, 0.5)",
+//   },
+//   insideTemperatureText: {
+//     // fontSize: 16,
+//     fontSize: 0.045 * ScreenWidth,
+//     fontWeight: 500,
+//     top: 5,
+//     left: 5,
+//   },
+//   insideTemperatureNumber: {
+//     fontSize: 0.045 * ScreenWidth,
+//     fontWeight: 500,
+//     // top: 25,
+//     bottom: -25,
+//     left: 5,
+//   },
+//   outsideTemperatureText: {
+//     // fontSize: 16,
+//     fontSize: 0.045 * ScreenWidth,
+//     fontWeight: 500,
+//     top: 5,
+//     left: 5,
+//   },
+//   outsideTemperatureNumber: {
+//     fontSize: 0.045 * ScreenWidth,
+//     fontWeight: 500,
+//     // top: 25,
+//     bottom: -25,
+//     left: 5,
+//   },
+//   MoistureText: {
+//     // fontSize: 16,
+//     fontSize: 0.045 * ScreenWidth,
+//     fontWeight: 500,
+//     top: 5,
+//     left: 5,
+//   },
+//   MoistureNumber: {
+//     fontSize: 0.045 * ScreenWidth,
+//     fontWeight: 500,
+//     // top: 25,
+//     bottom: -25,
+//     left: 5,
+//   },
+
   historyContainer: {
     flex: 2.95,
     backgroundColor: "#EFF1F5",
@@ -461,103 +473,39 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
 
-  // infoContainer: {
-  //   flex: 1.75,
-  //   flexDirection: "row",
-  //   backgroundColor: "#EFF1F5",
-  //   justifyContent: "space-around",
-  // },
-  // insideTemperatureStyle: {
-  //   width: 0.25 * ScreenWidth,
-  //   borderRadius: 12,
-  //   backgroundColor: "rgba(168, 168, 168, 0.5)",
-  // },
-  // outsideTemperatureStyle: {
-  //   width: 0.25 * ScreenWidth,
-  //   borderRadius: 12,
-  //   backgroundColor: "rgba(168, 168, 168, 0.5)",
-  // },
-  // MoistureStyle: {
-  //   width: 0.25 * ScreenWidth,
-  //   borderRadius: 12,
-  //   backgroundColor: "rgba(168, 168, 168, 0.5)",
-  // },
-  // insideTemperatureText: {
-  //   // fontSize: 16,
-  //   fontSize: 0.045 * ScreenWidth,
-  //   fontWeight: 500,
-  //   top: 5,
-  //   left: 5,
-  // },
-  // insideTemperatureNumber: {
-  //   fontSize: 0.045 * ScreenWidth,
-  //   fontWeight: 500,
-  //   // top: 25,
-  //   bottom: -25,
-  //   left: 5,
-  // },
-  // outsideTemperatureText: {
-  //   // fontSize: 16,
-  //   fontSize: 0.045 * ScreenWidth,
-  //   fontWeight: 500,
-  //   top: 5,
-  //   left: 5,
-  // },
-  // outsideTemperatureNumber: {
-  //   fontSize: 0.045 * ScreenWidth,
-  //   fontWeight: 500,
-  //   // top: 25,
-  //   bottom: -25,
-  //   left: 5,
-  // },
-  // MoistureText: {
-  //   // fontSize: 16,
-  //   fontSize: 0.045 * ScreenWidth,
-  //   fontWeight: 500,
-  //   top: 5,
-  //   left: 5,
-  // },
-  // MoistureNumber: {
-  //   fontSize: 0.045 * ScreenWidth,
-  //   fontWeight: 500,
-  //   // top: 25,
-  //   bottom: -25,
-  //   left: 5,
-  // },
-
-  // deviceContainer: {
-  //   flex: 1.2,
-  //   backgroundColor: "#EFF1F5",
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  // },
-  // dropdownButtonStyle: {
-  //   width: "70%",
-  //   height: 50,
-  //   backgroundColor: "#DCDCDC",
-  //   borderRadius: 50,
-  //   borderWidth: 1,
-  //   borderColor: "#FFFFFF",
-  // },
-  // dropdownButtonTextStyle: {
-  //   fontWeight: 600,
-  //   fontSize: 17,
-  //   color: "rgba(60, 60, 67, 0.6)",
-  //   textAlign: "left",
-  // },
-  // dropdown4DropdownStyle: {
-  //   backgroundColor: "#EFEFEF",
-  // },
-  // dropdown4RowStyle: {
-  //   backgroundColor: "#EFEFEF",
-  //   borderBottomColor: "#C5C5C5",
-  // },
-  // dropdown4RowTextStyle: {
-  //   textAlign: "left",
-  //   color: "rgba(60, 60, 67, 0.6)",
-  //   fontWeight: 600,
-  //   fontSize: 17,
-  // },
+//   deviceContainer: {
+//     flex: 1.2,
+//     backgroundColor: "#EFF1F5",
+//     alignItems: "center",
+//     justifyContent: "center",
+//   },
+//   dropdownButtonStyle: {
+//     width: "70%",
+//     height: 50,
+//     backgroundColor: "#DCDCDC",
+//     borderRadius: 50,
+//     borderWidth: 1,
+//     borderColor: "#FFFFFF",
+//   },
+//   dropdownButtonTextStyle: {
+//     fontWeight: 600,
+//     fontSize: 17,
+//     color: "rgba(60, 60, 67, 0.6)",
+//     textAlign: "left",
+//   },
+//   dropdown4DropdownStyle: {
+//     backgroundColor: "#EFEFEF",
+//   },
+//   dropdown4RowStyle: {
+//     backgroundColor: "#EFEFEF",
+//     borderBottomColor: "#C5C5C5",
+//   },
+//   dropdown4RowTextStyle: {
+//     textAlign: "left",
+//     color: "rgba(60, 60, 67, 0.6)",
+//     fontWeight: 600,
+//     fontSize: 17,
+//   },
 
   bottomContainer: {
     flex: 1.4,

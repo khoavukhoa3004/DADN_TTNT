@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
       },
       HomeIcon: {
         position: "absolute",
-        bottom: 0.06 * ScreenHeight,
+        bottom: 0.05 * ScreenHeight,
         left: 0.065 * ScreenWidth,
       },
       circleContainer: {
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
       personIcon: {
         position: "absolute",
 
-        bottom: 0.06 * ScreenHeight,
+        bottom: 0.05 * ScreenHeight,
         right: 0.065 * ScreenWidth,
       },
 });
