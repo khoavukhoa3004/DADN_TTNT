@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const bcrypt = require('bcrypt');
-const { Decimal128 } = require('mongodb');
-const DeviceLog= require('./deviceLog.model')
+// const { Decimal128 } = require('mongodb');
+const DeviceLog = require('./deviceLog.model')
 
-const device = mongoose.Schema({
+const device = new mongoose.Schema({
     device_name: {
         type: String,
         required: true,
@@ -27,7 +27,9 @@ const device = mongoose.Schema({
     type: {
         type: String,
         required: true,
+        // enum: ['fan', 'bulb', 'door', 'light', 'temp'],
     },
+
     haveLogs: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'DeviceLog'
@@ -93,6 +95,81 @@ device.pre('save', async function (next) {
         next(error);
     }
 });
+
+device.post('findOneAndUpdate', async function(doc) {
+    console.log('findOneAndUpdate is currently running')
+    const updatedFields = Object.keys(this.getUpdate().$set || {});
+    const deviceId = this.getQuery()._id;
+    // console.log('deviceId: ', deviceId);
+    const data = this.getQuery().value;
+    // console.log('data', data)
+    const deviceState = doc.state;
+    // console.log(doc);
+    // console.log(updatedFields);
+    // console.log(updatedFields.length)
+    let actions = `${doc.device_name}: {`;
+    for (i = 0; i < updatedFields.length; i++) {
+        if(updatedFields[i] === 'device_name'){
+            actions += `device_name changed: ${doc.device_name}; `;
+        }
+        if(updatedFields[i] === 'activation'){
+            actions += `activate changed: ${doc.activate}; `;
+        }
+        if(updatedFields[i] === 'state'){
+            actions += `state changed: ${doc.state}; `;
+        }
+        if(updatedFields[i] === 'value'){
+            actions += `value changed: ${doc.value}; `;
+        }
+        if(updatedFields[i] === 'haveRoom'){
+            actions += 'Room changed; ';
+        }
+        if(updatedFields[i] === 'type'){
+            actions += `type changed: ${doc.type}; `;
+        }
+    }
+    actions += ' }';
+    console.log('action', actions);
+    const deviceLog = new DeviceLog({
+      time: new Date(),
+      state: deviceState,
+      data: data,
+      device: deviceId,
+      action: actions,
+    });
+    await deviceLog.save();
+  });
+  
+//   function getAction(updatedFields, device) {
+//     const actionMap = {
+//         device_name: 'device name',
+//         activate: 'activate',
+//         state: 'state',
+//         value: 'value',
+//         haveRoom: "Device'room",
+//         type: 'Device type',
+//     };
+//     let action = '';
+//     let value = '';
+//     let modified = false;
+    
+//     for (let i = 0; i < updatedFields.length; i++) {
+//       const field = updatedFields[i];
+//       if (field in device._update) {
+//         if (actionMap[field]) {
+//           action = actionMap[field];
+//           modified = true;
+//           value = device.get(field);
+//           break;
+//         }
+//       }
+//     }
+//     if (modified) {
+//       return `${device.device_name} changed ${action} to ${value}`;
+//     } else {
+//       return `${device.device_name} has been created`;
+//     }
+//   }
 
 // const bulb = new mongoose.Schema({
 //     bulbID: {
@@ -188,7 +265,7 @@ device.pre('save', async function (next) {
 //         required: true,
 //     },
 // }, {timestamps: true});
-const deviceSchema = mongoose.model('Device', device);
+const deviceModel = mongoose.model('Device', device);
 
 // const fanSchema = mongoose.model('fan', fan);
 // const bulbSchema = mongoose.model('bulb', bulb);
@@ -198,7 +275,7 @@ const deviceSchema = mongoose.model('Device', device);
 
 
 module.exports = {
-    deviceModel: deviceSchema,
+    deviceModel
     // fanModel: fanSchema,
     // bulbModel: bulbSchema,
     // tempModel: tempSchema,

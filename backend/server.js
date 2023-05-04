@@ -13,6 +13,7 @@ require('./models/db');
 const userRouter = require('./routes/user')
 const adafruitRouter = require('./routes/adafruit.js')
 const homeRouter = require('./routes/homeRoute');
+const deviceRouter = require('./routes/deviceRoute');
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use('/user',userRouter);
 app.use('/sensor',adafruitRouter);
 app.use('/home', homeRouter);
+app.use('/device', deviceRouter);
 
 app.get('/', (req, res) => {
     res.json({success: true, message: 'Welcome to backend zone!'})

@@ -27,24 +27,14 @@ import SelectDropdown from "react-native-select-dropdown";
 const ScreenWidth = Dimensions.get("window").width;
 const ScreenHeight = Dimensions.get("window").height;
 
-let LED_Devices = ["ĐÈN 1", "ĐÈN 2", "ĐÈN 3"];
-let receive_insideTemp = 18 + "\u00B0C";
-let receive_outsideTemp = 30 + "\u00B0C";
-let receive_Moisture = 80 + "%";
-
 const LedScreen = ({ navigation }) => {
-const settingOnPress = () => {
-  navigation.navigate('LedSettingScreen');
-}
-const backOnPress = () => {
-  navigation.navigate('HomeScreen');
-}
+
   return (
     <View style={styles.Container}>
       <View style={styles.headContainer}>
         <StatusBar barStyle="light-content" />
         <View style={styles.leftHeadContainer}>
-          <TouchableOpacity onPress={backOnPress}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Icon
               ios="ios-add"
               android="android-add"
@@ -58,7 +48,7 @@ const backOnPress = () => {
           <Text style={styles.topTitle}>ĐÈN</Text>
         </View>
         <View style={styles.rightHeadContainer}>
-          <TouchableOpacity onPress={settingOnPress}>
+          {/* <TouchableOpacity onPress={settingOnPress}>
             <Icon
               ios="ios-add"
               android="android-add"
@@ -66,12 +56,12 @@ const backOnPress = () => {
               size={30}
               style={styles.settingIcon}
             ></Icon>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
 
       <View style={styles.mainContainer}>
-        <View style={styles.leftMainLayout}>
+        {/* <View style={styles.leftMainLayout}>
           <Text style={styles.leftTextMainContainer}>Tắt</Text>
         </View>
         <View style={styles.middleMainLayout}>
@@ -86,7 +76,7 @@ const backOnPress = () => {
         </View>
         <View style={styles.rightMainLayout}>
           <Text style={styles.rightTextMainContainer}>Rất{"\n"}Sáng</Text>
-        </View>
+        </View> */}
         {/* <View style={styles.firstLayout}>
           <View style={styles.secondLayout}>
             <View style={styles.thirdLayout}>
@@ -98,7 +88,7 @@ const backOnPress = () => {
         </View> */}
       </View>
 
-      <View style={styles.modeContainer}>
+      {/* <View style={styles.modeContainer}>
         <View style={styles.modeSubContainer}>
           <View style={styles.circleModeContainer}>
             <Image
@@ -126,9 +116,53 @@ const backOnPress = () => {
           </View>
           <Text style={styles.historyTextContainer}>LỊCH SỬ</Text>
         </View>
+      </View> */}
+
+      <View style={styles.modeContainer}>
+        <View style={styles.modeSubContainer}>
+          <TouchableOpacity onPress={() => {
+            
+          }}>
+            <View style={styles.circleModeContainer}>
+                <Image
+                style={styles.functionIcon}
+                source={require("../assets/images/Led_Fan/Mode_Icon.png")}
+                />
+            </View>
+            <Text style={styles.functionTextContainer}>CHẾ ĐỘ</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.modeSubContainer}>
+          <TouchableOpacity onPress={() => {
+
+          }}>
+            <View style={styles.circleModeContainer}>
+                <Image
+                style={styles.scheduleIcon}
+                source={require("../assets/images/Led_Fan/Schedule_Icon.png")}
+                />
+            </View>
+            <Text style={styles.scheduleTextContainer}>LỊCH TRÌNH</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.modeSubContainer}>
+          <TouchableOpacity>
+            <View style={styles.circleModeContainer}>
+                <Image
+                style={styles.historyIcon}
+                source={require("../assets/images/Led_Fan/History_Icon.png")}
+                />
+            </View>
+            <Text style={styles.historyTextContainer}>LỊCH SỬ</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
-      <View style={styles.infoContainer}>
+      <View style={styles.historyContainer}>
+        <View style={styles.historyBorder}></View>
+      </View>
+
+      {/* <View style={styles.infoContainer}>
         <View style={styles.insideTemperatureStyle}>
           <Text style={styles.insideTemperatureText}>
             Nhiệt độ{"\n"}trong nhà
@@ -149,9 +183,9 @@ const backOnPress = () => {
           <Text style={styles.MoistureText}>Độ ẩm{"\n"}</Text>
           <Text style={styles.MoistureNumber}>{receive_Moisture}</Text>
         </View>
-      </View>
+      </View> */}
 
-      <View style={styles.deviceContainer}>
+      {/* <View style={styles.deviceContainer}>
         <SelectDropdown
           data={LED_Devices}
           onSelect={(selectedItem, index) => {
@@ -176,46 +210,54 @@ const backOnPress = () => {
           rowStyle={styles.dropdown4RowStyle}
           rowTextStyle={styles.dropdown4RowTextStyle}
         />
-      </View>
+      </View> */}
 
       <View style={styles.bottomContainer}>
         <View style={styles.leftBottomContainer}>
-          <Image
-            style={styles.leftBottomContainer_Footer}
-            source={require("../assets/images/Led_Fan/leftFooter.png")}
-          />
-          <Icon
-            ios="ios-add"
-            android="android-add"
-            name="home-outline"
-            size={30}
-            color={"white"}
-            style={styles.HomeIcon}
-          ></Icon>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image
+              style={styles.leftBottomContainer_Footer}
+              source={require("../assets/images/Led_Fan/leftFooter.png")}
+            />
+            <Icon
+              ios="ios-add"
+              android="android-add"
+              name="home-outline"
+              size={30}
+              color={"white"}
+              style={styles.HomeIcon}
+            ></Icon>
+          </TouchableOpacity>
         </View>
         <View style={styles.middleBottomContainer}>
-          <View style={styles.circleContainer}>
-            <Icon3
-              style={styles.microphoneIcon}
-              name="microphone"
-              size={30}
-              color="white"
-            />
+        <View style={styles.circleContainer}>
+            <View style={styles.subCircleContainer}>
+              <TouchableOpacity>
+                <Icon3
+                  style={styles.microphoneIcon}
+                  name="microphone"
+                  size={30}
+                  color="black"
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
         <View style={styles.rightBottomContainer}>
-          <Image
-            style={styles.rightBottomContainer_Footer}
-            source={require("../assets/images/Led_Fan/rightFooter.png")}
-          ></Image>
-          <Icon
-            ios="ios-add"
-            android="android-add"
-            name="person-outline"
-            size={30}
-            color={"white"}
-            style={styles.personIcon}
-          ></Icon>
+          <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
+            <Image
+              style={styles.rightBottomContainer_Footer}
+              source={require("../assets/images/Led_Fan/rightFooter.png")}
+            ></Image>
+            <Icon
+              ios="ios-add"
+              android="android-add"
+              name="person-outline"
+              size={30}
+              color={"white"}
+              style={styles.personIcon}
+            ></Icon>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -410,106 +452,119 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 
-  infoContainer: {
-    flex: 1.75,
-    flexDirection: "row",
+  historyContainer: {
+    flex: 2.95,
     backgroundColor: "#EFF1F5",
-    justifyContent: "space-around",
-  },
-  insideTemperatureStyle: {
-    width: 0.25 * ScreenWidth,
-    borderRadius: 12,
-    backgroundColor: "rgba(168, 168, 168, 0.5)",
-  },
-  outsideTemperatureStyle: {
-    width: 0.25 * ScreenWidth,
-    borderRadius: 12,
-    backgroundColor: "rgba(168, 168, 168, 0.5)",
-  },
-  MoistureStyle: {
-    width: 0.25 * ScreenWidth,
-    borderRadius: 12,
-    backgroundColor: "rgba(168, 168, 168, 0.5)",
-  },
-  insideTemperatureText: {
-    // fontSize: 16,
-    fontSize: 0.045 * ScreenWidth,
-    fontWeight: 500,
-    top: 5,
-    left: 5,
-  },
-  insideTemperatureNumber: {
-    fontSize: 0.045 * ScreenWidth,
-    fontWeight: 500,
-    // top: 25,
-    bottom: -25,
-    left: 5,
-  },
-  outsideTemperatureText: {
-    // fontSize: 16,
-    fontSize: 0.045 * ScreenWidth,
-    fontWeight: 500,
-    top: 5,
-    left: 5,
-  },
-  outsideTemperatureNumber: {
-    fontSize: 0.045 * ScreenWidth,
-    fontWeight: 500,
-    // top: 25,
-    bottom: -25,
-    left: 5,
-  },
-  MoistureText: {
-    // fontSize: 16,
-    fontSize: 0.045 * ScreenWidth,
-    fontWeight: 500,
-    top: 5,
-    left: 5,
-  },
-  MoistureNumber: {
-    fontSize: 0.045 * ScreenWidth,
-    fontWeight: 500,
-    // top: 25,
-    bottom: -25,
-    left: 5,
   },
 
-  deviceContainer: {
-    flex: 1.2,
-    backgroundColor: "#EFF1F5",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  dropdownButtonStyle: {
-    width: "70%",
-    height: 50,
-    backgroundColor: "#DCDCDC",
-    borderRadius: 50,
+  historyBorder: {
     borderWidth: 1,
-    borderColor: "#FFFFFF",
+    borderColor: 'blue',
+    height: 160,
+    width: ScreenWidth,
+    borderRadius: 50,
   },
-  dropdownButtonTextStyle: {
-    fontWeight: 600,
-    fontSize: 17,
-    color: "rgba(60, 60, 67, 0.6)",
-    textAlign: "left",
-  },
-  dropdown4DropdownStyle: {
-    backgroundColor: "#EFEFEF",
-  },
-  dropdown4RowStyle: {
-    backgroundColor: "#EFEFEF",
-    borderBottomColor: "#C5C5C5",
-  },
-  dropdown4RowTextStyle: {
-    textAlign: "left",
-    color: "rgba(60, 60, 67, 0.6)",
-    fontWeight: 600,
-    fontSize: 17,
-  },
+
+  // infoContainer: {
+  //   flex: 1.75,
+  //   flexDirection: "row",
+  //   backgroundColor: "#EFF1F5",
+  //   justifyContent: "space-around",
+  // },
+  // insideTemperatureStyle: {
+  //   width: 0.25 * ScreenWidth,
+  //   borderRadius: 12,
+  //   backgroundColor: "rgba(168, 168, 168, 0.5)",
+  // },
+  // outsideTemperatureStyle: {
+  //   width: 0.25 * ScreenWidth,
+  //   borderRadius: 12,
+  //   backgroundColor: "rgba(168, 168, 168, 0.5)",
+  // },
+  // MoistureStyle: {
+  //   width: 0.25 * ScreenWidth,
+  //   borderRadius: 12,
+  //   backgroundColor: "rgba(168, 168, 168, 0.5)",
+  // },
+  // insideTemperatureText: {
+  //   // fontSize: 16,
+  //   fontSize: 0.045 * ScreenWidth,
+  //   fontWeight: 500,
+  //   top: 5,
+  //   left: 5,
+  // },
+  // insideTemperatureNumber: {
+  //   fontSize: 0.045 * ScreenWidth,
+  //   fontWeight: 500,
+  //   // top: 25,
+  //   bottom: -25,
+  //   left: 5,
+  // },
+  // outsideTemperatureText: {
+  //   // fontSize: 16,
+  //   fontSize: 0.045 * ScreenWidth,
+  //   fontWeight: 500,
+  //   top: 5,
+  //   left: 5,
+  // },
+  // outsideTemperatureNumber: {
+  //   fontSize: 0.045 * ScreenWidth,
+  //   fontWeight: 500,
+  //   // top: 25,
+  //   bottom: -25,
+  //   left: 5,
+  // },
+  // MoistureText: {
+  //   // fontSize: 16,
+  //   fontSize: 0.045 * ScreenWidth,
+  //   fontWeight: 500,
+  //   top: 5,
+  //   left: 5,
+  // },
+  // MoistureNumber: {
+  //   fontSize: 0.045 * ScreenWidth,
+  //   fontWeight: 500,
+  //   // top: 25,
+  //   bottom: -25,
+  //   left: 5,
+  // },
+
+  // deviceContainer: {
+  //   flex: 1.2,
+  //   backgroundColor: "#EFF1F5",
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  // },
+  // dropdownButtonStyle: {
+  //   width: "70%",
+  //   height: 50,
+  //   backgroundColor: "#DCDCDC",
+  //   borderRadius: 50,
+  //   borderWidth: 1,
+  //   borderColor: "#FFFFFF",
+  // },
+  // dropdownButtonTextStyle: {
+  //   fontWeight: 600,
+  //   fontSize: 17,
+  //   color: "rgba(60, 60, 67, 0.6)",
+  //   textAlign: "left",
+  // },
+  // dropdown4DropdownStyle: {
+  //   backgroundColor: "#EFEFEF",
+  // },
+  // dropdown4RowStyle: {
+  //   backgroundColor: "#EFEFEF",
+  //   borderBottomColor: "#C5C5C5",
+  // },
+  // dropdown4RowTextStyle: {
+  //   textAlign: "left",
+  //   color: "rgba(60, 60, 67, 0.6)",
+  //   fontWeight: 600,
+  //   fontSize: 17,
+  // },
 
   bottomContainer: {
-    flex: 1.2,
+    flex: 1.4,
     flexDirection: "row",
     backgroundColor: "#EFF1F5",
   },
@@ -530,17 +585,35 @@ const styles = StyleSheet.create({
   },
   HomeIcon: {
     position: "absolute",
-    bottom: 0.03 * ScreenHeight,
+    bottom: 0.05 * ScreenHeight,
     left: 0.065 * ScreenWidth,
   },
+  // circleContainer: {
+  //   position: "absolute",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   width: 60,
+  //   height: 60,
+  //   borderRadius: 100 / 2,
+  //   backgroundColor: "green",
+  // },
   circleContainer: {
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
-    width: 60,
-    height: 60,
+    width: 70,
+    height: 70,
     borderRadius: 100 / 2,
-    backgroundColor: "green",
+    backgroundColor: "#FFFFFF",
+  },
+  subCircleContainer: {
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    width: 50,
+    height: 50,
+    borderRadius: 100 / 2,
+    backgroundColor: "#D8D8D8",
   },
   microphoneIcon: {},
   rightBottomContainer_Footer: {
@@ -549,7 +622,7 @@ const styles = StyleSheet.create({
   },
   personIcon: {
     position: "absolute",
-    bottom: 0.03 * ScreenHeight,
+    bottom: 0.05 * ScreenHeight,
     right: 0.065 * ScreenWidth,
   },
 });
