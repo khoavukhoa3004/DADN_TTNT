@@ -30,7 +30,7 @@ const device = mongoose.Schema({
         enum: ['fan', 'bulb', 'door', 'light', 'temp'],
     },
     haveLogs: [{
-        type: mongoose.SchemaType.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'DeviceLog'
     }]
 },{timestamps: true});
@@ -86,7 +86,7 @@ device.pre('save', async function (next) {
                 });
                 await deviceLog.save();
                 this.haveLogs.push(deviceLog._id);
-                
+
             }
         }
         next();
