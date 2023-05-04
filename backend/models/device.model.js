@@ -29,6 +29,7 @@ const device = new mongoose.Schema({
         required: true,
         // enum: ['fan', 'bulb', 'door', 'light', 'temp'],
     },
+
     haveLogs: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'DeviceLog'
@@ -85,7 +86,8 @@ device.pre('save', async function (next) {
                     action: `${this.device_name} changed ${action} to ${value}`,
                 });
                 await deviceLog.save();
-                this.haveLog.push(deviceLog._id);
+                this.haveLogs.push(deviceLog._id);
+
             }
         }
         next();
@@ -94,64 +96,80 @@ device.pre('save', async function (next) {
     }
 });
 
-device.pre('update', async function (next) {
-    try {
-        if(this.isNew){
-            const deviceLog = new DeviceLog({
-                time: new Date(),
-                state: this.state,
-                data: this.value,
-                device: this._id,
-                action: `${this.device_name} has been created`,
-            })
-            await deviceLog.save();
+device.post('findOneAndUpdate', async function(doc) {
+    console.log('findOneAndUpdate is currently running')
+    const updatedFields = Object.keys(this.getUpdate().$set || {});
+    const deviceId = this.getQuery()._id;
+    // console.log('deviceId: ', deviceId);
+    const data = this.getQuery().value;
+    // console.log('data', data)
+    const deviceState = doc.state;
+    // console.log(doc);
+    // console.log(updatedFields);
+    // console.log(updatedFields.length)
+    let actions = `${doc.device_name}: {`;
+    for (i = 0; i < updatedFields.length; i++) {
+        if(updatedFields[i] === 'device_name'){
+            actions += `device_name changed: ${doc.device_name}; `;
         }
-        else {
-            let action = '';
-            let value = '';
-            let modified = false;
-            if(this.isModified('device_name')){
-                action = 'device name';
-                modified = true;
-                value = this.device_name;
-            }
-            if(this.isModified('value')){
-                action = 'value';
-                modified = true;
-                value = this.value;
-            }
-            else if(this.isModified('state')){
-                action = 'state';
-                modified = true;
-                value = this.state;
-            }
-            else if(this.isModified('activate')){
-                action = 'activate';
-                modified = true;
-                value = this.activate;
-            }
-            else if(this.isModified('room')){
-                action = 'room';
-                modified = true;
-                value = this.room.toString();
-            }
-            if(modified) {
-                const deviceLog = new DeviceLog({
-                    time: new Date(),
-                    state: this.state,
-                    data: this.value,
-                    device: this._id,
-                    action: `${this.device_name} changed ${action} to ${value}`,
-                });
-                await deviceLog.save();
-                this.haveLog.push(deviceLog._id);
-            }
+        if(updatedFields[i] === 'activation'){
+            actions += `activate changed: ${doc.activate}; `;
         }
-        next();
-    } catch(error) {
-        next(error);
+        if(updatedFields[i] === 'state'){
+            actions += `state changed: ${doc.state}; `;
+        }
+        if(updatedFields[i] === 'value'){
+            actions += `value changed: ${doc.value}; `;
+        }
+        if(updatedFields[i] === 'haveRoom'){
+            actions += 'Room changed; ';
+        }
+        if(updatedFields[i] === 'type'){
+            actions += `type changed: ${doc.type}; `;
+        }
     }
-});
+    actions += ' }';
+    console.log('action', actions);
+    const deviceLog = new DeviceLog({
+      time: new Date(),
+      state: deviceState,
+      data: data,
+      device: deviceId,
+      action: actions,
+    });
+    await deviceLog.save();
+  });
+  
+//   function getAction(updatedFields, device) {
+//     const actionMap = {
+//         device_name: 'device name',
+//         activate: 'activate',
+//         state: 'state',
+//         value: 'value',
+//         haveRoom: "Device'room",
+//         type: 'Device type',
+//     };
+//     let action = '';
+//     let value = '';
+//     let modified = false;
+    
+//     for (let i = 0; i < updatedFields.length; i++) {
+//       const field = updatedFields[i];
+//       if (field in device._update) {
+//         if (actionMap[field]) {
+//           action = actionMap[field];
+//           modified = true;
+//           value = device.get(field);
+//           break;
+//         }
+//       }
+//     }
+//     if (modified) {
+//       return `${device.device_name} changed ${action} to ${value}`;
+//     } else {
+//       return `${device.device_name} has been created`;
+//     }
+//   }
 
 // const bulb = new mongoose.Schema({
 //     bulbID: {

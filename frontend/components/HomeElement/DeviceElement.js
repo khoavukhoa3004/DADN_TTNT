@@ -32,8 +32,8 @@ const DeviceComponent = ({
           }));
         if (response.data.success === true){
           console.log('before');
-          await client.patch(`/device/updateState/${id}/${newData}`);
-          console.log('await');
+          const res = await client.patch(`/device/updateState/${id}/${newData}`);
+          console.log(res.data.message);
         }
         if (response.data.success === false) {
           throw new Error('Failed to post data to Adafruit');
