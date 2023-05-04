@@ -377,7 +377,7 @@ const HomeScreen = ({navigation}) =>{
                         {chunkArray(deviceIds, 2).map((item, index) => (
                             <View key={index} style={styles.listDetailRow}>
                                 {item[0] && item[0].key && <DeviceComponent key={item[0].key} id={item[0].key} type={selectedRoom.id} deviceNameSystem={`${userName}-${selectedRoom.id}-${item[0].name}`} navigation={navigation} color={'dark'} />}
-                                {item[1] && item[1].key && <DeviceComponent key={item[1].key} id={item[0].key} type={selectedRoom.id} deviceNameSystem={`${userName}-${selectedRoom.id}-${item[1].name}`} navigation={navigation} color={'light'}/>}
+                                {item[1] && item[1].key && <DeviceComponent key={item[1].key} id={item[1].key} type={selectedRoom.id} deviceNameSystem={`${userName}-${selectedRoom.id}-${item[1].name}`} navigation={navigation} color={'light'}/>}
                             </View>
                         ))}
                         </React.Fragment>

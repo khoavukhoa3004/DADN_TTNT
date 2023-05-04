@@ -5,7 +5,7 @@ const router = express.Router();
 
 const { isAuthenticated } = require('../middlewares/authentication');
 
-router.patch('/updateState/:deviceId/:state', isAuthenticated, DeviceController.patch);
-router.patch('/updateValue/:deviceId/:value', isAuthenticated, DeviceController.patchValue);
+router.patch('/updateState/:deviceId/:state', DeviceController.patch);
+router.patch('/updateValue/:deviceId/:value', DeviceController.patchValue);
 
 module.exports = router;

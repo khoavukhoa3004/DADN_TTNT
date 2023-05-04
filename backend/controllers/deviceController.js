@@ -2,16 +2,18 @@ const DeviceConstructor = require('../models/device.model').deviceModel;
 
 exports.DeviceController = {
     patch: async (req, res) => {
+
+        console.log('deviceController path: ',req.params.deviceId, req.params.state);
         const deviceId = req.params.deviceId;
-        console.log(req.params.deviceId);
+        
         const state = req.params.state;
         const options = { new: true };
 
         try {
             console.log('before update device');
-            await DeviceConstructor.findByIdAndUpdate(deviceId, state, options);
+            await DeviceConstructor.findOneAndUpdate({_id: deviceId}, {state}, options);
             console.log('update device');
-            res.status(200).json(state);
+            res.status(200).json({success: true, message: state});
         } catch (error) {
             console.error(error);
             res.status(500).json({success: false, message: error.message});
