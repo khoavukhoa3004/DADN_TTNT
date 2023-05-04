@@ -35,6 +35,7 @@ const device = new mongoose.Schema({
         ref: 'DeviceLog'
     }]
 },{timestamps: true});
+const deviceModel = mongoose.model('Device', device);
 
 device.pre('save', async function (next) {
     try {
@@ -107,165 +108,62 @@ device.post('findOneAndUpdate', async function(doc) {
     // console.log(doc);
     // console.log(updatedFields);
     // console.log(updatedFields.length)
+    let needUpdate = false;
     let actions = `${doc.device_name}: {`;
     for (i = 0; i < updatedFields.length; i++) {
         if(updatedFields[i] === 'device_name'){
             actions += `device_name changed: ${doc.device_name}; `;
+            needUpdate= true;
         }
         if(updatedFields[i] === 'activation'){
             actions += `activate changed: ${doc.activate}; `;
+            needUpdate= true;
         }
         if(updatedFields[i] === 'state'){
             actions += `state changed: ${doc.state}; `;
+            needUpdate= true;
         }
         if(updatedFields[i] === 'value'){
             actions += `value changed: ${doc.value}; `;
+            needUpdate= true;
         }
         if(updatedFields[i] === 'haveRoom'){
             actions += 'Room changed; ';
+            needUpdate= true;
         }
         if(updatedFields[i] === 'type'){
             actions += `type changed: ${doc.type}; `;
+            needUpdate= true;
         }
     }
     actions += ' }';
-    console.log('action', actions);
-    const deviceLog = new DeviceLog({
-      time: new Date(),
-      state: deviceState,
-      data: data,
-      device: deviceId,
-      action: actions,
-    });
-    await deviceLog.save();
-  });
-  
-//   function getAction(updatedFields, device) {
-//     const actionMap = {
-//         device_name: 'device name',
-//         activate: 'activate',
-//         state: 'state',
-//         value: 'value',
-//         haveRoom: "Device'room",
-//         type: 'Device type',
-//     };
-//     let action = '';
-//     let value = '';
-//     let modified = false;
+    if(needUpdate){
+        console.log('action', actions);
+        const deviceLog = new DeviceLog({
+            time: new Date(),
+            state: deviceState,
+            data: data,
+            device: deviceId,
+            action: actions,
+        });
+        
+        await deviceLog.save();
+        try {
+            const device = await deviceModel.findById(deviceId);
+            device.haveLogs.push(deviceLog._id);
+            await deviceLog.save();
+            console.log('save successfully')
+        } catch(error){
+            console.error('Error adding deviceLog: ', error);
+        }
+    }
+
     
-//     for (let i = 0; i < updatedFields.length; i++) {
-//       const field = updatedFields[i];
-//       if (field in device._update) {
-//         if (actionMap[field]) {
-//           action = actionMap[field];
-//           modified = true;
-//           value = device.get(field);
-//           break;
-//         }
-//       }
-//     }
-//     if (modified) {
-//       return `${device.device_name} changed ${action} to ${value}`;
-//     } else {
-//       return `${device.device_name} has been created`;
-//     }
-//   }
+});
 
-// const bulb = new mongoose.Schema({
-//     bulbID: {
-//         type: String,
-//         unique: true,
-//         required: true,
-//     },
-//     status: {
-//         type: String,
-//         required: true,
-//     },
-//     value: {
-//         type: Number,
-//         required: true,
-//     },
-//     isActive: {
-//         type: Boolean,
-//         required: true,
-//     },
-//     createdAt: {type: Date},
-//     updatedAt: {type: Date}
-// }, {timestamps: true});
 
-// const door = new mongoose.Schema({
-//     doorID: {
-//         type: String,
-//         unique: true,
-//         required: true,
-//     },
-//     doorStatus: {
-//         type: String,
-//         required: true,
-//     },
-//     isActive: {
-//         type: Boolean,
-//         required: true,
-//     },
-// }, {timestamps: true});
 
-// const fan = new mongoose.Schema({
-//     fanID: {
-//         type: String,
-//         unique: true,
-//         required: true,
-//     },
-//     status: {
-//         type: String,
-//         required: true,
-//     },
-//     value: {
-//         type: Number,
-//         required: true,
-//     },
-//     isActive: {
-//         type: Boolean,
-//         required: true,
-//     },
-// }, {timestamps: true});
 
-// const light = new mongoose.Schema({
-//     lightID: {
-//         type: String,
-//         unique: true,
-//         required: true,
-//     },
-//     lightValue: {
-//         type: Decimal128,
-//         required: true,
-//     },
-//     isActive: {
-//         type: Boolean,
-//         required: true,
-//     },
-// }, {timestamps: true});
-
-// const temp = new mongoose.Schema({
-//     tempID: {
-//         type: Number,
-//         unique: true,
-//         required: true,
-//         default: 0,
-//     },
-//     tempName: {
-//         type: String,
-//         required: true,
-//     },
-//     tempValue: {
-//         type: Decimal128,
-//         required: true,
-//     },
-//     isActive: {
-//         type: Boolean,
-//         required: true,
-//     },
-// }, {timestamps: true});
-const deviceModel = mongoose.model('Device', device);
 
 // const fanSchema = mongoose.model('fan', fan);
 // const bulbSchema = mongoose.model('bulb', bulb);
