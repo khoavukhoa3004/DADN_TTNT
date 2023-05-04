@@ -4,11 +4,21 @@ const Home = require('../models/home.model').homeModel;
 const Room = require('../models/home.model').roomModel;
 
 exports.get10DevicesLog = async (req, res) => {
-    const username = req.params.username;
-    const user = await User.findOne({username: username});
-    const homes = user.haveHomes.map(home => home._id.toString());
-    let rooms = [];
-    for(item in homes) {
-        let room = 
-    } 
+    // const username = req.params.username;
+    // const user = await User.findOne({username: username});
+    // const homes = user.haveHomes.map(home => home._id.toString());
+    // let rooms = [];
+    // for(item in homes) {
+    //     let room = 
+    // } 
+    try{
+        const latestLogs = await deviceLog.find()
+        .sort({ time: -1 })
+        .limit(10)
+        // console.log(latestLogs);
+        res.status(200).json({success: true, data: latestLogs});
+    } catch (error) {
+        console.error(error);
+    }
+
 }
