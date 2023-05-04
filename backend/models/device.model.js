@@ -29,6 +29,10 @@ const device = new mongoose.Schema({
         required: true,
         enum: ['fan', 'bulb', 'door', 'light', 'temp'],
     },
+    haveLog: [{
+        type: mongoose.SchemaType.Types.ObjectId,
+        ref: 'DeviceLog'
+    }]
 },{timestamps: true});
 
 device.pre('save', async function (next) {
@@ -81,6 +85,7 @@ device.pre('save', async function (next) {
                     action: `${this.device_name} changed ${action} to ${value}`,
                 });
                 await deviceLog.save();
+                this.haveLog.push(deviceLog._id);
             }
         }
         next();
