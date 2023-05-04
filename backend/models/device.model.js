@@ -131,16 +131,16 @@ device.post('findOneAndUpdate', async function(doc) {
     actions += ' }';
     console.log('action', actions);
     const deviceLog = new DeviceLog({
-      time: new Date(),
-      state: deviceState,
-      data: data,
-      device: deviceId,
-      action: actions,
+        time: new Date(),
+        state: deviceState,
+        data: data,
+        device: deviceId,
+        action: actions,
     });
     await deviceLog.save();
     console.log('trigger create deviceLog successfully!')
-  });
-  
+});
+
 
 const deviceModel = mongoose.model('Device', device);
 

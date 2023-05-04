@@ -13,14 +13,12 @@ import {
   FlatList,
   PanResponder,
 } from "react-native";
-import Icon1 from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon from "react-native-vector-icons/Ionicons";
-import Icon3 from "react-native-vector-icons/FontAwesome";
-import Icon2 from "react-native-vector-icons/Feather";
 import BottomBar from "../components/BottomBar";
 import { StatusBar } from "expo-status-bar";
 import { Line, LinearGradient } from "react-native-svg";
 import SelectDropdown from "react-native-select-dropdown";
+import { AntDesign, Entypo, MaterialCommunityIcons, FontAwesome5   } from '@expo/vector-icons';
 
 const ScreenWidth = Dimensions.get("window").width;
 const ScreenHeight = Dimensions.get("window").height;
@@ -46,7 +44,19 @@ const NotificationScreen = ({navigation}) => {
                 </View>
                 <View style={styles.rightContainer}></View>
             </View>
-            <View style={styles.bodyContainer}></View>
+            <View style={styles.bodyContainer}>
+                <View style={styles.elementContainer}>
+                    <View style={styles.iconElement}>
+                        <FontAwesome5 name="fan" size={50} color={'black'} />
+                    </View>
+                    <View style={styles.contentElement}>
+                        <Text>Thiết bị: Quạt</Text>
+                        <Text>state: 'ON', value: '', state: ''</Text>
+                        <Text>Action: </Text>
+                        <Text>Time: </Text>
+                    </View>
+                </View>
+            </View>
         </View>
     );
 };
@@ -60,6 +70,7 @@ const styles = StyleSheet.create({
     headContainer: {
         flex: 1,
         flexDirection: 'row',
+        borderBottomWidth: 1,
     },
     backContainer: {
         flex: 1,
@@ -88,7 +99,27 @@ const styles = StyleSheet.create({
     bodyContainer: {
         flex: 9,
         // backgroundColor: 'green',
-      },
+    },
+    elementContainer: {
+        height: 80,
+        // backgroundColor: 'blue',
+        borderBottomWidth: 1,
+        flexDirection: 'row',
+        paddingLeft: 20,
+        paddingRight: 20,
+        // flex: 1,
+    },
+    iconElement: {
+        flex: 1,
+        borderWidth: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    contentElement: {
+        flex: 3,
+        borderWidth: 1,
+        paddingLeft: 5,
+    }
 });
 
 export default NotificationScreen;
