@@ -58,7 +58,7 @@ const BottomBar = ({navigation}: {navigation: any}) => {
       });
 
       try {
-        const response = await fetch('http://192.168.0.101:9999/add', {
+        const response = await fetch('http://192.168.1.6:9999/add', {
           method: 'POST',
           body: formData,
           headers: {

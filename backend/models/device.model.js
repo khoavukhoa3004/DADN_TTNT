@@ -35,7 +35,6 @@ const device = new mongoose.Schema({
         ref: 'DeviceLog'
     }]
 },{timestamps: true});
-const deviceModel = mongoose.model('Device', device);
 
 device.pre('save', async function (next) {
     try {
@@ -108,62 +107,42 @@ device.post('findOneAndUpdate', async function(doc) {
     // console.log(doc);
     // console.log(updatedFields);
     // console.log(updatedFields.length)
-    let needUpdate = false;
     let actions = `${doc.device_name}: {`;
     for (i = 0; i < updatedFields.length; i++) {
         if(updatedFields[i] === 'device_name'){
             actions += `device_name changed: ${doc.device_name}; `;
-            needUpdate= true;
         }
         if(updatedFields[i] === 'activation'){
             actions += `activate changed: ${doc.activate}; `;
-            needUpdate= true;
         }
         if(updatedFields[i] === 'state'){
             actions += `state changed: ${doc.state}; `;
-            needUpdate= true;
         }
         if(updatedFields[i] === 'value'){
             actions += `value changed: ${doc.value}; `;
-            needUpdate= true;
         }
         if(updatedFields[i] === 'haveRoom'){
             actions += 'Room changed; ';
-            needUpdate= true;
         }
         if(updatedFields[i] === 'type'){
             actions += `type changed: ${doc.type}; `;
-            needUpdate= true;
         }
     }
     actions += ' }';
-    if(needUpdate){
-        console.log('action', actions);
-        const deviceLog = new DeviceLog({
-            time: new Date(),
-            state: deviceState,
-            data: data,
-            device: deviceId,
-            action: actions,
-        });
-        
-        await deviceLog.save();
-        try {
-            const device = await deviceModel.findById(deviceId);
-            device.haveLogs.push(deviceLog._id);
-            await deviceLog.save();
-            console.log('save successfully')
-        } catch(error){
-            console.error('Error adding deviceLog: ', error);
-        }
-    }
+    console.log('action', actions);
+    const deviceLog = new DeviceLog({
+      time: new Date(),
+      state: deviceState,
+      data: data,
+      device: deviceId,
+      action: actions,
+    });
+    await deviceLog.save();
+    console.log('trigger create deviceLog successfully!')
+  });
+  
 
-    
-});
-
-
-
-
+const deviceModel = mongoose.model('Device', device);
 
 // const fanSchema = mongoose.model('fan', fan);
 // const bulbSchema = mongoose.model('bulb', bulb);

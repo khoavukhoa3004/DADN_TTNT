@@ -1,5 +1,7 @@
 const DeviceConstructor = require('../models/device.model').deviceModel;
 
+
+
 exports.DeviceController = {
     patch: async (req, res) => {
 
