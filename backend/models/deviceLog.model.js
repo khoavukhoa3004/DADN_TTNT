@@ -16,11 +16,11 @@ const deviceLog = new mongoose.Schema({
     action: {
         type: String,
     },
-    device: [{
+    device: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Device',
         required: true,
-    }],
+    },
 }); 
 
 module.exports = mongoose.model('DeviceLog', deviceLog);
