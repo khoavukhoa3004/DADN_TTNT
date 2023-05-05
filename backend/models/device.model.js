@@ -3,6 +3,7 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 const bcrypt = require('bcrypt');
 // const { Decimal128 } = require('mongodb');
 const DeviceLog = require('./deviceLog.model')
+const DeviceLogConstructor = require('./deviceLog.model').deviceLogModel;
 
 const device = new mongoose.Schema({
     device_name: {
@@ -32,14 +33,14 @@ const device = new mongoose.Schema({
 
     haveLogs: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'DeviceLog'
+        ref: 'DeviceLogConstructor'
     }]
 },{timestamps: true});
 
 device.pre('save', async function (next) {
     try {
         if(this.isNew){
-            const deviceLog = new DeviceLog({
+            const deviceLog = new DeviceLogConstructor({
                 time: new Date(),
                 state: this.state,
                 data: this.value,
@@ -78,7 +79,7 @@ device.pre('save', async function (next) {
                 value = this.room.toString();
             }
             if(modified) {
-                const deviceLog = new DeviceLog({
+                const deviceLog = new DeviceLogConstructor({
                     time: new Date(),
                     state: this.state,
                     data: this.value,
@@ -130,7 +131,7 @@ device.post('findOneAndUpdate', async function(doc) {
     }
     actions += ' }';
     console.log('action', actions);
-    const deviceLog = new DeviceLog({
+    const deviceLog = new DeviceLogConstructor ({
       time: new Date(),
       state: deviceState,
       data: data,

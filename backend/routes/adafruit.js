@@ -4,7 +4,7 @@ const axios = require('axios');
 
 const { isAuthenticated } = require('../middlewares/authentication');
 const { dataValidation, validateData } = require('../middlewares/validation/adafruit.validation');
-const { postData, getCurrentData, getAllData } = require('../controllers/adafruit.controller');
+const { postData, getCurrentData, getAllData, getCurrentDataWithoutAuthenticated } = require('../controllers/adafruit.controller');
 
 const router = express.Router();
 
@@ -13,6 +13,8 @@ router.post('/post-current', isAuthenticated, validateData, dataValidation, post
 router.get('/get-current/:feedKey', isAuthenticated, getCurrentData);
 
 router.get('/get-all/:feedKey', isAuthenticated, getAllData);
+
+router.get('/get-current-without-authenticated/:feedKey', getCurrentDataWithoutAuthenticated);
 
 module.exports = router;
 

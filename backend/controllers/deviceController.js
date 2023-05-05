@@ -1,5 +1,5 @@
 const DeviceConstructor = require('../models/device.model').deviceModel;
-// const DeviceLog = require('../models/deviceLog.model');
+const DeviceLogConstructor = require('../models/deviceLog.model').deviceLogModel;
 
 exports.DeviceController = {
     patch: async (req, res) => {
@@ -38,16 +38,24 @@ exports.DeviceController = {
     getDataByDeviceId: async (req, res) => {
         try {
             console.log('GetDeviceHistory!');
-            const deviceInfo = await DeviceConstructor.findOne({_id: req.params.deviceId}).populate({
-                path: 'haveLogs',
-                select: '_id state data'
-            });
 
-            const devicePairs = deviceInfo.haveLogs.map(device => ({
-                _id: device._id, state: device.state, data: device.data
-            }));
-            console.log(devicePairs);
-            res.status(200).json({success: true, data: devicePairs});
+            // const deviceInfo = await DeviceConstructor.findOne({_id: req.params.deviceId}).populate({
+            //     path: 'haveLogs',
+            //     // select: '_id state data'
+            // });
+            // console.log(deviceInfo)
+            // console.log("----------------------------------------------------------------------------------")
+
+            // const devicePairs = deviceInfo.haveLogs.map(device => ({
+            //     _id: device._id, state: device.state, data: device.data
+            // }));
+            // console.log(devicePairs);
+
+            // const deviceHistory = await DeviceLogConstructor.find({device: req.params.deviceId}).select("time state data").sort({_id: -1}).limit(5);
+            const deviceHistory = await DeviceLogConstructor.find({device: req.params.deviceId}).select("time state data");
+            // console.log(deviceHistory);
+
+            res.status(200).json({success: true, data: deviceHistory});
         } catch (error) {
             console.error(error);
             res.status(500).json({success: false, message: error.message});
