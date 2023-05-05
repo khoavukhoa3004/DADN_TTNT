@@ -41,7 +41,14 @@ exports.validateData = [
             const {userName, room, deviceName, index} = parseFeedName(feedName);
             // console.log(deviceName);
             if (deviceName === 'fanvalue' || deviceName === 'ledvalue' || deviceName === 'lightsensor' || deviceName === 'tempsensor' || deviceName === 'soundai') {
-                return validator.isFloat(value) || validator.isInt(value);
+                if(!(validator.isFloat(value) || validator.isInt(value))){
+                    throw new Error('Value must be a number');
+                }
+                // if(validator.isFloat(value)) && (validator.isInt(value)){
+                //     if()
+                // }
+                return (validator.isFloat(value)) && (validator.isInt(value));
+                // return (validator.isFloat(value) >= 0) && (validator.isInt(value) <= 100);
             }
             else if (deviceName === 'fanstatus' || deviceName === 'doorstatus' || deviceName === 'ledstatus') {
                 return value === 'ON' || value === 'OFF';

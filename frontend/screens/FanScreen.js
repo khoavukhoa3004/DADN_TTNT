@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import {
   Modal,
   FlatList,
   PanResponder,
+  TextInput,
 } from "react-native";
 import Icon1 from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -21,12 +22,97 @@ import BottomBar from "../components/BottomBar";
 import { StatusBar } from "expo-status-bar";
 import { Line, LinearGradient } from "react-native-svg";
 import SelectDropdown from "react-native-select-dropdown";
+import client from '../API/client';
+import { withAuth } from '../utils/auth';
+
+// import {translateDevice, getVietNameseDevice} from '../../utils/translateDevice';
+
 
 const ScreenWidth = Dimensions.get("window").width;
 const ScreenHeight = Dimensions.get("window").height;
 
 
-const LedScreen = ({ navigation }) => {
+const FanScreen = ({ navigation, route }) => {
+
+    const [fanHistories, setFanHistories] = useState([]);
+    const [initialState, setInitialState] = useState("");
+    const [initialValue, setInitialValue] = useState(0);
+    const [state, setState] = useState("");
+    const [value, setValue] = useState(0);
+
+    const handleTextChange = (newValue) => {
+      setValue(newValue);
+    }
+
+    const handleSave = async () => {
+      try {
+        
+      } catch (error) {
+        
+      }
+    }
+
+    const getHistories = async () => {
+      console.log('Hi!');
+      try {
+        const res = await client.get(`/device/getData/${route.params.deviceId}`)
+        // console.log(res.data);
+        // setFanHistories(res.data);
+        setFanHistories(JSON.stringify(res.data));
+        console.log("----------------------------------------------");
+        // console.log(Histories);
+      } 
+      catch (error) {
+        alert(`Có lỗi xảy ra: ${error.message}`);
+        throw new Error('Error: ', error);
+      }
+    }
+
+    const getStatus = async () => {
+      try {
+        // console.log(route.params.deviceNameSys);
+        const response = await client.get(`/sensor/get-current-without-authenticated/${route.params.deviceNameSys}`,{
+          headers: {
+              'Content-Type': 'application/json',
+          }
+        }); 
+        // console.log(response);
+        setInitialState(response.data.value);
+        // console.log(data);
+        // setInitialState(data);
+        console.log(initialState);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    const getFanValue = async () => {
+      try {
+        const response = await client.get(`/sensor/get-current-without-authenticated/nmdk-1-fanvalue-1`, {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        setInitialValue(response.data.value);
+        console.log(initialValue);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    useEffect(() => {
+      const interval = setInterval(async () => {
+          getStatus();
+          getFanValue();
+      }, 1000); // Fetch the latest temperature every second
+      return () => clearInterval(interval);
+    }, [])
+
+    useEffect(() => {
+      if(initialState == 'OFF') setState("TẮT");
+      else setState("BẬT");
+    }, [initialState])
+
   return (
     <View style={styles.Container}>
       <View style={styles.headContainer}>
@@ -57,6 +143,25 @@ const LedScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.mainContainer}>
+        {/* <View style={styles.leftMainLayout}>
+          
+        </View> */}
+        <View style={styles.middleMainLayout}>
+          <View style={styles.textInputBox}>
+            
+          </View>
+          <View style={styles.currentStateBox}>
+            <View style={styles.leftStateBox}>
+              <Text style={styles.currentStateText}>Tình trạng hiện tại:</Text>
+            </View>
+            <View style={styles.rightStateBox}>
+              <Text style={styles.currentStateText}>Quạt: {state} {"\n"} Tốc độ quạt: {initialValue}</Text>
+            </View>
+          </View>
+        </View>
+        {/* <View style={styles.rightMainLayout}>
+            
+        </View> */}
         {/* <View style={styles.leftMainLayout}>
           <Text style={styles.leftTextMainContainer}>Tắt</Text>
         </View>
@@ -142,7 +247,10 @@ const LedScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.modeSubContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress = {() => {
+            // console.log(`deviceId: ${route.params.deviceId}`);
+            getHistories();
+          }}>
             <View style={styles.circleModeContainer}>
                 <Image
                 style={styles.historyIcon}
@@ -155,7 +263,16 @@ const LedScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.historyContainer}>
-        <View style={styles.historyBorder}></View>
+        <View style={styles.historyBorder}>
+          <View style={styles.historyHeader}>
+            <Text style={styles.historyHeaderText}>LỊCH SỬ</Text>
+          </View>
+          <View style={styles.historyList}>
+            <ScrollView>
+              <Text style={styles.historyText}>{fanHistories}</Text>
+            </ScrollView>
+          </View>
+        </View>
       </View>
 
       {/* <View style={styles.infoContainer}>
@@ -260,7 +377,7 @@ const LedScreen = ({ navigation }) => {
   );
 };
 
-export default LedScreen;
+export default FanScreen;
 // HeadContainer: 1.2
 // MainContainer: 5
 // ModeContainer: 1.7
@@ -314,15 +431,42 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   leftMainLayout: {
-    flex: 0.75,
+    flex: 1,
+    backgroundColor: 'blue',
   },
   middleMainLayout: {
     flex: 2.5,
     flexDirection: "column",
   },
   rightMainLayout: {
-    flex: 0.75,
+    flex: 1,
+    backgroundColor: 'red',
   },
+  textInputBox: {
+    flex: 5,
+  },
+  currentStateBox: {
+    flex: 2,
+    flexDirection: 'row',
+    backgroundColor: 'yellow',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: 'red',
+    borderWidth: 1,
+  },
+  leftStateBox: {
+    flex: 1,
+    // borderColor: 'green',
+    // borderWidth: 1,
+  },
+  rightStateBox: {
+    flex: 1,
+  },
+  currentStateText: {
+    textAlign: 'center',
+    fontSize: 18,
+  },
+
   leftTextMainContainer: {
     fontWeight: 600,
     fontSize: 0.04 * ScreenWidth,
@@ -454,11 +598,37 @@ const styles = StyleSheet.create({
   },
 
   historyBorder: {
+    flex: 1,
+    flexDirection: 'column',
     borderWidth: 1,
     borderColor: 'blue',
-    height: 160,
     width: ScreenWidth,
-    borderRadius: 50,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+  },
+
+  historyHeader: {
+    flex: 1,
+    borderColor: 'black',
+    borderWidth: 1,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+  },
+
+  historyHeaderText: {
+    textAlign: 'center',
+    top: 0.012 * ScreenHeight,
+    fontSize: 20,
+    fontWeight: 600,
+  },
+
+  historyList: {
+    flex: 3,
+    // backgroundColor: 'yellow',
+  },
+
+  historyText: {
+    
   },
 
   // infoContainer: {

@@ -1,17 +1,78 @@
 import * as React from 'react';
 import {Dimensions, View, Text, StyleSheet,Button, Image, ScrollView, Switch } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
-
+import Icon3 from 'react-native-vector-icons/FontAwesome';
+import { Audio } from 'expo-av';
+import FormData from 'form-data';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/Ionicons';
-import Icon3 from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/Feather';
 const ScreenWidth = Dimensions.get("window").width;
 const ScreenHeight = Dimensions.get("window").height;
 
 const BottomBar = ({navigation}: {navigation: any}) => {
+    const [isPressed, setIsPressed] = React.useState(false);
+    const [recording, setRecording] = React.useState();
+    const [sound, setSound] = React.useState();
 
+    async function startRecording() {
+      try {
+        console.log('Requesting permissions..');
+        await Audio.requestPermissionsAsync();
+        await Audio.setAudioModeAsync({
+          allowsRecordingIOS: true,
+          playsInSilentModeIOS: true,
+        });
+
+
+        console.log('Starting recording..');
+        const { recording } = await Audio.Recording.createAsync(
+          Audio.RecordingOptionsPresets.HighQuality
+        );
+        setRecording(recording);
+        console.log('Recording started');
+      } catch (err) {
+        console.error('Failed to start recording', err);
+      }
+    }
+
+
+    async function stopRecording() {
+      console.log('Stopping recording..');
+      setRecording(undefined);
+      await recording.stopAndUnloadAsync();
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+      });
+      const uri = recording.getURI();
+      console.log('Recording stopped and stored at', uri);
+      const { sound } = await Audio.Sound.createAsync({ uri });
+      setSound(sound);
+      console.log('Sound loaded');
+
+      const formData = new FormData();
+      formData.append('audio', {
+        uri: Platform.OS === 'android' ? uri : uri.replace('file://', ''),
+        name: 'recording.m4a',
+        type: 'audio/m4a',
+      });
+
+      try {
+        const response = await fetch('http://192.168.0.101:9999/add', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log('Audio file uploaded successfully:', response);
+      } catch (err) {
+        console.error('Failed to upload audio file:', err);
+      }
+      }
+      const onPressHandler = () => {
+        setIsPressed(prevState => !prevState);
+      }
     return (
         <View style={styles.bottomContainer}>
         <View style={styles.leftBottomContainer}>
@@ -31,9 +92,14 @@ const BottomBar = ({navigation}: {navigation: any}) => {
         </TouchableOpacity>
         </View>
         <View style={styles.middleBottomContainer}>
-        <View style={styles.circleContainer}>
+        <View style={[
+            styles.circleContainer,
+            isPressed && styles.circleContainerPressed
+          ]}>
             <View style={styles.subCircleContainer}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={recording ? stopRecording : startRecording}
+                >
                     <Icon3
                     style={styles.microphoneIcon}
                     name="microphone"
@@ -72,25 +138,10 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         backgroundColor: "#EFF1F5",
       },
-      leftBottomContainer: {
-        flex: 1,
-      },
       middleBottomContainer: {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-      },
-      rightBottomContainer: {
-        flex: 1,
-      },
-      leftBottomContainer_Footer: {
-        justifyContent: "flex-start",
-        width: "100%",
-      },
-      HomeIcon: {
-        position: "absolute",
-        bottom: 0.05 * ScreenHeight,
-        left: 0.065 * ScreenWidth,
       },
       circleContainer: {
         position: "absolute",
@@ -100,6 +151,9 @@ const styles = StyleSheet.create({
         height: 70,
         borderRadius: 100 / 2,
         backgroundColor: "#FFFFFF",
+      },
+      circleContainerPressed: {
+        backgroundColor: "green"
       },
       subCircleContainer: {
         position: "absolute",
@@ -114,6 +168,21 @@ const styles = StyleSheet.create({
       rightBottomContainer_Footer: {
         justifyContent: "flex-start",
         width: "100%",
+      },
+      leftBottomContainer: {
+        flex: 1,
+      },
+      rightBottomContainer: {
+        flex: 1,
+      },
+      leftBottomContainer_Footer: {
+        justifyContent: "flex-start",
+        width: "100%",
+      },
+      HomeIcon: {
+        position: "absolute",
+        bottom: 0.06 * ScreenHeight,
+        left: 0.065 * ScreenWidth,
       },
       personIcon: {
         position: "absolute",
