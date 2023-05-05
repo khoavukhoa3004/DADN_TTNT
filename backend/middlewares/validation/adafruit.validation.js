@@ -40,14 +40,20 @@ exports.validateData = [
             // console.log(feedName);
             const {userName, room, deviceName, index} = parseFeedName(feedName);
             // console.log(deviceName);
-            if (deviceName === 'fanvalue' || deviceName === 'ledvalue' || deviceName === 'lightsensor' || deviceName === 'tempsensor' || deviceName === 'soundai') {
+            if (deviceName === 'fanvalue' || deviceName === 'ledvalue' || deviceName === 'lightsensor' || deviceName === 'tempsensor') {
                 if(!(validator.isFloat(value) || validator.isInt(value))){
                     throw new Error('Value must be a number');
                 }
                 // if(validator.isFloat(value)) && (validator.isInt(value)){
                 //     if()
                 // }
-                return (validator.isFloat(value)) && (validator.isInt(value));
+                if(deviceName === 'fanvalue' || deviceName === 'ledvalue'){
+                    if(parseFloat(value < 0) || parseFloat(value) > 100){
+                        throw new Error(`${deviceName} must have value in range [0, 100]`);
+                    }
+                }
+                
+                return true;
                 // return (validator.isFloat(value) >= 0) && (validator.isInt(value) <= 100);
             }
             else if (deviceName === 'fanstatus' || deviceName === 'doorstatus' || deviceName === 'ledstatus') {
