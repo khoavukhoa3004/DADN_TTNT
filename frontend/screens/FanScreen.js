@@ -60,37 +60,7 @@ const FanScreen = ({ navigation, route }) => {
         return fanHistories.find(fan => fan.id === idToCheck)
     }
 
-    const getHistories = async () => {
-      // console.log('Hi!');
-      setFanHistories([]);
-      try {
-        const res = await client.get(`/device/getData/${route.params.deviceId}`)
-        // console.log(res.data);
-        // setFanHistories(res.data);
-        // setFanHistories(JSON.stringify(res.data));
-        setHistorySuccess('loading');
-        // console.log(res.data.data)
-        for(i = 0; i < res.data.data.length; i++){
-          const time_log = res.data.data[i].time;
-          const state_log = res.data.data[i].state;
-          const value_log = res.data.data[i]?.data;
-          const id_log = res.data.data[i]._id;
-          // console.log("History: ", time_log, state_log, value_log, id_log)
-          if(!isFanHistoryExist(id_log)){
-            setFanHistories((preState) => [...preState, { key: id_log, state: state_log, value: value_log, time: time_log}])
-          }
-          // console.log('success');
-        }
-        setHistorySuccess('loaded');
-        // for(i = 0; i < res.data)
-        console.log("----------------------------------------------");
-        // console.log(Histories);
-      } 
-      catch (error) {
-        alert(`Có lỗi xảy ra: ${error.message}`);
-        throw new Error('Error: ', error);
-      }
-    }
+
 
     useEffect(() => {
       if(initialState == 'OFF') setState("TẮT");
@@ -133,6 +103,42 @@ const FanScreen = ({ navigation, route }) => {
       }, 3600)
       return () => clearInterval(interval);
     }, [])
+
+    useEffect(()=> {
+      const getHistories = async () => {
+        // console.log('Hi!');
+        try {
+          const res = await client.get(`/device/getData/${route.params.deviceId}`)
+          // console.log(res.data);
+          // setFanHistories(res.data);
+          // setFanHistories(JSON.stringify(res.data));
+          setHistorySuccess('loading');
+          // console.log(res.data.data)
+          for(i = 0; i < res.data.data.length; i++){
+            const time_log = res.data.data[i].time;
+            const state_log = res.data.data[i].state;
+            const value_log = res.data.data[i]?.data;
+            const id_log = res.data.data[i]._id;
+            // console.log("History: ", time_log, state_log, value_log, id_log)
+            if(!isFanHistoryExist(id_log)){
+              setFanHistories((preState) => [...preState, { key: id_log, state: state_log, value: value_log, time: time_log}])
+            }
+            // console.log('success');
+          }
+          setHistorySuccess('loaded');
+          // for(i = 0; i < res.data)
+          console.log("----------------------------------------------");
+          // console.log(Histories);
+        } 
+        catch (error) {
+          alert(`Có lỗi xảy ra: ${error.message}`);
+          throw new Error('Error: ', error);
+        }
+      }
+      if(historySuccess ==='loading'){
+        getHistories();
+      }
+    }, [historySuccess])
 
   return (
     <View style={styles.Container}>
@@ -270,7 +276,7 @@ const FanScreen = ({ navigation, route }) => {
         <View style={styles.modeSubContainer}>
           <TouchableOpacity onPress = {() => {
             // console.log(`deviceId: ${route.params.deviceId}`);
-            getHistories();
+            setHistorySuccess('loading')
             console.log('successfully clicked')
           }}>
             <View style={styles.circleModeContainer}>
@@ -303,8 +309,8 @@ const FanScreen = ({ navigation, route }) => {
                     <Text style={{}}>Value</Text>
                   </View>
               </View>
-              {(historySuccess==='not_load') && <Text>Hãy bấm nút History để biết lịch sử</Text>}
-              {(historySuccess==='loading') && <Text>Đang tải lịch sử...</Text>}
+              {(historySuccess==='not_load') && <View style={{justifyContent: 'center', alignItems:'center'}}><Text>Hãy bấm nút History để biết lịch sử</Text></View>}
+              {(historySuccess==='loading') && <View style={{justifyContent: 'center', alignItems:'center'}}><Text><Text>Đang tải lịch sử...</Text></Text></View>}
               {fanHistories.map((item)=> (
                 <View key={item.key} style={{flexDirection: 'row'}}>
                   <View style={{flex: 4, justifyContent: 'center', alignItems:'center'}}>

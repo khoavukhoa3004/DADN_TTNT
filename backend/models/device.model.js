@@ -103,7 +103,7 @@ device.post('findOneAndUpdate', async function(doc) {
     const deviceId = this.getQuery()._id;
     // console.log('deviceId: ', deviceId);
     const data = doc.value;
-    // console.log('data', data)
+    console.log('data', data)
     const deviceState = doc.state;
     // console.log(doc);
     // console.log(updatedFields);
@@ -131,7 +131,7 @@ device.post('findOneAndUpdate', async function(doc) {
     }
     actions += ' }';
     console.log('action', actions);
-    const deviceLog = new DeviceLog({
+    const deviceLog = new DeviceLogConstructor({
         time: new Date(),
         state: deviceState,
         data: data,
