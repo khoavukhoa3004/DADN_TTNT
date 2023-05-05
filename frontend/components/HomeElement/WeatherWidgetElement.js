@@ -5,6 +5,7 @@ import client from '../../API/client';
 import React, { useState, useEffect } from 'react';
 const WeatherWidgetComponent = ({
     deviceNameSystem,
+    address,
 }) => {
     const [temperature, setTemperature] = useState(0);
     const [light, setLight] = useState(0);
@@ -63,12 +64,13 @@ const WeatherWidgetComponent = ({
             <Image source={require('../../assets/images/home/weather_widget.png')} style={{ width: '100%', height: '100%', resizeMode: 'contain' }} />
             <View style={styles.weatherInfor}>
                 <View style={styles.locationInfor}>
+                    <TouchableOpacity onPress={()=>{}}>
                     <Text style={styles.locationTitle}>Vị trí nhà bạn</Text>
-                    <Text style={styles.location}>Thủ Đức, Tp.Hồ Chí Minh</Text>
-                    <View style={styles.weatherStateContainer}>
-                        <Icon2  name="cloud" size={30} color="white"/>
-                        <Text style={styles.weatherState}>Partly Cloudy</Text>
-                    </View>
+                    <Text style={styles.location}>{address?.number}, {address?.street}</Text>
+                    <Text style={styles.location}>{address?.city}</Text>
+                    </TouchableOpacity>
+                    
+                
                 </View>
                 <View style={styles.weatherTemp}>
                     <View style= {styles.tempContainer}>

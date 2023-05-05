@@ -20,9 +20,11 @@ const HomeScreen = ({navigation}) =>{
     const [isEnabled, setIsEnabled] = React.useState(false);
     const [userName, setUserName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
+    
 
     const [homeIds, setHomeIds] = React.useState([]);
     const [selectedHome, setSelectedHome] = React.useState('');
+    const [homeAddress, setHomeAddress] = React.useState();
     
 
     const [roomIds, setRoomIds] = useState([]);
@@ -122,6 +124,7 @@ const HomeScreen = ({navigation}) =>{
         }
     },[userName])
 
+
     useEffect(() => {
         const getRooms = async () => {
             setDeviceIds([]);
@@ -130,7 +133,6 @@ const HomeScreen = ({navigation}) =>{
             console.log(`/home/getRooms/${selectedHome}`)
             try {
                 // const id = home_id?.home_id;
-                
                 const response = await withAuth((token) => client.get(`/home/getRoomsId&Name/${selectedHome}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -169,12 +171,33 @@ const HomeScreen = ({navigation}) =>{
                 console.error(error.message);
             }
         }
+        const getHomeAddress = async () => {
+            try {
+                console.log('selected Home key: ',selectedHome)
+                const response = await withAuth((token) => client.get(`/home/getAddress/${selectedHome}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    }
+                }));
+                if(response.data.success === true) {
+                    console.log(response.data.data);
+                    setHomeAddress(response.data.data);
+                } else {
+                    console.error("Can't get Home Address: ", response.data.message);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
       
-        if(selectedHome){
+        if(selectedHome.length != 0){
+            console.log('selected Home: ',selectedHome)
+            getHomeAddress();
             getRooms();
         }
 
-    },[homeIds, selectedHome])
+    },[selectedHome])
 
     useEffect(() => {
         const getDevices = async () => {
@@ -349,7 +372,7 @@ const HomeScreen = ({navigation}) =>{
                 </View>
 
                 {/* Weather widget */}
-                <WeatherWidgetComponent deviceNameSystem="nmdk-1-tempsensor-1"/>
+                <WeatherWidgetComponent deviceNameSystem="nmdk-1-tempsensor-1" address={homeAddress}/>
 
 
                 {/* Element Details */}

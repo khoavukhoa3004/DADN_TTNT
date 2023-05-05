@@ -111,9 +111,9 @@ exports.HomeController = {
             console.log('getRoomIds');
             const homeInfo = await HomeConstructor.findOne({_id: req.params.homeId}).populate({ path: 'haveRooms', select: 'id' })
             // console.log(homeInfo)
-            console.log(homeInfo)
+            // console.log(homeInfo)
             const roomIds = homeInfo.haveRooms.map(room => room.id);
-            console.log(typeof roomIds);
+            // console.log(typeof roomIds);
             res.status(200).json({success: true, data: roomIds});
         } catch (err) {
             console.error(err);
@@ -128,8 +128,11 @@ exports.HomeController = {
                 message: 'Unauthorized access!'
             });
         }
+        console.log('get Address: ', req.params.homeId)
         try {
+        
             const address = await HomeConstructor.findOne({_id: req.params.homeId})
+            console.log('getAddress: ', address)
             res.status(200).json({success: true, data: address.address});
         } catch (error) {
             console.error(error);
