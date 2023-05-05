@@ -102,7 +102,7 @@ device.post('findOneAndUpdate', async function(doc) {
     const updatedFields = Object.keys(this.getUpdate().$set || {});
     const deviceId = this.getQuery()._id;
     // console.log('deviceId: ', deviceId);
-    const data = this.getQuery().value;
+    const data = doc.value;
     // console.log('data', data)
     const deviceState = doc.state;
     // console.log(doc);
@@ -131,141 +131,18 @@ device.post('findOneAndUpdate', async function(doc) {
     }
     actions += ' }';
     console.log('action', actions);
-    const deviceLog = new DeviceLogConstructor ({
-      time: new Date(),
-      state: deviceState,
-      data: data,
-      device: deviceId,
-      action: actions,
+    const deviceLog = new DeviceLog({
+        time: new Date(),
+        state: deviceState,
+        data: data,
+        device: deviceId,
+        action: actions,
     });
     await deviceLog.save();
-  });
-  
-//   function getAction(updatedFields, device) {
-//     const actionMap = {
-//         device_name: 'device name',
-//         activate: 'activate',
-//         state: 'state',
-//         value: 'value',
-//         haveRoom: "Device'room",
-//         type: 'Device type',
-//     };
-//     let action = '';
-//     let value = '';
-//     let modified = false;
-    
-//     for (let i = 0; i < updatedFields.length; i++) {
-//       const field = updatedFields[i];
-//       if (field in device._update) {
-//         if (actionMap[field]) {
-//           action = actionMap[field];
-//           modified = true;
-//           value = device.get(field);
-//           break;
-//         }
-//       }
-//     }
-//     if (modified) {
-//       return `${device.device_name} changed ${action} to ${value}`;
-//     } else {
-//       return `${device.device_name} has been created`;
-//     }
-//   }
+    console.log('trigger create deviceLog successfully!')
+});
 
-// const bulb = new mongoose.Schema({
-//     bulbID: {
-//         type: String,
-//         unique: true,
-//         required: true,
-//     },
-//     status: {
-//         type: String,
-//         required: true,
-//     },
-//     value: {
-//         type: Number,
-//         required: true,
-//     },
-//     isActive: {
-//         type: Boolean,
-//         required: true,
-//     },
-//     createdAt: {type: Date},
-//     updatedAt: {type: Date}
-// }, {timestamps: true});
 
-// const door = new mongoose.Schema({
-//     doorID: {
-//         type: String,
-//         unique: true,
-//         required: true,
-//     },
-//     doorStatus: {
-//         type: String,
-//         required: true,
-//     },
-//     isActive: {
-//         type: Boolean,
-//         required: true,
-//     },
-// }, {timestamps: true});
-
-// const fan = new mongoose.Schema({
-//     fanID: {
-//         type: String,
-//         unique: true,
-//         required: true,
-//     },
-//     status: {
-//         type: String,
-//         required: true,
-//     },
-//     value: {
-//         type: Number,
-//         required: true,
-//     },
-//     isActive: {
-//         type: Boolean,
-//         required: true,
-//     },
-// }, {timestamps: true});
-
-// const light = new mongoose.Schema({
-//     lightID: {
-//         type: String,
-//         unique: true,
-//         required: true,
-//     },
-//     lightValue: {
-//         type: Decimal128,
-//         required: true,
-//     },
-//     isActive: {
-//         type: Boolean,
-//         required: true,
-//     },
-// }, {timestamps: true});
-
-// const temp = new mongoose.Schema({
-//     tempID: {
-//         type: Number,
-//         unique: true,
-//         required: true,
-//         default: 0,
-//     },
-//     tempName: {
-//         type: String,
-//         required: true,
-//     },
-//     tempValue: {
-//         type: Decimal128,
-//         required: true,
-//     },
-//     isActive: {
-//         type: Boolean,
-//         required: true,
-//     },
-// }, {timestamps: true});
 const deviceModel = mongoose.model('Device', device);
 
 // const fanSchema = mongoose.model('fan', fan);

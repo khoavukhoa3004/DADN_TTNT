@@ -35,7 +35,9 @@ const ScreenHeight = Dimensions.get("window").height;
 const FanScreen = ({ navigation, route }) => {
 
     const [fanHistories, setFanHistories] = useState([]);
+    const [toggleHistory, setToggleHistory] = useState(false);
     const [initialState, setInitialState] = useState("");
+    const [historySuccess, setHistorySuccess] = useState('not_load');
     const [initialValue, setInitialValue] = useState(0);
     const [state, setState] = useState("");
     const [value, setValue] = useState(0);
@@ -53,13 +55,35 @@ const FanScreen = ({ navigation, route }) => {
       }
     }
 
+    const isFanHistoryExist = (idToCheck) => {
+      if(fanHistories.length == 0)
+        return false;
+        return fanHistories.find(fan => fan.id === idToCheck)
+    }
+
     const getHistories = async () => {
-      console.log('Hi!');
+      // console.log('Hi!');
+      setFanHistories([]);
       try {
         const res = await client.get(`/device/getData/${route.params.deviceId}`)
         // console.log(res.data);
         // setFanHistories(res.data);
-        setFanHistories(JSON.stringify(res.data));
+        // setFanHistories(JSON.stringify(res.data));
+        setHistorySuccess('loading');
+        // console.log(res.data.data)
+        for(i = 0; i < res.data.data.length; i++){
+          const time_log = res.data.data[i].time;
+          const state_log = res.data.data[i].state;
+          const value_log = res.data.data[i]?.data;
+          const id_log = res.data.data[i]._id;
+          // console.log("History: ", time_log, state_log, value_log, id_log)
+          if(!isFanHistoryExist(id_log)){
+            setFanHistories((preState) => [...preState, { key: id_log, state: state_log, value: value_log, time: time_log}])
+          }
+          // console.log('success');
+        }
+        setHistorySuccess('loaded');
+        // for(i = 0; i < res.data)
         console.log("----------------------------------------------");
         // console.log(Histories);
       } 
@@ -69,50 +93,47 @@ const FanScreen = ({ navigation, route }) => {
       }
     }
 
-    const getStatus = async () => {
-      try {
-        // console.log(route.params.deviceNameSys);
-        const response = await client.get(`/sensor/get-current-without-authenticated/${route.params.deviceNameSys}`,{
-          headers: {
-              'Content-Type': 'application/json',
-          }
-        }); 
-        // console.log(response);
-        setInitialState(response.data.value);
-        // console.log(data);
-        // setInitialState(data);
-        console.log(initialState);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    const getFanValue = async () => {
-      try {
-        const response = await client.get(`/sensor/get-current-without-authenticated/nmdk-1-fanvalue-1`, {
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        });
-        setInitialValue(response.data.value);
-        console.log(initialValue);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    useEffect(() => {
-      const interval = setInterval(async () => {
-          getStatus();
-          getFanValue();
-      }, 1000); // Fetch the latest temperature every second
-      return () => clearInterval(interval);
-    }, [])
-
     useEffect(() => {
       if(initialState == 'OFF') setState("TẮT");
       else setState("BẬT");
-    }, [initialState])
+
+      const getStatus = async () => {
+        try {
+          // console.log(route.params.deviceNameSys);
+          const response = await client.get(`/sensor/get-current-without-authenticated/${route.params.deviceNameSys}`,{
+            headers: {
+                'Content-Type': 'application/json',
+            }
+          }); 
+          // console.log(response);
+          // console.log(response.data);
+          setInitialState(response.data.value);
+          // console.log(data);
+          // setInitialState(data);
+          // console.log('getStatus',response.data.value);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      const getFanValue = async () => {
+        try {
+          const response = await client.get(`/sensor/get-current-without-authenticated/nmdk-1-fanvalue-1`, {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+          // console.log(response.data);
+          setInitialValue(response.data.value);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      const interval = setInterval(async () => {
+        getStatus();
+        getFanValue();
+      }, 3600)
+      return () => clearInterval(interval);
+    }, [])
 
   return (
     <View style={styles.Container}>
@@ -185,7 +206,7 @@ const FanScreen = ({ navigation, route }) => {
               <Text style={styles.currentStateText}>Tình trạng hiện tại:</Text>
             </View>
             <View style={styles.rightStateBox}>
-              <Text style={styles.currentStateText}>Quạt: {state} {"\n"} Tốc độ quạt: {initialValue}</Text>
+              <Text style={styles.currentStateText}>Quạt: {(initialState === 'ON')? 'BẬT' : 'TẮT' } {"\n"} Tốc độ quạt: {(initialState === 'ON') ? initialValue : 0}</Text>
             </View>
           </View>
         </View>
@@ -280,6 +301,7 @@ const FanScreen = ({ navigation, route }) => {
           <TouchableOpacity onPress = {() => {
             // console.log(`deviceId: ${route.params.deviceId}`);
             getHistories();
+            console.log('successfully clicked')
           }}>
             <View style={styles.circleModeContainer}>
                 <Image
@@ -299,7 +321,33 @@ const FanScreen = ({ navigation, route }) => {
           </View>
           <View style={styles.historyList}>
             <ScrollView>
-              <Text style={styles.historyText}>{fanHistories}</Text>
+              
+              <View style={{flexDirection: 'row'}}>
+                  <View style={{flex: 4, justifyContent: 'center', alignItems:'center'}}>
+                    <Text style={{}}>Time</Text>
+                  </View>
+                  <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                    <Text style={{}}>State</Text>
+                  </View>
+                  <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                    <Text style={{}}>Value</Text>
+                  </View>
+              </View>
+              {(historySuccess==='not_load') && <Text>Hãy bấm nút History để biết lịch sử</Text>}
+              {(historySuccess==='loading') && <Text>Đang tải lịch sử...</Text>}
+              {fanHistories.map((item)=> (
+                <View key={item.key} style={{flexDirection: 'row'}}>
+                  <View style={{flex: 4, justifyContent: 'center', alignItems:'center'}}>
+                    <Text style={{}}>{item.time}</Text>
+                  </View>
+                  <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                  <Text style={{}}>{item.state}</Text>
+                  </View>
+                  <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                  <Text style={{}}>{item.value}</Text>
+                  </View>
+                </View>
+              ))}
             </ScrollView>
           </View>
         </View>
