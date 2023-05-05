@@ -120,3 +120,31 @@ exports.getAllData = async (req, res) => {
         });
     }
 }
+
+exports.getCurrentDataWithoutAuthenticated = async (req, res) => {
+    const feedKey = req.params.feedKey;
+    const url =  `https://io.adafruit.com/api/v2/${process.env.AIO_USERNAME}/feeds/${feedKey}/data/last`;
+    const headers = {
+        'X-AIO-Key': process.env.AIO_KEY,
+    }
+    
+    try {
+        const response = await axios.get(url,{headers});
+        const data = response.data;
+        const value = data?.value;
+        const timestamp = data?.created_at;
+
+        // Send response with current value and timestamp
+        res.json({
+            feed: feedKey,
+            value: value,
+            timestamp: timestamp,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Error retrieving data from Adafruit IO',
+        });
+    }
+}

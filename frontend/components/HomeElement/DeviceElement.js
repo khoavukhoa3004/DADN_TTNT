@@ -14,7 +14,7 @@ const DeviceComponent = ({
     color,
     type,
     navigation,
-}) =>{
+}) => {
     const [buttonState, setButtonState] = useState('OFF');
     const [tempButtonState, setTempButtonState] = useState('OFF');
     const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
@@ -151,9 +151,9 @@ const DeviceComponent = ({
         <TouchableOpacity onPress={() => {
           console.log(deviceNameSystem)
           console.log(id);
-          if (deviceName == 'Fan') navigation.navigate('FanScreen');
-          if (deviceName == 'Led') navigation.navigate('LedScreen');
-          if (deviceName == 'Door') navigation.navigate('DoorScreen');
+          if (deviceName == 'Fan') navigation.navigate('FanScreen', { deviceId: id, deviceNameSys: deviceNameSystem });
+          if (deviceName == 'Led') navigation.navigate('LedScreen', { deviceId: id, deviceNameSys: deviceNameSystem });
+          if (deviceName == 'Door') navigation.navigate('DoorScreen', { deviceId: id, deviceNameSys: deviceNameSystem });
           }}>
           <View style={styles.box} >
               <View style={styles.iconBox}>

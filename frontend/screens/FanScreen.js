@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import {
   Modal,
   FlatList,
   PanResponder,
+  TextInput,
 } from "react-native";
 import Icon1 from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -21,12 +22,118 @@ import BottomBar from "../components/BottomBar";
 import { StatusBar } from "expo-status-bar";
 import { Line, LinearGradient } from "react-native-svg";
 import SelectDropdown from "react-native-select-dropdown";
+import client from '../API/client';
+import { withAuth } from '../utils/auth';
+
+// import {translateDevice, getVietNameseDevice} from '../../utils/translateDevice';
+
 
 const ScreenWidth = Dimensions.get("window").width;
 const ScreenHeight = Dimensions.get("window").height;
 
 
-const LedScreen = ({ navigation }) => {
+const FanScreen = ({ navigation, route }) => {
+
+    const [fanHistories, setFanHistories] = useState([]);
+    const [toggleHistory, setToggleHistory] = useState(false);
+    const [initialState, setInitialState] = useState("");
+    const [historySuccess, setHistorySuccess] = useState('not_load');
+    const [initialValue, setInitialValue] = useState(0);
+    const [state, setState] = useState("");
+    const [value, setValue] = useState(0);
+
+    const handleTextChange = (newValue) => {
+      setValue(newValue);
+    }
+
+    const handleSave = async () => {
+      try {
+        
+      } catch (error) {
+        
+      }
+    }
+
+    const isFanHistoryExist = (idToCheck) => {
+      if(fanHistories.length == 0)
+        return false;
+        return fanHistories.find(fan => fan.id === idToCheck)
+    }
+
+    const getHistories = async () => {
+      // console.log('Hi!');
+      setFanHistories([]);
+      try {
+        const res = await client.get(`/device/getData/${route.params.deviceId}`)
+        // console.log(res.data);
+        // setFanHistories(res.data);
+        // setFanHistories(JSON.stringify(res.data));
+        setHistorySuccess('loading');
+        // console.log(res.data.data)
+        for(i = 0; i < res.data.data.length; i++){
+          const time_log = res.data.data[i].time;
+          const state_log = res.data.data[i].state;
+          const value_log = res.data.data[i]?.data;
+          const id_log = res.data.data[i]._id;
+          // console.log("History: ", time_log, state_log, value_log, id_log)
+          if(!isFanHistoryExist(id_log)){
+            setFanHistories((preState) => [...preState, { key: id_log, state: state_log, value: value_log, time: time_log}])
+          }
+          // console.log('success');
+        }
+        setHistorySuccess('loaded');
+        // for(i = 0; i < res.data)
+        console.log("----------------------------------------------");
+        // console.log(Histories);
+      } 
+      catch (error) {
+        alert(`Có lỗi xảy ra: ${error.message}`);
+        throw new Error('Error: ', error);
+      }
+    }
+
+    useEffect(() => {
+      if(initialState == 'OFF') setState("TẮT");
+      else setState("BẬT");
+
+      const getStatus = async () => {
+        try {
+          // console.log(route.params.deviceNameSys);
+          const response = await client.get(`/sensor/get-current-without-authenticated/${route.params.deviceNameSys}`,{
+            headers: {
+                'Content-Type': 'application/json',
+            }
+          }); 
+          // console.log(response);
+          // console.log(response.data);
+          setInitialState(response.data.value);
+          // console.log(data);
+          // setInitialState(data);
+          // console.log('getStatus',response.data.value);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      const getFanValue = async () => {
+        try {
+          const response = await client.get(`/sensor/get-current-without-authenticated/nmdk-1-fanvalue-1`, {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+          // console.log(response.data);
+          setInitialValue(response.data.value);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      const interval = setInterval(async () => {
+        getStatus();
+        getFanValue();
+      }, 3600)
+      return () => clearInterval(interval);
+    }, [])
+
   return (
     <View style={styles.Container}>
       <View style={styles.headContainer}>
@@ -57,6 +164,25 @@ const LedScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.mainContainer}>
+        {/* <View style={styles.leftMainLayout}>
+          
+        </View> */}
+        <View style={styles.middleMainLayout}>
+          <View style={styles.textInputBox}>
+            
+          </View>
+          <View style={styles.currentStateBox}>
+            <View style={styles.leftStateBox}>
+              <Text style={styles.currentStateText}>Tình trạng hiện tại:</Text>
+            </View>
+            <View style={styles.rightStateBox}>
+              <Text style={styles.currentStateText}>Quạt: {(initialState === 'ON')? 'BẬT' : 'TẮT' } {"\n"} Tốc độ quạt: {(initialState === 'ON') ? initialValue : 0}</Text>
+            </View>
+          </View>
+        </View>
+        {/* <View style={styles.rightMainLayout}>
+            
+        </View> */}
         {/* <View style={styles.leftMainLayout}>
           <Text style={styles.leftTextMainContainer}>Tắt</Text>
         </View>
@@ -142,7 +268,11 @@ const LedScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.modeSubContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress = {() => {
+            // console.log(`deviceId: ${route.params.deviceId}`);
+            getHistories();
+            console.log('successfully clicked')
+          }}>
             <View style={styles.circleModeContainer}>
                 <Image
                 style={styles.historyIcon}
@@ -155,7 +285,42 @@ const LedScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.historyContainer}>
-        <View style={styles.historyBorder}></View>
+        <View style={styles.historyBorder}>
+          <View style={styles.historyHeader}>
+            <Text style={styles.historyHeaderText}>LỊCH SỬ</Text>
+          </View>
+          <View style={styles.historyList}>
+            <ScrollView>
+              
+              <View style={{flexDirection: 'row'}}>
+                  <View style={{flex: 4, justifyContent: 'center', alignItems:'center'}}>
+                    <Text style={{}}>Time</Text>
+                  </View>
+                  <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                    <Text style={{}}>State</Text>
+                  </View>
+                  <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                    <Text style={{}}>Value</Text>
+                  </View>
+              </View>
+              {(historySuccess==='not_load') && <Text>Hãy bấm nút History để biết lịch sử</Text>}
+              {(historySuccess==='loading') && <Text>Đang tải lịch sử...</Text>}
+              {fanHistories.map((item)=> (
+                <View key={item.key} style={{flexDirection: 'row'}}>
+                  <View style={{flex: 4, justifyContent: 'center', alignItems:'center'}}>
+                    <Text style={{}}>{item.time}</Text>
+                  </View>
+                  <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                  <Text style={{}}>{item.state}</Text>
+                  </View>
+                  <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                  <Text style={{}}>{item.value}</Text>
+                  </View>
+                </View>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
       </View>
 
       {/* <View style={styles.infoContainer}>
@@ -260,7 +425,7 @@ const LedScreen = ({ navigation }) => {
   );
 };
 
-export default LedScreen;
+export default FanScreen;
 // HeadContainer: 1.2
 // MainContainer: 5
 // ModeContainer: 1.7
@@ -314,15 +479,42 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   leftMainLayout: {
-    flex: 0.75,
+    flex: 1,
+    backgroundColor: 'blue',
   },
   middleMainLayout: {
     flex: 2.5,
     flexDirection: "column",
   },
   rightMainLayout: {
-    flex: 0.75,
+    flex: 1,
+    backgroundColor: 'red',
   },
+  textInputBox: {
+    flex: 5,
+  },
+  currentStateBox: {
+    flex: 2,
+    flexDirection: 'row',
+    backgroundColor: 'yellow',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: 'red',
+    borderWidth: 1,
+  },
+  leftStateBox: {
+    flex: 1,
+    // borderColor: 'green',
+    // borderWidth: 1,
+  },
+  rightStateBox: {
+    flex: 1,
+  },
+  currentStateText: {
+    textAlign: 'center',
+    fontSize: 18,
+  },
+
   leftTextMainContainer: {
     fontWeight: 600,
     fontSize: 0.04 * ScreenWidth,
@@ -454,11 +646,37 @@ const styles = StyleSheet.create({
   },
 
   historyBorder: {
+    flex: 1,
+    flexDirection: 'column',
     borderWidth: 1,
     borderColor: 'blue',
-    height: 160,
     width: ScreenWidth,
-    borderRadius: 50,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+  },
+
+  historyHeader: {
+    flex: 1,
+    borderColor: 'black',
+    borderWidth: 1,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+  },
+
+  historyHeaderText: {
+    textAlign: 'center',
+    top: 0.012 * ScreenHeight,
+    fontSize: 20,
+    fontWeight: 600,
+  },
+
+  historyList: {
+    flex: 3,
+    // backgroundColor: 'yellow',
+  },
+
+  historyText: {
+    
   },
 
   // infoContainer: {

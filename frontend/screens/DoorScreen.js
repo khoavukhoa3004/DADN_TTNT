@@ -28,8 +28,24 @@ import client from '../API/client';
 const ScreenWidth = Dimensions.get("window").width;
 const ScreenHeight = Dimensions.get("window").height;
 
-const DoorScreen = ({ navigation, deviceNameSystem, id, color, type }) => {
+const DoorScreen = ({ navigation, route }) => {
+  const [doorHistories, setDoorHistories] = useState([]);
 
+  const getHistories = async () => {
+    console.log('Hi!');
+    try {
+      const res = await client.get(`/device/getData/${route.params.deviceId}`)
+      // console.log(res.data);
+      // setFanHistories(res.data);
+      setDoorHistories(JSON.stringify(res.data));
+      console.log("----------------------------------------------");
+      console.log(doorHistories);
+    } 
+    catch (error) {
+      alert(`Có lỗi xảy ra: ${error.message}`);
+      throw new Error('Error: ', error);
+    }
+  }
     
   return (
     <View style={styles.Container}>
@@ -109,7 +125,10 @@ const DoorScreen = ({ navigation, deviceNameSystem, id, color, type }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.modeSubContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+            console.log(`deviceId: ${route.params.deviceId}`);
+            getHistories();
+          }}>
             <View style={styles.circleModeContainer}>
                 <Image
                 style={styles.historyIcon}
@@ -122,7 +141,16 @@ const DoorScreen = ({ navigation, deviceNameSystem, id, color, type }) => {
       </View>
 
       <View style={styles.historyContainer}>
-        <View style={styles.historyBorder}></View>
+        <View style={styles.historyBorder}>
+          <View style={styles.historyHeader}>
+            <Text style={styles.historyHeaderText}>LỊCH SỬ</Text>
+          </View>
+          <View style={styles.historyList}>
+            <ScrollView>
+              <Text style={styles.historyText}>{doorHistories}</Text>
+            </ScrollView>
+          </View>
+        </View>
       </View>
 
       {/* <View style={styles.deviceContainer}>
@@ -466,11 +494,35 @@ const styles = StyleSheet.create({
   },
 
   historyBorder: {
+    flex: 1,
+    flexDirection: 'column',
     borderWidth: 1,
     borderColor: 'blue',
-    height: 160,
     width: ScreenWidth,
-    borderRadius: 50,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+  },
+
+  historyHeader: {
+    flex: 1,
+    borderColor: 'black',
+    borderWidth: 1,
+  },
+
+  historyHeaderText: {
+    textAlign: 'center',
+    top: 0.012 * ScreenHeight,
+    fontSize: 20,
+    fontWeight: 600,
+  },
+
+  historyList: {
+    flex: 3,
+    // backgroundColor: 'yellow',
+  },
+
+  historyText: {
+    
   },
 
 //   deviceContainer: {

@@ -23,4 +23,6 @@ const deviceLog = new mongoose.Schema({
     },
 }); 
 
-module.exports = mongoose.model('DeviceLog', deviceLog);
+const deviceLogModel = mongoose.model('DeviceLog', deviceLog);
+
+module.exports = {deviceLogModel};
