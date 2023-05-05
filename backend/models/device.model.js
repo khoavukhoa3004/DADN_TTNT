@@ -102,7 +102,7 @@ device.post('findOneAndUpdate', async function(doc) {
     const updatedFields = Object.keys(this.getUpdate().$set || {});
     const deviceId = this.getQuery()._id;
     // console.log('deviceId: ', deviceId);
-    const data = this.getQuery().value;
+    const data = doc.value;
     // console.log('data', data)
     const deviceState = doc.state;
     // console.log(doc);

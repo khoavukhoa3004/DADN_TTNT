@@ -52,7 +52,9 @@ exports.DeviceController = {
             // console.log(devicePairs);
 
             // const deviceHistory = await DeviceLogConstructor.find({device: req.params.deviceId}).select("time state data").sort({_id: -1}).limit(5);
-            const deviceHistory = await DeviceLogConstructor.find({device: req.params.deviceId}).select("time state data");
+            const deviceHistory = await DeviceLogConstructor.find({device: req.params.deviceId})
+                .select("time state data")
+                .sort({ time: -1 });
             // console.log(deviceHistory);
 
             res.status(200).json({success: true, data: deviceHistory});
