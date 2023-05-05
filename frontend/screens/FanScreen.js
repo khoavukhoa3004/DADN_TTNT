@@ -42,6 +42,7 @@ const FanScreen = ({ navigation, route }) => {
 
     const handleTextChange = (newValue) => {
       setValue(newValue);
+      console.log(value);
     }
 
     const handleSave = async () => {
@@ -148,7 +149,36 @@ const FanScreen = ({ navigation, route }) => {
         </View> */}
         <View style={styles.middleMainLayout}>
           <View style={styles.textInputBox}>
-            
+            <TextInput
+              value={value}
+              onChangeText={handleTextChange}
+              style={{
+                height: 0.15 * ScreenHeight, 
+                width: 0.5 * ScreenWidth, 
+                borderColor: 'gray', 
+                borderWidth: 1,
+                marginTop: 'auto',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginBottom: 'auto',
+              }}
+              placeholder="50"
+              fontSize="50"
+              fontWeight="700"
+              textAlign="center"
+            />
+            <TouchableOpacity style={{
+              width: '60%',
+              height: '30%',
+              borderColor: 'blue',
+              borderWidth: 1,
+              backgroundColor: '#18A2EB',
+              borderRadius: 100,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <Text style={{color: 'white', fontSize: 20, fontWeight: 600}}>SAVE</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.currentStateBox}>
             <View style={styles.leftStateBox}>
@@ -444,6 +474,8 @@ const styles = StyleSheet.create({
   },
   textInputBox: {
     flex: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   currentStateBox: {
     flex: 2,
@@ -609,10 +641,10 @@ const styles = StyleSheet.create({
 
   historyHeader: {
     flex: 1,
-    borderColor: 'black',
+    borderColor: 'blue',
     borderWidth: 1,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
+    borderTopLeftRadius: 49,
+    borderTopRightRadius: 49,
   },
 
   historyHeaderText: {
