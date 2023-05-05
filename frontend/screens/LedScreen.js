@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import {
   Modal,
   FlatList,
   PanResponder,
+  TextInput,
 } from "react-native";
 import Icon1 from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -31,22 +32,138 @@ const ScreenHeight = Dimensions.get("window").height;
 const LedScreen = ({ navigation, route }) => {
 
   const [ledHistories, setLedHistories] = useState([]);
+  const [toggleHistory, setToggleHistory] = useState(false);
+  const [initialState, setInitialState] = useState("");
+  const [historySuccess, setHistorySuccess] = useState('not_load');
+  const [initialValue, setInitialValue] = useState(0);
+  const [state, setState] = useState("");
+  const [value, setValue] = useState(0);
+
+  const handleTextChange = (newValue) => {
+    setValue(newValue);
+    console.log(value);
+  }
+
+  const handleSave = async (newData) => {
+    try {
+      const response = await client.post('/sensor/post-current-without-authenticated', {
+        feedName: "nmdk-1-ledvalue-1",
+        value: newData,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      if (response.data.success === true){
+        console.log('before');
+        const res = await client.patch(`/device/updateValue/${route.params.deviceId}/${newData}`);
+        console.log(response.data.message);
+        console.log(newData);
+      }
+      if (response.data.success === false) {
+        throw new Error('Failed to post data to Adafruit');
+      }
+    } catch (error) {
+      alert(`Có lỗi xảy ra: ${error.message}`);
+      throw new Error('Error: ', error);
+    }
+  }
+
+  const isLedHistoryExist = (idToCheck) => {
+    if(ledHistories.length == 0)
+      return false;
+      return ledHistories.find(led => led.id === idToCheck)
+  }
 
   const getHistories = async () => {
-    console.log('Hi!');
+    // console.log('Hi!');
+    setLedHistories([]);
     try {
       const res = await client.get(`/device/getData/${route.params.deviceId}`)
       // console.log(res.data);
       // setFanHistories(res.data);
-      setLedHistories(JSON.stringify(res.data));
+      // setFanHistories(JSON.stringify(res.data));
+      setHistorySuccess('loading');
+      // console.log(res.data.data)
+      for(i = 0; i < res.data.data.length; i++){
+        const time_log = res.data.data[i].time;
+        const state_log = res.data.data[i].state;
+        const value_log = res.data.data[i]?.data;
+        const id_log = res.data.data[i]._id;
+        // console.log("History: ", time_log, state_log, value_log, id_log)
+        if(!isLedHistoryExist(id_log)){
+          setLedHistories((preState) => [...preState, { key: id_log, state: state_log, value: value_log, time: time_log}])
+        }
+        // console.log('success');
+      }
+      setHistorySuccess('loaded');
+      // for(i = 0; i < res.data)
       console.log("----------------------------------------------");
-      console.log(ledHistories);
+      // console.log(Histories);
     } 
     catch (error) {
       alert(`Có lỗi xảy ra: ${error.message}`);
       throw new Error('Error: ', error);
     }
   }
+
+  useEffect(() => {
+    if(initialState == 'OFF') setState("TẮT");
+    else setState("BẬT");
+
+    const getStatus = async () => {
+      try {
+        // console.log(route.params.deviceNameSys);
+        const response = await client.get(`/sensor/get-current-without-authenticated/${route.params.deviceNameSys}`,{
+          headers: {
+              'Content-Type': 'application/json',
+          }
+        }); 
+        // console.log(response);
+        // console.log(response.data);
+        setInitialState(response.data.value);
+        // console.log(data);
+        // setInitialState(data);
+        // console.log('getStatus',response.data.value);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    const getLedValue = async () => {
+      try {
+        const response = await client.get(`/sensor/get-current-without-authenticated/nmdk-1-ledvalue-1`, {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        // console.log(response.data);
+        setInitialValue(response.data.value);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    const interval = setInterval(async () => {
+      getStatus();
+      getLedValue();
+    }, 1000)
+    return () => clearInterval(interval);
+  }, [])
+
+  // const getHistories = async () => {
+  //   console.log('Hi!');
+  //   try {
+  //     const res = await client.get(`/device/getData/${route.params.deviceId}`)
+  //     // console.log(res.data);
+  //     // setFanHistories(res.data);
+  //     setLedHistories(JSON.stringify(res.data));
+  //     console.log("----------------------------------------------");
+  //     console.log(ledHistories);
+  //   } 
+  //   catch (error) {
+  //     alert(`Có lỗi xảy ra: ${error.message}`);
+  //     throw new Error('Error: ', error);
+  //   }
+  // }
 
   return (
     <View style={styles.Container}>
@@ -80,15 +197,63 @@ const LedScreen = ({ navigation, route }) => {
       </View>
 
       <View style={styles.mainContainer}>
-        <View style={styles.leftMainLayout}>
+        {/* <View style={styles.leftMainLayout}>
           
-        </View>
+        </View> */}
         <View style={styles.middleMainLayout}>
-              
+          <View style={styles.textInputBox}>
+            <TextInput
+              value={value}
+              onChangeText={handleTextChange}
+              style={{
+                height: 0.15 * ScreenHeight, 
+                width: 0.5 * ScreenWidth, 
+                borderColor: 'gray', 
+                borderWidth: 1,
+                marginTop: 'auto',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginBottom: 'auto',
+              }}
+              placeholder="0 - 100"
+              fontSize="45"
+              fontWeight="700"
+              textAlign="center"
+            />
+            <TouchableOpacity onPress={() => {
+              // handleSave(value);
+              console.log(value);
+              handleSave(value);
+              console.log('Hello');
+              console.log(route.params.deviceNameSys);
+            }} 
+            style={{
+              width: '60%',
+              height: '30%',
+              borderColor: 'blue',
+              borderWidth: 1,
+              backgroundColor: '#18A2EB',
+              borderRadius: 100,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: 'auto',
+            }
+            }>
+              <Text style={{color: 'white', fontSize: 20, fontWeight: 600}}>SAVE</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.currentStateBox}>
+            <View style={styles.leftStateBox}>
+              <Text style={styles.currentStateText}>Tình trạng hiện tại:</Text>
+            </View>
+            <View style={styles.rightStateBox}>
+              <Text style={styles.currentStateText}>Đèn: {(initialState === 'ON')? 'BẬT' : 'TẮT' } {"\n"} Độ sáng: {(initialState === 'ON') ? initialValue : 0}</Text>
+            </View>
+          </View>
         </View>
-        <View style={styles.rightMainLayout}>
+        {/* <View style={styles.rightMainLayout}>
             
-        </View>
+        </View> */}
         {/* <View style={styles.leftMainLayout}>
           <Text style={styles.leftTextMainContainer}>Tắt</Text>
         </View>
@@ -196,7 +361,33 @@ const LedScreen = ({ navigation, route }) => {
           </View>
           <View style={styles.historyList}>
             <ScrollView>
-              <Text style={styles.historyText}>{ledHistories}</Text>
+              
+              <View style={{flexDirection: 'row'}}>
+                  <View style={{flex: 4, justifyContent: 'center', alignItems:'center'}}>
+                    <Text style={{}}>Time</Text>
+                  </View>
+                  <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                    <Text style={{}}>State</Text>
+                  </View>
+                  <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                    <Text style={{}}>Value</Text>
+                  </View>
+              </View>
+              {(historySuccess==='not_load') && <Text style={{textAlign: 'center'}}>Hãy bấm nút "Lịch Sử" để biết lịch sử</Text>}
+              {(historySuccess==='loading') && <Text style={{textAlign: 'center'}}>Đang tải lịch sử...</Text>}
+              {ledHistories.map((item)=> (
+                <View key={item.key} style={{flexDirection: 'row'}}>
+                  <View style={{flex: 4, justifyContent: 'center', alignItems:'center'}}>
+                    <Text style={{}}>{item.time}</Text>
+                  </View>
+                  <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                  <Text style={{}}>{item.state}</Text>
+                  </View>
+                  <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                  <Text style={{}}>{item.value}</Text>
+                  </View>
+                </View>
+              ))}
             </ScrollView>
           </View>
         </View>
@@ -369,6 +560,33 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'red',
   },
+  textInputBox: {
+    flex: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  currentStateBox: {
+    flex: 2,
+    flexDirection: 'row',
+    backgroundColor: 'yellow',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: 'red',
+    borderWidth: 1,
+  },
+  leftStateBox: {
+    flex: 1,
+    // borderColor: 'green',
+    // borderWidth: 1,
+  },
+  rightStateBox: {
+    flex: 1,
+  },
+  currentStateText: {
+    textAlign: 'center',
+    fontSize: 18,
+  },
+
   leftTextMainContainer: {
     fontWeight: 600,
     fontSize: 0.04 * ScreenWidth,
@@ -511,8 +729,10 @@ const styles = StyleSheet.create({
 
   historyHeader: {
     flex: 1,
-    borderColor: 'black',
+    borderColor: 'blue',
     borderWidth: 1,
+    borderTopLeftRadius: 49,
+    borderTopRightRadius: 49,
   },
 
   historyHeaderText: {

@@ -23,7 +23,7 @@ import { StatusBar } from "expo-status-bar";
 import { Line, LinearGradient } from "react-native-svg";
 import SelectDropdown from "react-native-select-dropdown";
 import client from '../API/client';
-import { withAuth } from '../utils/auth';
+// import { withAuth } from '../utils/auth';
 
 // import {translateDevice, getVietNameseDevice} from '../../utils/translateDevice';
 
@@ -47,11 +47,28 @@ const FanScreen = ({ navigation, route }) => {
       console.log(value);
     }
 
-    const handleSave = async () => {
+    const handleSave = async (newData) => {
       try {
-        
+        const response = await client.post('/sensor/post-current-without-authenticated', {
+          feedName: "nmdk-1-fanvalue-1",
+          value: newData,
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        if (response.data.success === true){
+          console.log('before');
+          const res = await client.patch(`/device/updateValue/${route.params.deviceId}/${newData}`);
+          console.log(response.data.message);
+          console.log(newData);
+        }
+        if (response.data.success === false) {
+          throw new Error('Failed to post data to Adafruit');
+        }
       } catch (error) {
-        
+        alert(`Có lỗi xảy ra: ${error.message}`);
+        throw new Error('Error: ', error);
       }
     }
 
@@ -131,7 +148,7 @@ const FanScreen = ({ navigation, route }) => {
       const interval = setInterval(async () => {
         getStatus();
         getFanValue();
-      }, 3600)
+      }, 1000)
       return () => clearInterval(interval);
     }, [])
 
@@ -183,12 +200,19 @@ const FanScreen = ({ navigation, route }) => {
                 marginRight: 'auto',
                 marginBottom: 'auto',
               }}
-              placeholder="50"
-              fontSize="50"
+              placeholder="0 - 100"
+              fontSize="45"
               fontWeight="700"
               textAlign="center"
             />
-            <TouchableOpacity style={{
+            <TouchableOpacity onPress={() => {
+              // handleSave(value);
+              console.log(value);
+              handleSave(value);
+              console.log('Hello');
+              console.log(route.params.deviceNameSys);
+            }} 
+            style={{
               width: '60%',
               height: '30%',
               borderColor: 'blue',
@@ -197,7 +221,9 @@ const FanScreen = ({ navigation, route }) => {
               borderRadius: 100,
               alignItems: 'center',
               justifyContent: 'center',
-            }}>
+              marginBottom: 'auto',
+            }
+            }>
               <Text style={{color: 'white', fontSize: 20, fontWeight: 600}}>SAVE</Text>
             </TouchableOpacity>
           </View>
@@ -333,8 +359,8 @@ const FanScreen = ({ navigation, route }) => {
                     <Text style={{}}>Value</Text>
                   </View>
               </View>
-              {(historySuccess==='not_load') && <Text>Hãy bấm nút History để biết lịch sử</Text>}
-              {(historySuccess==='loading') && <Text>Đang tải lịch sử...</Text>}
+              {(historySuccess==='not_load') && <Text style={{textAlign: 'center'}}>Hãy bấm nút "Lịch Sử" để biết lịch sử</Text>}
+              {(historySuccess==='loading') && <Text style={{textAlign: 'center'}}>Đang tải lịch sử...</Text>}
               {fanHistories.map((item)=> (
                 <View key={item.key} style={{flexDirection: 'row'}}>
                   <View style={{flex: 4, justifyContent: 'center', alignItems:'center'}}>

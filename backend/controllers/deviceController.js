@@ -28,9 +28,9 @@ exports.DeviceController = {
         const value = req.params.value;
         const options = { new: true };
         try {
-            await DeviceConstructor.findOneAndUpdate(deviceId, { value }, options);
+            await DeviceConstructor.findOneAndUpdate({_id: deviceId}, { value }, options);
             console.log('update device value');
-            res.status(200).json(updates);
+            res.status(200).json({success: true, message: value});
         } catch (error) {
             console.error(error);
             res.status(500).json({success: false, message: error.message});

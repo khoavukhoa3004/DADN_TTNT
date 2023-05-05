@@ -131,7 +131,7 @@ device.post('findOneAndUpdate', async function(doc) {
     }
     actions += ' }';
     console.log('action', actions);
-    const deviceLog = new DeviceLog({
+    const deviceLog = new DeviceLogConstructor({
         time: new Date(),
         state: deviceState,
         data: data,
