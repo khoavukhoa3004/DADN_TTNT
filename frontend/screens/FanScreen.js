@@ -37,7 +37,8 @@ const FanScreen = ({ navigation, route }) => {
     const [fanHistories, setFanHistories] = useState([]);
     const [initialState, setInitialState] = useState("");
     const [initialValue, setInitialValue] = useState(0);
-    const [value, setValue] = useState()
+    const [state, setState] = useState("");
+    const [value, setValue] = useState(0);
 
     const handleTextChange = (newValue) => {
       setValue(newValue);
@@ -101,16 +102,16 @@ const FanScreen = ({ navigation, route }) => {
 
     useEffect(() => {
       const interval = setInterval(async () => {
-          // getStatus();
+          getStatus();
           getFanValue();
       }, 1000); // Fetch the latest temperature every second
       return () => clearInterval(interval);
     }, [])
 
-    // useEffect(() => {
-    //   if(initialState == 'OFF') console.log('TAT');
-    //   else console.log('BAT');
-    // }, [initialState])
+    useEffect(() => {
+      if(initialState == 'OFF') setState("TẮT");
+      else setState("BẬT");
+    }, [initialState])
 
   return (
     <View style={styles.Container}>
@@ -154,7 +155,7 @@ const FanScreen = ({ navigation, route }) => {
               <Text style={styles.currentStateText}>Tình trạng hiện tại:</Text>
             </View>
             <View style={styles.rightStateBox}>
-              <Text style={styles.currentStateText}>Quạt: {} {"\n"} Tốc độ quạt: {}</Text>
+              <Text style={styles.currentStateText}>Quạt: {state} {"\n"} Tốc độ quạt: {initialValue}</Text>
             </View>
           </View>
         </View>
@@ -610,6 +611,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderColor: 'black',
     borderWidth: 1,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
   },
 
   historyHeaderText: {
