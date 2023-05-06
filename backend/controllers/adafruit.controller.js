@@ -148,3 +148,43 @@ exports.getCurrentDataWithoutAuthenticated = async (req, res) => {
         });
     }
 }
+
+exports.postDataWithoutAuthenticated = async(req, res) => {
+    const { feedName, value } = req.body;
+    if (!feedName || !value) {
+        return res.status(400).json({
+            success: false,
+            message: 'A feedName and a value must be provided!',
+        });
+    }
+    console.log(`https://io.adafruit.com/api/v2/${process.env.AIO_USERNAME}/feeds/${feedName}/data`);
+    try {
+        const response = await axios({
+            method: 'POST',
+            url: `https://io.adafruit.com/api/v2/${process.env.AIO_USERNAME}/feeds/${feedName}/data`,
+            headers: {
+                'X-AIO-Key': process.env.AIO_KEY,
+                'Content-Type': 'application/json',
+            },
+            data: { value: value },
+        });
+
+        if(response.status === 200){
+            res.json({
+                success: true,
+                message: 'Data sent to Adafruit IO',
+            });
+        } else {
+            res.status(500).json({
+                success: false,
+                message: 'Error sending data to Adafruit IO',
+            });
+        }
+    } catch (error) {
+        console.error('Error while sending data to Adafruit IO:', error);
+        res.status(500).json({
+            success: false, 
+            message: error
+        });
+    }
+}

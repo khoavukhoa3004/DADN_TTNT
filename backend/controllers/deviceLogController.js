@@ -1,4 +1,5 @@
-const deviceLog = require('../models/deviceLog.model');
+// const deviceLog = require('../models/deviceLog.model');
+const DeviceLogConstructor = require('../models/deviceLog.model').deviceLogModel;
 const User = require('../models/user.model');
 const Home = require('../models/home.model').homeModel;
 const Room = require('../models/home.model').roomModel;
@@ -12,7 +13,7 @@ exports.get10DevicesLog = async (req, res) => {
     //     let room = 
     // } 
     try{
-        const latestLogs = await deviceLog.find()
+        const latestLogs = await DeviceLogConstructor.find()
         .sort({ time: -1 })
         .limit(10)
         // console.log(latestLogs);

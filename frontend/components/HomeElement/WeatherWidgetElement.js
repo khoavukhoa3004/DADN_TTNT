@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet,Button, Image, ScrollView, Switch, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet,Button, Image, ScrollView, Switch, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import Icon2 from 'react-native-vector-icons/Feather'; 
 import {withAuth } from '../../utils/auth';
 import client from '../../API/client';
@@ -10,6 +10,15 @@ const WeatherWidgetComponent = ({
     const [temperature, setTemperature] = useState(0);
     const [light, setLight] = useState(0);
     // checkLoginStatus(navigation);
+    const checkTemp = () => {
+        console.log(temperature);
+        if(temperature >= 34) {
+            Alert.alert('Cảnh báo', `Nhiệt độ môi trường đang nóng! Hãy bật các thiết bị làm mát!`, [
+                {text: 'OK', onPress: () => console.log('OK Pressed')}
+            ]);
+        }
+    }
+
     const updateTemp = async () => {
         try {
             const response = await withAuth((token) => client.get(`/sensor/get-current/${deviceNameSystem}`,{
@@ -56,9 +65,15 @@ const WeatherWidgetComponent = ({
         const interval = setInterval(async () => {
             updateTemp();
             updateLight();
-        }, 3600); // Fetch the latest temperature every second
+            // checkTemp();
+        }, 1000); // Fetch the latest temperature every second
         return () => clearInterval(interval);
     }, []);
+
+    useEffect(() => {
+        checkTemp();
+    }, [temperature])
+
     return (
         <View style={styles.weatherWidget} onPress={updateTemp()}>
             <Image source={require('../../assets/images/home/weather_widget.png')} style={{ width: '100%', height: '100%', resizeMode: 'contain' }} />
