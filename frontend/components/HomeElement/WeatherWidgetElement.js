@@ -19,26 +19,7 @@ const WeatherWidgetComponent = ({
         }
     }
 
-    const updateTemp = async () => {
-        try {
-            const response = await withAuth((token) => client.get(`/sensor/get-current/${deviceNameSystem}`,{
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                }
-            }));  
-            setTemperature(response.data.value);
-            // if(response?.value ==='ON' && !isClicked){
-            //     setIsEnabled(true)
-            // }
-            // else if(response?.value ==='OFF' && !isClicked){
-            //     console.log('yep');
-            //     setIsEnabled(false)
-            // }
-        } catch (error) {
-            console.error(error);
-        }      
-    }
+    
     const updateLight = async () => {
         try {
             const response = await withAuth((token) => client.get(`/sensor/get-current/nmdk-1-lightsensor-1`,{
@@ -55,6 +36,19 @@ const WeatherWidgetComponent = ({
             //     console.log('yep');
             //     setIsEnabled(false)
             // }
+        } catch (error) {
+            console.error(error);
+        }      
+    }
+    const updateTemp = async () => {
+        try {
+            const response = await withAuth((token) => client.get(`/sensor/get-current/${deviceNameSystem}`,{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            }));  
+            setTemperature(response.data.value);
         } catch (error) {
             console.error(error);
         }      
@@ -142,7 +136,7 @@ const styles = StyleSheet.create({
     },
     weatherTemp: {
         // position: 'absolute',
-        flex: 4,
+        flex: 5,
         paddingTop:5,
         // backgroundColor: 'blue',
         paddingRight: 15,

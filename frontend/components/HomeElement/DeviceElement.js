@@ -64,24 +64,25 @@ const DeviceComponent = ({
     }
 
     useEffect(() => {
+      const getData = async () => {
+        try {
+          const response = await withAuth((token) => client.get(`/sensor/get-current/${deviceNameSystem}`,{
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            }
+          }));
+          const data = await response.data.value;
+          setButtonState(data);
+          setTempButtonState(data);
+        } catch (error) {
+          console.error(error);
+        }           
+      };
       getData();
     })
 
-    const getData = async () => {
-      try {
-        const response = await withAuth((token) => client.get(`/sensor/get-current/${deviceNameSystem}`,{
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          }
-        }));
-        const data = await response.data.value;
-        setButtonState(data);
-        setTempButtonState(data);
-      } catch (error) {
-        console.error(error);
-      }           
-    };
+
 
 
     const styles = StyleSheet.create({

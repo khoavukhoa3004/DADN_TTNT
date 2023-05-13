@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
   Modal,
   FlatList,
-  PanResponder,
   TextInput,
 } from "react-native";
 import Icon1 from "react-native-vector-icons/MaterialCommunityIcons";
@@ -40,7 +39,7 @@ const FanScreen = ({ navigation, route }) => {
     const [historySuccess, setHistorySuccess] = useState('not_load');
     const [initialValue, setInitialValue] = useState(0);
     const [state, setState] = useState("");
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState('');
 
     const handleTextChange = (newValue) => {
       setValue(newValue);
@@ -194,8 +193,8 @@ const FanScreen = ({ navigation, route }) => {
         <View style={styles.middleMainLayout}>
           <View style={styles.textInputBox}>
             <TextInput
-              value={value}
-              onChangeText={handleTextChange}
+              value={value.toString()}
+              onChangeText={setValue}
               style={{
                 height: 0.15 * ScreenHeight, 
                 width: 0.5 * ScreenWidth, 
@@ -207,8 +206,6 @@ const FanScreen = ({ navigation, route }) => {
                 marginBottom: 'auto',
               }}
               placeholder="0 - 100"
-              fontSize="45"
-              fontWeight="700"
               textAlign="center"
             />
             <TouchableOpacity onPress={() => {

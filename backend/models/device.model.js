@@ -101,13 +101,9 @@ device.post('findOneAndUpdate', async function(doc) {
     console.log('findOneAndUpdate is currently running')
     const updatedFields = Object.keys(this.getUpdate().$set || {});
     const deviceId = this.getQuery()._id;
-    // console.log('deviceId: ', deviceId);
     const data = doc.value;
-    console.log('data', data)
     const deviceState = doc.state;
-    // console.log(doc);
-    // console.log(updatedFields);
-    // console.log(updatedFields.length)
+
     let actions = `${doc.device_name}: {`;
     for (i = 0; i < updatedFields.length; i++) {
         if(updatedFields[i] === 'device_name'){
