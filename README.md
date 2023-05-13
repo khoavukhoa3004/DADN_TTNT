@@ -37,7 +37,7 @@ The diagram above has a small mistake. **First**, in the User entity, the attrib
 ### Login/ Sign Up/ Log out
 
 1. Login screen:
-<div style="display: flex;">
+<div style="display: flex; align: center;">
   <img style="padding: 20px" src="./images/login.png" alt="Image 1" height="400" />
   <img style="padding: 20px" src="./images/login-fail-password.png" alt="Image 2" height="400" />
   <img style="padding: 20px" src="./images/login-fail-email.png" alt="Image 2" height="400" />
