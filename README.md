@@ -44,6 +44,18 @@ The diagram above has a small mistake. **First**, in the User entity, the attrib
 </div>
 
 2. Sign Up screen / Logout
+
+<!-- [<img src="./images/login.png" width="225" height="400"
+/>](https://vimeo.com/826428074?share=copy)
+
+[<img src="./images/sign_up.png" width="225" height="400"
+/>](https://vimeo.com/826425808?share=copy) -->
+<p align="center">
+    <a href="https://vimeo.com/826425808?share=copy"><img src="./images/sign_up.png" width="225" height="400" style="padding: 10px" /></a>
+    <a href="https://vimeo.com/826428074?share=copy"><img src="./images/login.png" width="225" height="400" style="padding: 10px"/></a>&nbsp;&nbsp;&nbsp;
+  
+</p>
+You can click to image above, it will link to video (because github readme can't embbed video)
 <div style="display: flex;">
     <div>
         <!-- <p style="algin-item: center">Sign up</p> -->
@@ -56,6 +68,8 @@ The diagram above has a small mistake. **First**, in the User entity, the attrib
 </div>
 
 ### Home screen & Devices screen
+<a href="https://youtu.be/pTK_d-lqZ4M"><img src="./images/demo.png" width="560" height="315" style="padding: 10px" /></a>
+You can click to image above, it will link to video (because github readme can't embbed video)
 <div>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/pTK_d-lqZ4M" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
