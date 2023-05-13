@@ -55,6 +55,7 @@ The diagram above has a small mistake. **First**, in the User entity, the attrib
     <a href="https://vimeo.com/826428074?share=copy"><img src="./images/login.png" width="225" height="400" style="padding: 10px"/></a>&nbsp;&nbsp;&nbsp;
   
 </p>
+
 You can click to image above, it will link to video (because github readme can't embbed video)
 <div style="display: flex;">
     <div>
@@ -69,6 +70,7 @@ You can click to image above, it will link to video (because github readme can't
 
 ### Home screen & Devices screen
 <a href="https://youtu.be/pTK_d-lqZ4M"><img src="./images/demo.png" width="560" height="315" style="padding: 10px" /></a>
+
 You can click to image above, it will link to video (because github readme can't embbed video)
 <div>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/pTK_d-lqZ4M" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
