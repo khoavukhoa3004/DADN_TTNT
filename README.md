@@ -87,6 +87,7 @@ If you don't have anything in node_modules in backend, you need to install it fi
     npm install --save
 ```
 If the terminal showed: 'our db is connected', it means that server is running and connected successfully.
+
 ***Note:*** you need to make sure that the AIO_KEY and AIO_USERNAME in the .env in backend must be corrected.
 
 Then, go back to 'DADN_TTNT' folder, then go to frontend by typing:
@@ -94,5 +95,6 @@ Then, go back to 'DADN_TTNT' folder, then go to frontend by typing:
     cd frontend
     npx expo start
 ```
+
 ***Note:*** The frontend requires node_modules, too. Make sure that the ip address of the backend server in /API/client.js must be corrected. If you are in development mode, try to get this IP in the Ipv4 of your network.
 
